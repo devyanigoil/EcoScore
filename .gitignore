@@ -1,0 +1,11 @@
+
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
+# OCR sandbox
+sandbox/ocr-poc/node_modules/
+
+# Secrets
+keys/
+**/.env
