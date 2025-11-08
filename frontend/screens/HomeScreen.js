@@ -45,7 +45,7 @@ export default function HomeScreen() {
       >
         {/* Header pill */}
         <View style={styles.headerPill}>
-          <Text style={styles.headerTitle}>Home{"\n"}Dashboard</Text>
+          <Text style={styles.headerTitle}>Dashboard</Text>
         </View>
 
         {/* Score card */}
