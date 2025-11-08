@@ -1,163 +1,309 @@
-// screens/HomeScreen.js
-import React, { useState } from "react";
+import React from "react";
+import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import ModulesPanel from "./ModulesPanel";
+import { MODULES } from "./modules.config";
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+  useFonts,
+  PlayfairDisplay_600SemiBold,
+  PlayfairDisplay_700Bold,
+} from "@expo-google-fonts/playfair-display";
+import { oceanSunsetNeumorphicStyles as base } from "../colorThemes";
+import RadialModulesFab from "./RadialModulesFab";
 
-const dietFactorsTonsPerYear = {
-  omnivore: 2.5, // ~tCO2e/yr (coarse default)
-  vegetarian: 1.7,
-  vegan: 1.5,
-};
+const { width } = Dimensions.get("window");
 
-export default function HomeScreen({ navigation }) {
-  const [kwhMonthly, setKwhMonthly] = useState("250"); // electricity use per month
-  const [milesPerWeek, setMilesPerWeek] = useState("60"); // driving miles per week
-  const [mpg, setMpg] = useState("28"); // vehicle fuel economy
-  const [diet, setDiet] = useState("omnivore"); // omnivore | vegetarian | vegan
+// Mock data (wire up later to real backend)
+const monthlyBreakdown = [
+  { key: "Shopping", icon: "🛒", delta: 620 },
+  { key: "Transit", icon: "🚶", delta: 340 },
+  { key: "Energy", icon: "💡", delta: 180 },
+  { key: "Food", icon: "🥗", delta: 250 },
+];
 
-  const onCalculate = () => {
-    const kwh = Math.max(0, parseFloat(kwhMonthly) || 0);
-    const miles = Math.max(0, parseFloat(milesPerWeek) || 0);
-    const mpgVal = Math.max(1, parseFloat(mpg) || 1); // avoid divide-by-zero
+export default function HomeScreen() {
+  const navigation = useNavigation();
+  const [fontsLoaded] = useFonts({
+    PlayfairDisplay_600SemiBold,
+    PlayfairDisplay_700Bold,
+  });
 
-    // --- Electricity ---
-    // US avg grid ~0.417 kg CO2e / kWh (rough figure). Convert to tCO2e/year.
-    const elec_kg_per_month = kwh * 0.417;
-    const elec_tons_per_year = (elec_kg_per_month * 12) / 1000;
-
-    // --- Transport ---
-    // Tailpipe: 8.887 kg CO2e per gallon gasoline
-    const gallonsPerWeek = miles / mpgVal;
-    const trans_kg_per_week = gallonsPerWeek * 8.887;
-    const trans_tons_per_year = (trans_kg_per_week * 52) / 1000;
-
-    // --- Diet ---
-    const diet_tons_per_year =
-      dietFactorsTonsPerYear[diet] ?? dietFactorsTonsPerYear.omnivore;
-
-    const total = elec_tons_per_year + trans_tons_per_year + diet_tons_per_year;
-
-    navigation.navigate("Results", {
-      breakdown: {
-        electricity: elec_tons_per_year,
-        transport: trans_tons_per_year,
-        diet: diet_tons_per_year,
-      },
-      total,
-      inputs: { kwhMonthly: kwh, milesPerWeek: miles, mpg: mpgVal, diet },
-    });
-  };
+  if (!fontsLoaded) return null;
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.select({ ios: "padding", android: undefined })}
-      style={styles.container}
-    >
-      <Text style={styles.h1}>Estimate your annual footprint</Text>
-
-      <View style={styles.card}>
-        <Text style={styles.label}>Electricity use (kWh / month)</Text>
-        <TextInput
-          value={kwhMonthly}
-          onChangeText={setKwhMonthly}
-          keyboardType="numeric"
-          placeholder="e.g., 250"
-          style={styles.input}
-        />
-
-        <Text style={[styles.label, { marginTop: 12 }]}>
-          Driving (miles / week)
-        </Text>
-        <TextInput
-          value={milesPerWeek}
-          onChangeText={setMilesPerWeek}
-          keyboardType="numeric"
-          placeholder="e.g., 60"
-          style={styles.input}
-        />
-
-        <Text style={[styles.label, { marginTop: 12 }]}>
-          Vehicle fuel economy (mpg)
-        </Text>
-        <TextInput
-          value={mpg}
-          onChangeText={setMpg}
-          keyboardType="numeric"
-          placeholder="e.g., 28"
-          style={styles.input}
-        />
-
-        <Text style={[styles.label, { marginTop: 12 }]}>Diet</Text>
-        <View style={styles.segment}>
-          {["omnivore", "vegetarian", "vegan"].map((key) => (
-            <TouchableOpacity
-              key={key}
-              onPress={() => setDiet(key)}
-              style={[
-                styles.segmentBtn,
-                diet === key && styles.segmentBtnActive,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.segmentText,
-                  diet === key && styles.segmentTextActive,
-                ]}
-              >
-                {key.charAt(0).toUpperCase() + key.slice(1)}
-              </Text>
-            </TouchableOpacity>
-          ))}
+    <View style={base.container}>
+      {/* Background theme */}
+      <View style={base.backgroundGradient}>
+        <View style={[base.circle, base.circle1]} />
+        <View style={[base.circle, base.circle2]} />
+        <View style={[base.circle, base.circle3]} />
+      </View>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header pill */}
+        <View style={styles.headerPill}>
+          <Text style={styles.headerTitle}>Home{"\n"}Dashboard</Text>
         </View>
 
-        <TouchableOpacity style={styles.cta} onPress={onCalculate}>
-          <Text style={styles.ctaText}>Calculate</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+        {/* Score card */}
+        <View style={styles.card}>
+          <LinearGradient
+            colors={["#826AED", "#6D5CE7", "#5863F8"]} // cool violet/indigo blend over your ocean palette
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.scorePill}
+          >
+            <Text style={styles.scoreValue}>2,847</Text>
+            <Text style={styles.scoreLabel}>Your EcoScore</Text>
+          </LinearGradient>
+
+          {/* Month breakdown */}
+          <Text style={styles.sectionTitle}>This Month:</Text>
+          <View style={styles.breakdownWrap}>
+            {monthlyBreakdown.map((row) => (
+              <View key={row.key} style={styles.breakdownRow}>
+                <Text style={styles.breakdownLeft}>
+                  <Text style={styles.emoji}>{row.icon} </Text>
+                  {row.key}:
+                </Text>
+                <Text style={styles.breakdownRight}>+{row.delta} pts</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Status ribbon */}
+          <View style={styles.statusRibbon}>
+            <Text style={styles.statusTitle}>Status: Gold Member</Text>
+            <Text style={styles.statusSub}>Top 8% of users</Text>
+          </View>
+        </View>
+
+        {/* Suggested widgets (placeholders) */}
+        <View style={styles.row}>
+          <View style={[styles.widget, styles.widgetHalf]}>
+            <Text style={styles.widgetTitle}>Weekly Goal</Text>
+            <Text style={styles.widgetMetric}>3/5 actions</Text>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressFill, { width: "60%" }]} />
+            </View>
+            <Text style={styles.widgetHint}>
+              2 more for a 200-pt streak bonus
+            </Text>
+          </View>
+
+          <View style={[styles.widget, styles.widgetHalf]}>
+            <Text style={styles.widgetTitle}>CO₂ Saved</Text>
+            <Text style={styles.widgetMetric}>18.4 kg</Text>
+            <Text style={styles.widgetHint}>≈ 150 km avoided by car</Text>
+          </View>
+        </View>
+
+        <View style={styles.row}>
+          <View style={[styles.widget, styles.widgetHalf]}>
+            <Text style={styles.widgetTitle}>Next Reward</Text>
+            <Text style={styles.widgetMetric}>$5 cashback</Text>
+            <Text style={styles.widgetHint}>Earn in ~350 pts</Text>
+          </View>
+
+          <View style={[styles.widget, styles.widgetHalf]}>
+            <Text style={styles.widgetTitle}>Tip of the Day</Text>
+            <Text style={styles.widgetHint}>
+              Swap one meat meal with plant-based: save ~2 kg CO₂.
+            </Text>
+          </View>
+        </View>
+
+        <View style={[styles.widget, styles.full]}>
+          <Text style={styles.widgetTitle}>Recent Actions</Text>
+          <View style={styles.historyRow}>
+            <Text style={styles.historyItem}>🚲 Biked to campus</Text>
+            <Text style={styles.historyPts}>+60</Text>
+          </View>
+          <View style={styles.historyRow}>
+            <Text style={styles.historyItem}>🔌 Turned off idle devices</Text>
+            <Text style={styles.historyPts}>+35</Text>
+          </View>
+          <View style={styles.historyRow}>
+            <Text style={styles.historyItem}>🥗 Cooked at home</Text>
+            <Text style={styles.historyPts}>+45</Text>
+          </View>
+        </View>
+      </ScrollView>
+      <RadialModulesFab
+        modules={MODULES}
+        onSelect={(key) => {
+          if (key === "shopping") navigation.navigate("Shopping");
+          if (key === "transport") navigation.navigate("Transportation");
+        }}
+      />
+    </View>
   );
 }
 
+const cardShadow = {
+  shadowColor: "#000",
+  shadowOpacity: 0.2,
+  shadowRadius: 14,
+  shadowOffset: { width: 0, height: 8 },
+  elevation: 8,
+};
+
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#fff" },
-  h1: { fontSize: 20, fontWeight: "700", marginBottom: 8 },
-  card: { backgroundColor: "#f6f6f8", borderRadius: 12, padding: 16 },
-  label: { fontSize: 14, fontWeight: "600" },
-  input: {
-    marginTop: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 10,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#e3e3e8",
+  content: {
+    paddingTop: 24,
+    paddingBottom: 48,
+    paddingHorizontal: 18,
+    width,
+    alignItems: "center",
   },
-  segment: { flexDirection: "row", gap: 8, marginTop: 8 },
-  segmentBtn: {
+
+  headerPill: {
+    width: width * 0.9,
+    borderRadius: 20,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    paddingVertical: 14,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+    marginBottom: 14,
+    ...cardShadow,
+  },
+  headerTitle: {
+    color: "#E8F1F2",
+    textAlign: "center",
+    fontFamily: "PlayfairDisplay_700Bold",
+    fontSize: 18,
+    lineHeight: 22,
+  },
+
+  card: {
+    width: width * 0.9,
+    borderRadius: 28,
+    backgroundColor: "#0a4966", // slightly lighter than base.container
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+    marginBottom: 18,
+    ...cardShadow,
+  },
+
+  scorePill: {
+    borderRadius: 22,
+    paddingVertical: 22,
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  scoreValue: {
+    color: "#FFFFFF",
+    fontSize: 42,
+    fontFamily: "PlayfairDisplay_700Bold",
+  },
+  scoreLabel: {
+    color: "rgba(255,255,255,0.9)",
+    fontSize: 14,
+    marginTop: 2,
+    fontFamily: "PlayfairDisplay_600SemiBold",
+  },
+
+  sectionTitle: {
+    marginTop: 10,
+    marginBottom: 6,
+    color: "#E6EEF0",
+    fontSize: 16,
+    fontFamily: "PlayfairDisplay_700Bold",
+  },
+
+  breakdownWrap: {
+    marginBottom: 12,
+  },
+  breakdownRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 6,
+  },
+  breakdownLeft: {
+    color: "#E6EEF0",
+    fontSize: 15,
+  },
+  emoji: { fontSize: 16 },
+  breakdownRight: {
+    color: "#CDE8FF",
+    fontSize: 15,
+    fontWeight: "600",
+  },
+
+  statusRibbon: {
+    backgroundColor: "rgba(214, 234, 248, 0.25)",
+    borderRadius: 14,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+  },
+  statusTitle: {
+    color: "#F3F8FB",
+    fontWeight: "700",
+    marginBottom: 2,
+  },
+  statusSub: {
+    color: "rgba(255,255,255,0.85)",
+    fontSize: 12,
+  },
+
+  row: {
+    width: width * 0.9,
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 12,
+  },
+  widget: {
     flex: 1,
-    paddingVertical: 10,
-    borderRadius: 10,
+    backgroundColor: "rgba(10,73,102,0.85)",
+    borderRadius: 22,
+    padding: 14,
     borderWidth: 1,
-    borderColor: "#d7d7dd",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    borderColor: "rgba(255,255,255,0.10)",
+    ...cardShadow,
   },
-  segmentBtnActive: { backgroundColor: "#2f6fff15", borderColor: "#2f6fff" },
-  segmentText: { fontSize: 13, fontWeight: "600", color: "#333" },
-  segmentTextActive: { color: "#2f6fff" },
-  cta: {
-    marginTop: 16,
-    backgroundColor: "#2f6fff",
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: "center",
+  widgetHalf: { flexBasis: "48%" },
+  full: { width: width * 0.9, alignSelf: "center" },
+
+  widgetTitle: {
+    color: "#EAF4F6",
+    fontFamily: "PlayfairDisplay_700Bold",
+    fontSize: 15,
+    marginBottom: 6,
   },
-  ctaText: { color: "#fff", fontWeight: "700", fontSize: 16 },
+  widgetMetric: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 6,
+  },
+  widgetHint: {
+    color: "rgba(255,255,255,0.85)",
+    fontSize: 12,
+  },
+
+  progressBar: {
+    height: 8,
+    borderRadius: 6,
+    backgroundColor: "rgba(255,255,255,0.18)",
+    overflow: "hidden",
+    marginBottom: 6,
+  },
+  progressFill: {
+    height: "100%",
+    backgroundColor: "#edae49",
+  },
+
+  historyRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 6,
+  },
+  historyItem: { color: "#EAF4F6", fontSize: 14 },
+  historyPts: { color: "#CDE8FF", fontWeight: "700" },
 });
