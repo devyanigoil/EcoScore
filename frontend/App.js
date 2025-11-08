@@ -22,10 +22,8 @@ export default function App() {
   const [scaleAnim] = useState(new Animated.Value(0.9));
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId:
-      "93116964233-i8dt8gathqh7ddbnhqq8u9jr6i827urm.apps.googleusercontent.com",
-    webClientId:
-      "93116964233-28rchgmcqpd68gda808i4dl31hc66737.apps.googleusercontent.com",
+    iosClientId: "",
+    webClientId: "",
     scopes: [
       "openid",
       "email",
