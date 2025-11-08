@@ -39,13 +39,12 @@ export default function LoginScreen() {
   });
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId: "",
-    webClientId: "",
+    expoClientId: "93116964233-2nn1m34uj3j4hd5r0j2skda5m9m8tbq1.apps.googleusercontent.com",
+    iosClientId: "93116964233-i8dt8gathqh7ddbnhqq8u9jr6i827urm.apps.googleusercontent.com",
     scopes: [
       "openid",
-      "email",
       "profile",
-      "https://www.googleapis.com/auth/gmail.readonly",
+      "email",
     ],
   });
 
@@ -74,20 +73,30 @@ export default function LoginScreen() {
   }, [fontsLoaded]);
 
   useEffect(() => {
+    if (response) {
+      console.log("Auth Response:", response);
+      
+      if (response.type === "error") {
+        console.log("Auth Error:", response.error);
+      }
     if (response?.type === "success") {
       const { authentication } = response;
-      const accessToken = authentication.accessToken;
       const idToken = authentication.idToken;
-      console.log("Access Token:", accessToken);
+      const accessToken = authentication.accessToken;
+
       console.log("ID Token:", idToken);
+      console.log("Access Token:", accessToken);
+
+      // Send ID token to FastAPI backend
       axios
-        .post("http://YOUR_SERVER_IP:8000/auth/google", {
+        .post("http://127.0.0.1:8000/auth/google", {
           id_token: idToken,
-          access_token: accessToken,
+          access_token: accessToken
         })
-        .then((res) => console.log("API Token:", res.data.token))
+        .then((res) => console.log("Backend JWT + Gmail Labels:", res.data))
         .catch((err) => console.log(err.response?.data || err));
     }
+  }
   }, [response]);
 
   return (
@@ -150,8 +159,8 @@ export default function LoginScreen() {
         {/* Sign In Button */}
         <TouchableOpacity
           style={[styles.signInButton, !request && styles.signInButtonDisabled]}
-          // onPress={() => promptAsync()}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => promptAsync()}
+          // onPress={() => navigation.navigate("Home")}
           disabled={!request}
           activeOpacity={0.8}
         >
