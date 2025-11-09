@@ -459,7 +459,11 @@ function ScoreDonut({ score = 0, size = 160, strokeWidth = 14 }) {
 
 /* Bubbles */
 function ItemBubbles({ items = [] }) {
-  const top = useMemo(() => items.slice(0, 8), [items]);
+  // Filter out items with zero or falsy score, then take top 8
+  const top = useMemo(
+    () => items.filter((i) => i.carbonScore > 0).slice(0, 8),
+    [items]
+  );
   const max = useMemo(
     () => Math.max(1, ...top.map((i) => i.carbonScore || 0)),
     [top]

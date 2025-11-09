@@ -65,6 +65,7 @@ export default function Energy() {
           type: fileMeta.mimeType || "application/pdf",
         });
 
+        console.log("Just before hitting the api");
         const resp = await fetch(API_URL, {
           method: "POST",
           body: form,
@@ -152,61 +153,32 @@ export default function Energy() {
         {/* Results */}
         {result && (
           <View style={scannerStyles.resultsWrap}>
-            {/* Top: Donut (days coverage) + meta */}
+            {/* Top: Donut (days) + meta */}
             <View style={scannerStyles.scoreWrap}>
               <DaysDonut days={result.days} size={160} strokeWidth={14} />
               <View style={scannerStyles.scoreMeta}>
-                <Text style={scannerStyles.storeTag}>
-                  {result.utilityName || "Utility"} • {result.zipCode || "ZIP"}
-                </Text>
-
-                <LinearGradient
-                  colors={[COLORS.primary, COLORS.accent]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={scannerStyles.badge}
-                >
-                  <Text style={scannerStyles.badgeText}>
-                    {result.netMetering ? "Net Metering" : "Standard"}
-                  </Text>
-                </LinearGradient>
-
+                {/* Only the billing period is known */}
                 <Text style={scannerStyles.metaHint}>{result.periodLabel}</Text>
               </View>
             </View>
 
             {/* Stats */}
-            <View style={scannerStyles.statsRow}>
+            <View style={scannerStyles.statsCol}>
               <StatCard label="Total kWh" value={fmtNum(result.totalKwh)} />
               <StatCard label="Avg kWh/day" value={fmtNum(result.avgPerDay)} />
+              {result.carbonFootprint != null && (
+                <StatCard
+                  label="CO₂e (kg)"
+                  value={fmtNum(result.carbonFootprint)}
+                />
+              )}
             </View>
-
-            {/* Supplier */}
-            <View style={scannerStyles.bubblesCard}>
-              <Text style={scannerStyles.sectionTitle}>Supplier Details</Text>
-              <View style={scannerStyles.kvWrap}>
-                <KV label="Name" value={result.supplierName || "—"} />
-                <KV label="Plan" value={result.supplierPlan || "—"} />
-                <KV label="Green Attribute" value={result.greenAttr || "—"} />
-                <KV label="Accounting" value={result.accountingMethod || "—"} />
-              </View>
-            </View>
-
-            {/* Service address */}
-            {result.serviceAddress ? (
-              <LinearGradient
-                colors={[COLORS.primary, COLORS.primaryDark]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={scannerStyles.eqPill}
-              >
-                <Text style={scannerStyles.eqTitle}>Service Address</Text>
-                <Text style={scannerStyles.eqLine}>{result.serviceAddress}</Text>
-              </LinearGradient>
-            ) : null}
 
             {/* CTA */}
-            <TouchableOpacity style={scannerStyles.secondaryBtn} onPress={reset}>
+            <TouchableOpacity
+              style={scannerStyles.secondaryBtn}
+              onPress={reset}
+            >
               <Text style={scannerStyles.secondaryBtnText}>Scan another</Text>
             </TouchableOpacity>
           </View>
@@ -219,45 +191,32 @@ export default function Energy() {
 /* ================= helpers / components ================= */
 
 function normalizePayload(data) {
-  const e = data?.energy ?? {};
-  const start = e.billing_period_start
-    ? new Date(e.billing_period_start)
-    : null;
-  const end = e.billing_period_end ? new Date(e.billing_period_end) : null;
+  const totalKwh = num(data?.energy);
+  const start = data?.startDate ? new Date(data.startDate) : null;
+  const end = data?.endDate ? new Date(data.endDate) : null;
 
-  const days = typeof e.days === "number" ? e.days : diffDays(start, end);
-  const totalKwh = num(e.total_kwh);
-  const avgPerDay = days ? totalKwh / days : null;
+  const days = start && end ? diffDays(start, end) : null;
+  const avgPerDay = days && totalKwh != null ? totalKwh / days : null;
 
   return {
-    ok: !!data?.ok,
-    bytes: data?.bytes ?? null,
-
-    utilityName: e.utility_name || "",
-    zipCode: e.zip_code || "",
-    serviceAddress: e.service_address || "",
+    ok: true,
+    // Period
     periodStart: start,
     periodEnd: end,
     days,
+    periodLabel:
+      start && end
+        ? `Billing period: ${fmtDate(start)} – ${fmtDate(end)} (${
+            days ?? "—"
+          } days)`
+        : "Billing period",
 
+    // Energy
     totalKwh,
     avgPerDay,
 
-    supplierName: e.supplier?.name || "",
-    supplierPlan: e.supplier?.plan || "",
-    greenAttr: e.supplier?.green_attributes || "",
-
-    importKwh: num(e.onsite?.import_kwh),
-    exportKwh: num(e.onsite?.export_kwh),
-    netMetering: !!e.onsite?.net_metering,
-
-    accountingMethod: e.accounting_method || "",
-    periodLabel:
-      start && end
-        ? `Billing period: ${fmtDate(start)} – ${fmtDate(end)} (${days} days)`
-        : days
-        ? `Billing period: ${days} days`
-        : "Billing period",
+    // Carbon
+    carbonFootprint: num(data?.carbonFootPrint),
   };
 }
 
@@ -333,7 +292,7 @@ function DaysDonut({ days = 0, size = 160, strokeWidth = 14 }) {
 
 function StatCard({ label, value }) {
   return (
-    <View style={scannerStyles.statCard}>
+    <View style={[scannerStyles.statCard, { width: "100%" }]}>
       <Text style={scannerStyles.statValue}>{value}</Text>
       <Text style={scannerStyles.statLabel}>{label}</Text>
     </View>

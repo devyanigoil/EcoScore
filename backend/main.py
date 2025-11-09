@@ -167,9 +167,9 @@ def compute_transport_carbon(vehicle_type: str, distance_miles: float) -> float:
     return round((distance_miles or 0.0) * factor, 3)
 
 def make_min_response(energy_dict: dict) -> JSONResponse:
-    start = energy_dict.get("billing_period_start")
-    end   = energy_dict.get("billing_period_end")
-    kwh   = energy_dict.get("total_kwh")
+    start = energy_dict.get("energy").get("billing_period_start")
+    end   = energy_dict.get("energy").get("billing_period_end")
+    kwh   = energy_dict.get("energy").get("total_kwh")
 
     if kwh is None:
         raise HTTPException(status_code=422, detail="Could not extract total_kwh from the bill")
