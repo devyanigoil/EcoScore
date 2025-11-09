@@ -1,11 +1,12 @@
 import json
+from re import U
 from pydantic import BaseModel
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from jose import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
@@ -14,6 +15,8 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import sys
+from uuid import uuid4
+from collections import defaultdict
 
 from ocr import (
     ocr_from_bytes,
@@ -35,6 +38,36 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 from LLM_Score.ScoreCal import score_receipt
 
+
+POINTS_FILE = "data/points.json"
+def load_points():
+    if os.path.exists(POINTS_FILE):
+        with open(POINTS_FILE, "r") as f:
+            return json.load(f)
+    return []
+
+def save_points(points_data):
+    with open(POINTS_FILE, "w") as f:
+        json.dump(points_data, f, indent=2)
+
+def add_points_entry(user, item, entry_type, date, carbon_emission, points):
+    """Adds a single unified entry to points.json."""
+    data = load_points()
+    user_entry = next((u for u in data if u["user"] == user), None)
+    if not user_entry:
+        user_entry = {"user": user, "points": []}
+        data.append(user_entry)
+
+    user_entry["points"].append({
+        "user": user,
+        "item": item,
+        "type": entry_type,
+        "date": date,
+        "carbon_emission": round(float(carbon_emission), 3),
+        "points": round(float(points), 3)
+    })
+    print(data)
+    #save_points(data)
 
 app = FastAPI(title="EcoScore Upload API", version="3.0.0")
 
@@ -90,14 +123,14 @@ async def google_auth(data: GoogleAuthModel):
                 "email": email,
                 "name": name,
                 "picture": picture,
-                "created_at": datetime.utcnow()
+                "created_at": datetime.now(timezone.utc)
             }
             users.insert_one(user)
         else:
             # Update existing user
             users.update_one(
                 {"google_id": google_id},
-                {"$set": {"last_login": datetime.utcnow()}}
+                {"$set": {"last_login": datetime.now(timezone.utc)}}
             )
 
         # For now, skip Gmail API calls until basic auth works
@@ -117,7 +150,7 @@ async def google_auth(data: GoogleAuthModel):
         payload = {
             "user_id": google_id,
             "email": email,
-            "exp": datetime.utcnow() + timedelta(days=7)
+            "exp": datetime.now(timezone.utc) + timedelta(days=7)
         }
         token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
@@ -163,6 +196,53 @@ EMISSIONS_PER_MILE = {
     "electric": 0.10,    # ~0.30 kWh/mi * ~0.33 kg/kWh; tune by ZIP if you want
 }
 
+from datetime import datetime, timezone
+
+from datetime import datetime, timezone
+
+@app.get("/points/{user_id}")
+def get_points_summary(user_id: str):
+    data = load_points()
+
+    # Filter all records for this user
+    user_points = [p for p in data if p.get("user") == user_id]
+
+    if not user_points:
+        return {
+            "user": user_id,
+            "today_points": 0,
+            "month_points": 0,
+            "by_type": {
+                "shopping": 0,
+                "energy": 0,
+                "transportation": 0
+            }
+        }
+
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    month_prefix = datetime.now(timezone.utc).strftime("%Y-%m")
+
+    # ---- Aggregations ----
+    today_points = sum(p["points"] for p in user_points if p["date"] == today)
+    month_points = sum(p["points"] for p in user_points if p["date"].startswith(month_prefix))
+
+    # ---- Simple type filters (no month restriction) ----
+    shopping_points = sum(p["points"] for p in user_points if p["type"] == "shopping")
+    energy_points = sum(p["points"] for p in user_points if p["type"] == "energy")
+    transport_points = sum(p["points"] for p in user_points if p["type"] == "transportation")
+
+    return {
+        "user": user_id,
+        "today_points": round(today_points, 2),
+        "month_points": round(month_points, 2),
+        "by_type": {
+            "shopping": round(shopping_points, 2),
+            "energy": round(energy_points, 2),
+            "transportation": round(transport_points, 2)
+        }
+    }
+
+
 def compute_transport_carbon(vehicle_type: str, distance_miles: float) -> float:
     vt = (vehicle_type or "").lower()
     factor = EMISSIONS_PER_MILE.get(vt, EMISSIONS_PER_MILE["gasoline"])
@@ -193,6 +273,7 @@ def healthz():
 # -------- Receipts (unchanged) --------
 @app.post("/ocr/upload")
 async def ocr_upload(
+    userId: str = Form(..., description="User Id"),
     image: UploadFile = File(..., description="Receipt image (jpg/png/webp)"),
     return_cleaned: bool = Form(False),
 ):
@@ -206,7 +287,20 @@ async def ocr_upload(
         response = await score_receipt(result)   # <-- IMPORTANT: await
 
         # Add the receipt to the database
-        add_receipt(user="Aashnna Soni", items=response)
+
+        add_receipt(user=userId, items=response)
+        for item in response:
+            carbon = item.get("emissions_kg_co2e", 0)
+            item_points = max(0, 10 - float(carbon))  # shopping logic
+            add_points_entry(
+                user=userId,
+                item=item.get("item_name", "unknown"),
+                entry_type="shopping",
+                date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                carbon_emission=carbon,
+                points=item_points
+            )
+
 
         print("Response from LLM Success")
         return JSONResponse(content={"items": response})
@@ -221,6 +315,7 @@ async def ocr_upload(
 # -------- Energy bills (images) --------
 @app.post("/ocr/energy/upload")
 async def ocr_energy_upload(
+    userId: str = Form(..., description="User Id"),
     image: UploadFile = File(..., description="Energy bill image (jpg/png/webp)"),
     return_cleaned: bool = Form(False),
 ):
@@ -231,7 +326,19 @@ async def ocr_energy_upload(
         result = energy_from_image_bytes(data, return_cleaned=bool(return_cleaned))
         resp = make_min_response(result)
         resp_json =json.loads(resp.body.decode("utf-8"))
-        add_energy(user="Aashnna Soni", bill=resp_json)
+
+        add_energy(user=userId, bill=resp_json)
+
+        carbon = resp_json.get("carbonFootPrint", 0)
+        energy_points = 100 - float(carbon)  # 🔸 new energy logic
+        add_points_entry(
+            user=userId,
+            item="energy",
+            entry_type="energy",
+            date=resp_json.get("startDate") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            carbon_emission=carbon,
+            points=energy_points
+        )
         return resp
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
@@ -243,6 +350,7 @@ async def ocr_energy_upload(
 # -------- Energy bills (PDFs: text-based) --------
 @app.post("/ocr/energy/pdf")
 async def ocr_energy_pdf(
+    userId: str = Form(..., description="User Id"),
     pdf: UploadFile = File(..., description="Energy bill PDF (text-based, not scanned)"),
     return_cleaned: bool = Form(False),
 ):
@@ -253,7 +361,18 @@ async def ocr_energy_pdf(
         result = energy_from_pdf_bytes(data, return_cleaned=bool(return_cleaned))
         resp = make_min_response(result)
         resp_json =json.loads(resp.body.decode("utf-8"))
-        add_energy(user="Aashnna Soni", bill=resp_json)
+
+        add_energy(user=userId, bill=resp_json)
+        carbon = resp_json.get("carbonFootPrint", 0)
+        energy_points = 100 - float(carbon)  # 🔸 new energy logic
+        add_points_entry(
+            user=userId,
+            item="energy",
+            entry_type="energy",
+            date=resp_json.get("startDate") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            carbon_emission=carbon,
+            points=energy_points
+        )
         return resp
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
@@ -267,6 +386,7 @@ async def ocr_energy_pdf(
 # -------- Transport (images) --------
 @app.post("/ocr/transport/upload")
 async def ocr_transport_upload(
+    userId: str = Form(..., description="User Id"),
     vehicle_type: str = Form(..., description="gasoline | hybrid | electric"),
     image: UploadFile = File(..., description="Trip screenshot / receipt (jpg/png/webp)"),
     return_cleaned: bool = Form(False),
@@ -296,7 +416,18 @@ async def ocr_transport_upload(
         if return_cleaned:
             out["cleaned_text"] = t.get("cleaned_text")
 
-        add_rides(user="Aashnna Soni", bill=out)
+
+        add_rides(user=userId, bill=out)
+        carbon = out.get("carbonFootPrint", 0)
+        ride_points = max(0, 10 - float(carbon))
+        add_points_entry(
+            user=userId,
+            item=f"ride ({vehicle_type})",
+            entry_type="transportation",
+            date=out.get("date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            carbon_emission=carbon,
+            points=ride_points
+        )
         return JSONResponse(out)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Transport OCR failed: {e}")
@@ -304,6 +435,7 @@ async def ocr_transport_upload(
 # -------- Transport (PDFs: text-based) --------
 @app.post("/ocr/transport/pdf")
 async def ocr_transport_pdf(
+    userId: str = Form(..., description="User Id"),
     vehicle_type: str = Form(..., description="gasoline | hybrid | electric"),
     pdf: UploadFile = File(..., description="Transport receipt PDF (text-based, not scanned)"),
     return_cleaned: bool = Form(False),
@@ -333,7 +465,18 @@ async def ocr_transport_pdf(
         if return_cleaned:
             out["cleaned_text"] = t.get("cleaned_text")
 
-        add_rides(user="Aashnna Soni", bill=out)
+
+        add_rides(user=userId, bill=out)
+        carbon = out.get("carbonFootPrint", 0)
+        ride_points = max(0, 10 - float(carbon))
+        add_points_entry(
+            user=userId,
+            item=f"ride ({vehicle_type})",
+            entry_type="transportation",
+            date=out.get("date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            carbon_emission=carbon,
+            points=ride_points
+        )
         return JSONResponse(out)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Transport PDF OCR failed: {e}")
