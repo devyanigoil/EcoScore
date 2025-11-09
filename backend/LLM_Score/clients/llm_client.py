@@ -165,7 +165,8 @@ class LLMClient:
                     "role": "system",
                     "content": (
                         "You are a sustainability analyst producing factual carbon footprint estimates. "
-                        "If unsure, return null for emissions."
+                        "Try your best to find the estimate for each item."
+                        "If absolutely unsure even about the estimate, only then return 1.0 kg CO2e. "
                     ),
                 },
                 {"role": "user", "content": user_prompt},
@@ -181,6 +182,7 @@ class LLMClient:
         raw_text = _extract_content(response.choices[0].message.content)
         try:
             parsed = json.loads(raw_text)
+            print("Parsed LLM response:", parsed)
         except json.JSONDecodeError:
             parsed = {"items": []}
 
