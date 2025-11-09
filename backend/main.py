@@ -16,6 +16,8 @@ from ocr import (
     ocr_from_bytes,
     energy_from_image_bytes,
     energy_from_pdf_bytes,
+    transport_from_image_bytes,
+    transport_from_pdf_bytes,
 )
 
 app = FastAPI(title="EcoScore Upload API", version="3.0.0")
@@ -138,6 +140,36 @@ async def google_auth(data: GoogleAuthModel):
 #   pdfminer.six   (for /ocr/energy/pdf)
 #   GOOGLE_APPLICATION_CREDENTIALS set in the shell running uvicorn
 
+EMISSION_FACTOR_KG_PER_KWH = 0.42
+EMISSIONS_PER_MILE = {
+    "gasoline": 0.404,   # tailpipe avg per mile
+    "hybrid":   0.25,    # rougher, lower
+    "electric": 0.10,    # ~0.30 kWh/mi * ~0.33 kg/kWh; tune by ZIP if you want
+}
+
+def compute_transport_carbon(vehicle_type: str, distance_miles: float) -> float:
+    vt = (vehicle_type or "").lower()
+    factor = EMISSIONS_PER_MILE.get(vt, EMISSIONS_PER_MILE["gasoline"])
+    return round((distance_miles or 0.0) * factor, 3)
+
+def make_min_response(energy_dict: dict) -> JSONResponse:
+    start = energy_dict.get("billing_period_start")
+    end   = energy_dict.get("billing_period_end")
+    kwh   = energy_dict.get("total_kwh")
+
+    if kwh is None:
+        raise HTTPException(status_code=422, detail="Could not extract total_kwh from the bill")
+
+    carbon = round(float(kwh) * EMISSION_FACTOR_KG_PER_KWH, 2)
+
+    return JSONResponse({
+        "startDate": start,
+        "endDate": end,
+        "energy": kwh,
+        "carbonFootPrint": carbon
+    })
+
+
 @app.get("/healthz")
 def healthz():
     return {"ok": True}
@@ -161,6 +193,8 @@ async def ocr_upload(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"unexpected: {e}")
 
+
+
 # -------- Energy bills (images) --------
 @app.post("/ocr/energy/upload")
 async def ocr_energy_upload(
@@ -172,7 +206,7 @@ async def ocr_energy_upload(
     data = await image.read()
     try:
         result = energy_from_image_bytes(data, return_cleaned=bool(return_cleaned))
-        return JSONResponse(result)
+        return make_min_response(result)
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
     except RuntimeError as e:
@@ -191,7 +225,8 @@ async def ocr_energy_pdf(
     data = await pdf.read()
     try:
         result = energy_from_pdf_bytes(data, return_cleaned=bool(return_cleaned))
-        return JSONResponse(result)
+
+        return make_min_response(result)
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
     except RuntimeError as e:
@@ -199,3 +234,74 @@ async def ocr_energy_pdf(
         raise HTTPException(status_code=502, detail=f"PDF processing: {e}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"unexpected: {e}")
+
+
+# -------- Transport (images) --------
+@app.post("/ocr/transport/upload")
+async def ocr_transport_upload(
+    vehicle_type: str = Form(..., description="gasoline | hybrid | electric"),
+    image: UploadFile = File(..., description="Trip screenshot / receipt (jpg/png/webp)"),
+    return_cleaned: bool = Form(False),
+):
+    if not image.content_type or not image.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="file must be an image/*")
+    data = await image.read()
+    try:
+        result = transport_from_image_bytes(data)          # <-- OCR in ocr.py
+        t = result.get("transport", {})
+        dist = t.get("distance_miles")
+        carbon = compute_transport_carbon(vehicle_type, dist if dist is not None else 0.0)
+
+        out = {
+            "provider": t.get("provider"),
+            "date": t.get("date"),
+            "startTime": t.get("startTime"),
+            "endTime": t.get("endTime"),
+            "pickup": t.get("pickup"),
+            "dropoff": t.get("dropoff"),
+            "distance_miles": dist,
+            "duration_min": t.get("duration_min"),
+            "price_total": t.get("price_total"),
+            "vehicle_type": vehicle_type,
+            "carbonFootPrint": carbon,
+        }
+        if return_cleaned:
+            out["cleaned_text"] = t.get("cleaned_text")
+        return JSONResponse(out)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Transport OCR failed: {e}")
+
+# -------- Transport (PDFs: text-based) --------
+@app.post("/ocr/transport/pdf")
+async def ocr_transport_pdf(
+    vehicle_type: str = Form(..., description="gasoline | hybrid | electric"),
+    pdf: UploadFile = File(..., description="Transport receipt PDF (text-based, not scanned)"),
+    return_cleaned: bool = Form(False),
+):
+    if not pdf.content_type or pdf.content_type not in ("application/pdf", "application/octet-stream"):
+        raise HTTPException(status_code=400, detail="file must be a PDF")
+    data = await pdf.read()
+    try:
+        result = transport_from_pdf_bytes(data)            # <-- OCR in ocr.py
+        t = result.get("transport", {})
+        dist = t.get("distance_miles")
+        carbon = compute_transport_carbon(vehicle_type, dist if dist is not None else 0.0)
+
+        out = {
+            "provider": t.get("provider"),
+            "date": t.get("date"),
+            "startTime": t.get("startTime"),
+            "endTime": t.get("endTime"),
+            "pickup": t.get("pickup"),
+            "dropoff": t.get("dropoff"),
+            "distance_miles": dist,
+            "duration_min": t.get("duration_min"),
+            "price_total": t.get("price_total"),
+            "vehicle_type": vehicle_type,
+            "carbonFootPrint": carbon,
+        }
+        if return_cleaned:
+            out["cleaned_text"] = t.get("cleaned_text")
+        return JSONResponse(out)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Transport PDF OCR failed: {e}")

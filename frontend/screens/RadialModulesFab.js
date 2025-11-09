@@ -62,7 +62,7 @@ export default function RadialModulesFab({ modules = [], onSelect }) {
           onPress={() => toggle(false)}
         >
           <BlurView
-            intensity={35}
+            intensity={75}
             tint={Platform.OS === "ios" ? "dark" : "regular"}
             style={StyleSheet.absoluteFill}
           />

@@ -2,12 +2,14 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { TouchableOpacity, Text, Alert } from "react-native";
+import WelcomeScreen from "./screens/WelcomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import Shopping from "./screens/Shopping";
 import Transportation from "./screens/Transportation";
 import Energy from "./screens/Energy";
 import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "./styles/theme";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,9 +23,15 @@ export default function App() {
           headerShadowVisible: false,
           headerBackTitleVisible: false,
           headerTintColor: "#ffffff",
-          headerStyle: { backgroundColor: "#003d5b" },
+          headerStyle: { backgroundColor: COLORS.background },
         }}
       >
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{ headerShown: false }}
+        />
+
         <Stack.Screen
           name="Login"
           component={LoginScreen}
@@ -47,7 +55,7 @@ export default function App() {
                       {
                         text: "Logout",
                         style: "destructive",
-                        onPress: () => navigation.replace("Login"),
+                        onPress: () => navigation.replace("Welcome"),
                       },
                     ],
                     { cancelable: true }

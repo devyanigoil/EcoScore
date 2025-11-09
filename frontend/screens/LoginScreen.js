@@ -3,8 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  Dimensions,
   StatusBar,
   Animated,
 } from "react-native";
@@ -12,18 +10,9 @@ import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-import { oceanSunsetNeumorphicStyles as styles } from "../colorThemes";
-// import { oceanSunsetStyles as styles } from "./colorThemes";
-import {
-  useFonts,
-  PlayfairDisplay_400Regular,
-  PlayfairDisplay_600SemiBold,
-  PlayfairDisplay_700Bold,
-} from "@expo-google-fonts/playfair-display";
+import { baseStyles, loginStyles } from "../styles/theme";
 
 WebBrowser.maybeCompleteAuthSession();
-
-const { width, height } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -31,12 +20,6 @@ export default function LoginScreen() {
   const [fadeAnim] = useState(new Animated.Value(0));
   const [slideAnim] = useState(new Animated.Value(50));
   const [scaleAnim] = useState(new Animated.Value(0.9));
-
-  let [fontsLoaded] = useFonts({
-    PlayfairDisplay_400Regular,
-    PlayfairDisplay_600SemiBold,
-    PlayfairDisplay_700Bold,
-  });
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId:
@@ -47,28 +30,26 @@ export default function LoginScreen() {
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
-      // Entrance animations
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-  }, [fontsLoaded]);
+    // Entrance animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        tension: 50,
+        friction: 7,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
 
   useEffect(() => {
     if (response) {
@@ -98,19 +79,19 @@ export default function LoginScreen() {
   }, [response]);
 
   return (
-    <View style={styles.container}>
+    <View style={baseStyles.container}>
       <StatusBar barStyle="light-content" />
 
       {/* Background gradient effect */}
-      <View style={styles.backgroundGradient}>
-        <View style={[styles.circle, styles.circle1]} />
-        <View style={[styles.circle, styles.circle2]} />
-        <View style={[styles.circle, styles.circle3]} />
+      <View style={baseStyles.backgroundGradient}>
+        <View style={[baseStyles.circle, baseStyles.circle1]} />
+        <View style={[baseStyles.circle, baseStyles.circle2]} />
+        <View style={[baseStyles.circle, baseStyles.circle3]} />
       </View>
 
       <Animated.View
         style={[
-          styles.content,
+          baseStyles.content,
           {
             opacity: fadeAnim,
             transform: [{ translateY: slideAnim }, { scale: scaleAnim }],
@@ -118,58 +99,48 @@ export default function LoginScreen() {
         ]}
       >
         {/* Logo Section */}
-        <View style={styles.logoContainer}>
-          <View style={styles.logoCircle}>
-            <Text style={styles.logoLeaf}>🌱</Text>
+        <View style={loginStyles.logoContainer}>
+          <View style={loginStyles.logoCircle}>
+            <Text style={loginStyles.logoLeaf}>🌱</Text>
           </View>
-          <Text style={styles.logoText}>
-            <Text style={styles.logoEco}>Eco</Text>
-            <Text style={styles.logoScore}>Score</Text>
+          <Text style={loginStyles.logoText}>
+            <Text style={loginStyles.logoEco}>Eco</Text>
+            <Text style={loginStyles.logoScore}>Score</Text>
           </Text>
         </View>
 
         {/* Tagline */}
-        <Text style={styles.tagline}>
+        <Text style={loginStyles.tagline}>
           Track Your Impact,{"\n"}Earn Real Rewards
         </Text>
 
         {/* Description */}
-        <Text style={styles.description}>
+        <Text style={loginStyles.description}>
           Convert your eco-friendly actions into cashback and discounts at your
           favorite stores
         </Text>
 
-        {/* <View style={styles.featuresContainer}>
-          <View style={styles.featurePill}>
-            <Text style={styles.featureIcon}>📊</Text>
-            <Text style={styles.featureText}>Track Carbon</Text>
-          </View>
-          <View style={styles.featurePill}>
-            <Text style={styles.featureIcon}>💰</Text>
-            <Text style={styles.featureText}>Earn Cashback</Text>
-          </View>
-          <View style={styles.featurePill}>
-            <Text style={styles.featureIcon}>🎁</Text>
-            <Text style={styles.featureText}>Get Rewards</Text>
-          </View>
-        </View> */}
-
         {/* Sign In Button */}
         <TouchableOpacity
-          style={[styles.signInButton, !request && styles.signInButtonDisabled]}
+          style={[
+            loginStyles.signInButton,
+            !request && loginStyles.signInButtonDisabled,
+          ]}
           // onPress={() => promptAsync()}
           onPress={() => navigation.navigate("Home")}
           disabled={!request}
           activeOpacity={0.8}
         >
-          <View style={styles.googleIcon}>
-            <Text style={styles.googleG}>G</Text>
+          <View style={loginStyles.googleIcon}>
+            <Text style={loginStyles.googleG}>G</Text>
           </View>
-          <Text style={styles.signInButtonText}>Sign in with Google</Text>
+          <Text style={loginStyles.signInButtonText}>Sign in with Google</Text>
         </TouchableOpacity>
 
         {/* Footer Text */}
-        <Text style={styles.footerText}>Start making a difference today</Text>
+        <Text style={loginStyles.footerText}>
+          Start making a difference today
+        </Text>
       </Animated.View>
     </View>
   );
