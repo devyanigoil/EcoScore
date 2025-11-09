@@ -1,3 +1,4 @@
+import json
 from pydantic import BaseModel
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -22,6 +23,7 @@ from ocr import (
     transport_from_pdf_bytes,
 )
 
+from db import add_receipt, add_energy, add_rides
 
 
 # REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -202,6 +204,10 @@ async def ocr_upload(
         result = ocr_from_bytes(data, return_cleaned=bool(return_cleaned))  # if this is slow CPU, consider to_thread
         print("Response from OCR Success")
         response = await score_receipt(result)   # <-- IMPORTANT: await
+
+        # Add the receipt to the database
+        add_receipt(user="Aashnna Soni", items=response)
+
         print("Response from LLM Success")
         return JSONResponse(content={"items": response})
     except ValueError as e:
@@ -223,7 +229,10 @@ async def ocr_energy_upload(
     data = await image.read()
     try:
         result = energy_from_image_bytes(data, return_cleaned=bool(return_cleaned))
-        return make_min_response(result)
+        resp = make_min_response(result)
+        resp_json =json.loads(resp.body.decode("utf-8"))
+        add_energy(user="Aashnna Soni", bill=resp_json)
+        return resp
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
     except RuntimeError as e:
@@ -242,8 +251,10 @@ async def ocr_energy_pdf(
     data = await pdf.read()
     try:
         result = energy_from_pdf_bytes(data, return_cleaned=bool(return_cleaned))
-
-        return make_min_response(result)
+        resp = make_min_response(result)
+        resp_json =json.loads(resp.body.decode("utf-8"))
+        add_energy(user="Aashnna Soni", bill=resp_json)
+        return resp
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
     except RuntimeError as e:
@@ -284,6 +295,8 @@ async def ocr_transport_upload(
         }
         if return_cleaned:
             out["cleaned_text"] = t.get("cleaned_text")
+
+        add_rides(user="Aashnna Soni", bill=out)
         return JSONResponse(out)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Transport OCR failed: {e}")
@@ -319,6 +332,8 @@ async def ocr_transport_pdf(
         }
         if return_cleaned:
             out["cleaned_text"] = t.get("cleaned_text")
+
+        add_rides(user="Aashnna Soni", bill=out)
         return JSONResponse(out)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Transport PDF OCR failed: {e}")
