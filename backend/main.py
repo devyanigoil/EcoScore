@@ -64,7 +64,8 @@ def add_points_entry(user, item, entry_type, date, carbon_emission, points):
     }
 
     data.append(new_entry)  # Simply append the entry to the flat list
-    #save_points(data)
+    #print(data)
+    save_points(data)
     print(f"✅ Added new points entry for {user}: {item} ({entry_type})")
 
 app = FastAPI(title="EcoScore Upload API", version="3.0.0")
@@ -282,7 +283,9 @@ async def ocr_upload(
     try:
         result = ocr_from_bytes(data, return_cleaned=bool(return_cleaned))  # if this is slow CPU, consider to_thread
         print("Response from OCR Success")
+        #print("OCR Result:", result)
         response = await score_receipt(result)   # <-- IMPORTANT: await
+        #print("Scoring Result:", response)
 
         # Add the receipt to the database
 
@@ -577,3 +580,58 @@ async def get_summary(user_id: str, type: str):
             status_code=400,
             detail="type must be one of: 'transport', 'energy', 'shopping'",
         )
+    
+
+
+
+@app.get("/percentile/{user_id}")
+def get_today_percentile(user_id: str):
+    data = load_points()
+
+    if not data:
+        return {
+            "user": user_id,
+            "today_points": 0,
+            "percentile": 0,
+            "total_users": 0
+        }
+
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    # 1) Compute today's total points per user
+    today_totals = defaultdict(float)
+    for p in data:
+        if p.get("date") == today:
+            user = p.get("user")
+            if user:
+                today_totals[user] += p.get("points", 0)
+
+    # If no one has points today
+    if not today_totals:
+        return {
+            "user": user_id,
+            "today_points": 0,
+            "percentile": 0,
+            "total_users": 0
+        }
+
+    # 2) Get today's points for this user (0 if not present)
+    user_today_points = today_totals.get(user_id, 0.0)
+
+    # Ensure this user is included in the distribution even if 0
+    if user_id not in today_totals:
+        today_totals[user_id] = 0.0
+
+    values = list(today_totals.values())
+    total_users = len(values)
+
+    # 3) Percentile: proportion of users with <= this user's points
+    count_le = sum(1 for v in values if v <= user_today_points)
+    percentile = (count_le / total_users) * 100 if total_users > 0 else 0.0
+
+    return {
+        "user": user_id,
+        "today_points": round(user_today_points, 2),
+        "percentile": round(percentile, 2),
+        "total_users": total_users
+    }
