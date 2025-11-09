@@ -59,6 +59,122 @@
             "emissions_kg_co2e": 1.0
           }
         ]
+      },
+      {
+        "entry_id": "2f5e580f-cdf0-4488-801d-35ba7fef8852",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "ORGANIC CHICKEN DRUMSTIC",
+            "emissions_kg_co2e": 5.5
+          },
+          {
+            "item_name": "CHICKEN NAT BREAST BNLS",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "ORG DK CHOC ALMOND BAR",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BREAD FOCACCIA FRENCH ON",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "SOURDOUGH BREAD",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "LOVERS BAR DK CHOC 85%",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BAREBELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          }
+        ]
+      },
+      {
+        "entry_id": "12dd24c9-210a-422e-9a8b-354c8013f5eb",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "ORGANIC CHICKEN DRUMSTIC",
+            "emissions_kg_co2e": 5.5
+          },
+          {
+            "item_name": "CHICKEN NAT BREAST BNLS",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "ORG DK CHOC ALMOND BAR",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BREAD FOCACCIA FRENCH ON",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "SOURDOUGH BREAD",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "LOVERS BAR DK CHOC 85%",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BAREBELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          }
+        ]
       }
     ]
   }

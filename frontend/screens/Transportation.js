@@ -16,7 +16,6 @@ import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
-import Constants from "expo-constants";
 import { baseStyles, homeStyles, COLORS } from "../styles/theme";
 import { useRoute } from "@react-navigation/native";
 import { resolveApiBase } from "./functions";

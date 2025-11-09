@@ -25,6 +25,7 @@ import { useRoute } from "@react-navigation/native";
 import { resolveApiBase } from "./functions";
 
 const API_URL = `${resolveApiBase()}/ocr/upload`;
+// const API_URL = "http://10.0.0.145:8001/ocr/upload"; // <-- replace
 
 export default function Shopping() {
   const [imageUri, setImageUri] = useState(null);
@@ -124,6 +125,8 @@ export default function Shopping() {
 
       form.append("userId", String(userId));
 
+      console.log(form);
+
       // Call API
       const resp = await fetch(API_URL, {
         method: "POST",
@@ -137,6 +140,8 @@ export default function Shopping() {
       }
 
       const data = await resp.json();
+
+      console.log(data);
 
       // Briefly hold the analyze state (optional ~0.6 s)
       await new Promise((r) => setTimeout(r, 600));

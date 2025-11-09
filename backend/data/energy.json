@@ -9,6 +9,14 @@
         "end_date": "2025-10-29",
         "consumption_kwh": 191.0,
         "emissions": 80.22
+      },
+      {
+        "entry_id": "60342fcb-606c-4305-be95-ae4e785e39f1",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22
       }
     ]
   }

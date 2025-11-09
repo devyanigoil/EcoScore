@@ -1,3 +1,5 @@
+import Constants from "expo-constants";
+
 /** ===== API host resolution ===== */
 export function resolveApiBase() {
   const host = Constants.expoConfig?.hostUri?.split(":")[0];
