@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import {
   View,
   Text,
@@ -13,6 +19,8 @@ import * as ImagePicker from "expo-image-picker";
 import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { baseStyles, scannerStyles, COLORS } from "../styles/theme";
+import { Animated, Easing } from "react-native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const API_URL = "http://172.31.173.9:8001/ocr/upload"; // <-- replace
 
@@ -20,6 +28,36 @@ export default function Shopping() {
   const [imageUri, setImageUri] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+
+  // "idle" | "scan" | "analyze"
+  const [loadingStage, setLoadingStage] = useState("idle");
+
+  // Gentle pulse for icons / ring
+  const pulse = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    if (loadingStage === "idle") {
+      pulse.setValue(1);
+      return;
+    }
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, {
+          toValue: 1.08,
+          duration: 650,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulse, {
+          toValue: 1,
+          duration: 650,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [loadingStage]);
 
   const askMediaPerms = async () => {
     if (Platform.OS === "web") return true;
@@ -64,12 +102,15 @@ export default function Shopping() {
 
   const upload = useCallback(async (uri) => {
     try {
-      console.log("Entered upload");
       setLoading(true);
       setResult(null);
+      setLoadingStage("scan"); // Stage 1 begins
 
-      console.log(uri);
+      // --- Always show stage 1 for 2 seconds ---
+      await new Promise((r) => setTimeout(r, 2000));
+      setLoadingStage("analyze"); // Move to stage 2
 
+      // Prepare image form
       const form = new FormData();
       form.append("image", {
         uri,
@@ -77,12 +118,10 @@ export default function Shopping() {
         type: "image/jpeg",
       });
 
-      console.log(API_URL);
+      // Call API
       const resp = await fetch(API_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
         body: form,
       });
 
@@ -90,21 +129,26 @@ export default function Shopping() {
         const txt = await resp.text();
         throw new Error(`Upload failed: ${resp.status} ${txt}`);
       }
+
       const data = await resp.json();
 
-      console.log(data);
+      // Briefly hold the analyze state (optional ~0.6 s)
+      await new Promise((r) => setTimeout(r, 600));
+
+      // Done — show results
       setResult(normalizePayload(data));
     } catch (e) {
       console.log(e);
       Alert.alert("Error", e.message || "Failed to analyze receipt.");
     } finally {
       setLoading(false);
+      setLoadingStage("idle");
     }
   }, []);
 
   const reset = useCallback(() => {
-    setImageUri(null);
-    setResult(null);
+    setLoading(false);
+    setLoadingStage("idle");
   }, []);
 
   return (
@@ -154,20 +198,21 @@ export default function Shopping() {
           </View>
         )}
 
-        {/* Loading */}
+        {/* Two-stage Loading */}
         {loading && (
           <View style={scannerStyles.loadingCard}>
-            <ActivityIndicator size="large" color={COLORS.primary} />
-            <Text style={scannerStyles.loadingText}>
-              Scanning your receipt…
-            </Text>
+            {loadingStage === "scan" ? (
+              <StageScan pulse={pulse} />
+            ) : (
+              <StageAnalyze pulse={pulse} />
+            )}
           </View>
         )}
 
         {/* Results */}
         {result && (
           <View style={scannerStyles.resultsWrap}>
-            {/* Top: Score Donut + store tag */}
+            {/* Top: Score Donut  store tag */}
             <View style={scannerStyles.scoreWrap}>
               {/* <ScoreDonut
                 score={result.overallScore}
@@ -224,8 +269,105 @@ export default function Shopping() {
 
 /* ---------- helpers / components ---------- */
 
+function StageScan({ pulse }) {
+  return (
+    <View style={{ alignItems: "center", gap: 14 }}>
+      <Animated.View
+        style={{
+          transform: [{ scale: pulse }],
+          padding: 20,
+          borderRadius: 999,
+          backgroundColor: "rgba(74,158,255,0.12)",
+        }}
+      >
+        <MaterialCommunityIcons
+          name="receipt"
+          size={46}
+          color={COLORS.primary}
+        />
+      </Animated.View>
+
+      <Text style={scannerStyles.loadingText}>Scanning the receipt…</Text>
+
+      {/* Animated scanning ring */}
+      <Animated.View
+        style={{
+          marginTop: 4,
+          width: 72,
+          height: 72,
+          borderRadius: 36,
+          borderWidth: 3,
+          borderColor: "rgba(255,255,255,0.18)",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+        }}
+      >
+        <Animated.View
+          style={{
+            position: "absolute",
+            width: "120%",
+            height: 6,
+            backgroundColor: COLORS.primary,
+            opacity: 0.5,
+            transform: [
+              {
+                translateY: pulse.interpolate({
+                  inputRange: [1, 1.08],
+                  outputRange: [-28, 28],
+                }),
+              },
+            ],
+          }}
+        />
+        <Ionicons name="scan" size={24} color="white" />
+      </Animated.View>
+    </View>
+  );
+}
+
+function StageAnalyze({ pulse }) {
+  return (
+    <View style={{ alignItems: "center", gap: 14 }}>
+      <Animated.View
+        style={{
+          transform: [{ scale: pulse }],
+          padding: 20,
+          borderRadius: 999,
+          backgroundColor: "rgba(237,174,73,0.14)",
+        }}
+      >
+        <MaterialCommunityIcons name="brain" size={46} color={COLORS.accent} />
+      </Animated.View>
+
+      <Text style={scannerStyles.loadingText}>Analyzing the receipt…</Text>
+
+      {/* Subtle spinner ring */}
+      <Animated.View
+        style={{
+          marginTop: 4,
+          width: 56,
+          height: 56,
+          borderRadius: 28,
+          borderWidth: 3,
+          borderColor: "rgba(255,255,255,0.18)",
+          borderTopColor: COLORS.accent,
+          transform: [
+            {
+              rotate: pulse.interpolate({
+                inputRange: [1, 1.08],
+                outputRange: ["0deg", "360deg"],
+              }),
+            },
+          ],
+        }}
+      />
+    </View>
+  );
+}
+
 function normalizePayload(data) {
-  const raw = Array.isArray(data.items) ? data.items : [];
+  const raw = Array.isArray(data?.items) ? data.items : [];
 
   // Map payload → UI model
   const items = raw
@@ -265,7 +407,7 @@ function toPercent(value, maxValue) {
 }
 
 function gradeLabel(score) {
-  if (score <= 20) return "A+";
+  if (score <= 20) return "A";
   if (score <= 35) return "A";
   if (score <= 50) return "B";
   if (score <= 70) return "C";
