@@ -571,10 +571,21 @@ async def get_summary(user_id: str, type: str):
 
         # if you’re using Receipts.json structure, this will be "receipts"
         receipts = user_block.get("receipts", [])
+        # entries = [
+        #     {   "date": receipt.get("date"),
+        #         "store": receipt.get("store"),
+        #         "items": receipt.get("items"),
+        #     }
+        #     for receipt in receipts
+        # ]
         entries = [
-            {   "date": receipt.get("date"),
+            {
+                "date": receipt.get("date"),
                 "store": receipt.get("store"),
-                "items": receipt.get("items"),
+                "emissions": sum(
+                    item.get("emissions_kg_co2e", 0) 
+                    for item in receipt.get("items", [])
+                ),
             }
             for receipt in receipts
         ]
