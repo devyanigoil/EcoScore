@@ -1,5 +1,5 @@
 // HomeScreen.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,10 @@ import { baseStyles, homeStyles, COLORS } from "../styles/theme";
 import RadialModulesFab from "./RadialModulesFab";
 import EcoScoreRing, { getTier, TIERS } from "./EcoScoreRing";
 import { useRoute } from "@react-navigation/native";
+import axios from "axios";
+import { resolveApiBase } from "./functions";
+
+const API_URL = `${resolveApiBase()}/user`;
 
 // Mock data (wire up later to real backend)
 const monthlyBreakdown = [
@@ -29,12 +33,29 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const { params } = useRoute();
   const userId = params?.userId;
+  const [userData, setUserData] = useState(null);
 
   // Example eco score (0..1000); replace with real state from backend
   const ecoScore = 300;
   const tier = getTier(ecoScore);
 
   const [tiersOpen, setTiersOpen] = useState(false);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/${userId}`);
+        console.log("✅ User fetched:", response.data);
+        setUserData(response.data);
+      } catch (error) {
+        console.error("❌ Failed to fetch user:", error.message);
+      }
+    };
+
+    fetchUser();
+  }, [userId]);
 
   return (
     <View style={baseStyles.container}>
@@ -51,7 +72,9 @@ export default function HomeScreen() {
       >
         {/* Header pill */}
         <View style={homeStyles.headerPill}>
-          <Text style={homeStyles.headerTitle}>Welcome Vanshika</Text>
+          <Text style={homeStyles.headerTitle}>
+            Welcome {userData.user_name}
+          </Text>
         </View>
 
         {/* Score card */}

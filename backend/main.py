@@ -343,10 +343,10 @@ async def ocr_transport_pdf(
 async def get_user(user_id: str):
     # Load users from JSON file
     try:
-        with open("data/user.json", "r", encoding="utf-8") as f:
+        with open("data/users.json", "r", encoding="utf-8") as f:
             users = json.load(f)
     except FileNotFoundError:
-        raise HTTPException(status_code=500, detail="user.json not found")
+        raise HTTPException(status_code=500, detail="users.json not found")
 
     # Look up user name
     name = users.get(user_id)
