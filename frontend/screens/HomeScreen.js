@@ -20,41 +20,65 @@ import axios from "axios";
 import { resolveApiBase } from "./functions";
 
 const API_URL = `${resolveApiBase()}/user`;
-
-// Mock data (wire up later to real backend)
-const monthlyBreakdown = [
-  { key: "Shopping", icon: "🛒", delta: 620 },
-  { key: "Transit", icon: "🚶", delta: 340 },
-  { key: "Energy", icon: "💡", delta: 180 },
-  { key: "Food", icon: "🥗", delta: 250 },
-];
+const POINTS_URL = `${resolveApiBase()}/points`;
+const PERCENTILE_URL = `${resolveApiBase()}/percentile`;
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { params } = useRoute();
   const userId = params?.userId;
   const [userData, setUserData] = useState({ user_name: "" });
-
-  // Example eco score (0..1000); replace with real state from backend
-  const ecoScore = 300;
-  const tier = getTier(ecoScore);
+  const [pointsData, setPointsData] = useState(null);
+  const [percentileData, setPercentileData] = useState(null);
 
   const [tiersOpen, setTiersOpen] = useState(false);
+
+  // Use percentile instead of raw score
+  const percentile = percentileData?.percentile || 0;
+  const tier = getTier(percentile);
+
+  // Build monthly breakdown from API data
+  const monthlyBreakdown = pointsData
+    ? [
+        { key: "Shopping", icon: "🛒", delta: pointsData.by_type.shopping },
+        {
+          key: "Transit",
+          icon: "🚶",
+          delta: pointsData.by_type.transportation,
+        },
+        { key: "Energy", icon: "💡", delta: pointsData.by_type.energy },
+        // Add Food if you have it in your API, otherwise remove or set to 0
+        { key: "Food", icon: "🥗", delta: 0 },
+      ]
+    : [];
 
   useEffect(() => {
     if (!userId) return;
 
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/${userId}`);
-        console.log("✅ User fetched:", response.data);
-        setUserData(response.data);
+        // Fetch user info
+        const userResponse = await axios.get(`${API_URL}/${userId}`);
+        console.log("✅ User fetched:", userResponse.data);
+        setUserData(userResponse.data);
+
+        // Fetch points summary
+        const pointsResponse = await axios.get(`${POINTS_URL}/${userId}`);
+        console.log("✅ Points fetched:", pointsResponse.data);
+        setPointsData(pointsResponse.data);
+
+        // Fetch percentile data
+        const percentileResponse = await axios.get(
+          `${PERCENTILE_URL}/${userId}`
+        );
+        console.log("✅ Percentile fetched:", percentileResponse.data);
+        setPercentileData(percentileResponse.data);
       } catch (error) {
-        console.error("❌ Failed to fetch user:", error.message);
+        console.error("❌ Failed to fetch data:", error.message);
       }
     };
 
-    fetchUser();
+    fetchData();
   }, [userId]);
 
   return (
@@ -82,11 +106,11 @@ export default function HomeScreen() {
           {/* Top: animated EcoScore ring */}
           <View style={{ alignItems: "center", marginBottom: 16 }}>
             <EcoScoreRing
-              score={ecoScore}
+              score={percentile}
               // fixedColor="#3DDC84" // uncomment to force a single green
             />
             <Text style={{ color: "#A7A7A7", marginTop: 6 }}>
-              Your EcoScore
+              Top {percentile.toFixed(0)}% Percentile
             </Text>
           </View>
 
@@ -120,27 +144,25 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
-        {/* Suggested widgets (placeholders) */}
+        {/* Suggested widgets */}
         <View style={homeStyles.row}>
           <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
-            <Text style={homeStyles.widgetTitle}>Weekly Goal</Text>
-            <Text style={homeStyles.widgetMetric}>3/5 actions</Text>
-            <View style={homeStyles.progressBar}>
-              <View style={[homeStyles.progressFill, { width: "60%" }]} />
-            </View>
-            <Text style={homeStyles.widgetHint}>
-              2 more for a 200-pt streak bonus
+            <Text style={homeStyles.widgetTitle}>Today's Points</Text>
+            <Text style={homeStyles.widgetMetric}>
+              {pointsData?.today_points || 0} pts
             </Text>
+            <Text style={homeStyles.widgetHint}>Keep going to earn more!</Text>
           </View>
 
-          {/* Rewards Card - Now Interactive */}
-        </View>
-
-        <View style={homeStyles.row}>
+          {/* Rewards Card - Interactive */}
           <Pressable
             style={[homeStyles.widget, homeStyles.widgetHalf]}
             onPress={() =>
-              navigation.navigate("Rewards", { userId, ecoScore, tier })
+              navigation.navigate("Rewards", {
+                userId,
+                ecoScore: percentile,
+                tier,
+              })
             }
             android_ripple={{ color: "#222" }}
           >
@@ -149,24 +171,6 @@ export default function HomeScreen() {
             <Text style={homeStyles.widgetHint}>Tap to view discounts</Text>
           </Pressable>
         </View>
-
-        {/* <View style={[homeStyles.widget, homeStyles.full]}>
-          <Text style={homeStyles.widgetTitle}>Recent Actions</Text>
-          <View style={homeStyles.historyRow}>
-            <Text style={homeStyles.historyItem}>🚲 Biked to campus</Text>
-            <Text style={homeStyles.historyPts}>+60</Text>
-          </View>
-          <View style={homeStyles.historyRow}>
-            <Text style={homeStyles.historyItem}>
-              🔌 Turned off idle devices
-            </Text>
-            <Text style={homeStyles.historyPts}>+35</Text>
-          </View>
-          <View style={homeStyles.historyRow}>
-            <Text style={homeStyles.historyItem}>🥗 Cooked at home</Text>
-            <Text style={homeStyles.historyPts}>+45</Text>
-          </View>
-        </View> */}
       </ScrollView>
 
       <RadialModulesFab
@@ -196,7 +200,7 @@ export default function HomeScreen() {
                     style={[localStyles.badge, { backgroundColor: item.color }]}
                   />
                   <Text style={localStyles.rowText}>
-                    {item.name} — {item.min}–{item.max}
+                    {item.name} — {item.min}–{item.max}%
                   </Text>
                 </View>
               )}
