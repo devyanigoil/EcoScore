@@ -1,5 +1,5 @@
 // HomeScreen.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,12 +10,15 @@ import {
   StyleSheet,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from "@react-navigation/native"; // ← NEW
 import { MODULES } from "./modules.config";
 import { baseStyles, homeStyles, COLORS } from "../styles/theme";
 import RadialModulesFab from "./RadialModulesFab";
 import EcoScoreRing, { getTier, TIERS } from "./EcoScoreRing";
-import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { resolveApiBase } from "./functions";
 
@@ -52,34 +55,51 @@ export default function HomeScreen() {
       ]
     : [];
 
-  useEffect(() => {
+  const fetchAll = useCallback(async () => {
     if (!userId) return;
 
-    const fetchData = async () => {
-      try {
-        // Fetch user info
-        const userResponse = await axios.get(`${API_URL}/${userId}`);
-        console.log("✅ User fetched:", userResponse.data);
-        setUserData(userResponse.data);
+    const controller = new AbortController();
+    const { signal } = controller;
 
-        // Fetch points summary
-        const pointsResponse = await axios.get(`${POINTS_URL}/${userId}`);
-        console.log("✅ Points fetched:", pointsResponse.data);
-        setPointsData(pointsResponse.data);
+    try {
+      const [userRes, pointsRes, pctRes] = await Promise.all([
+        axios.get(`${API_URL}/${userId}`, { signal }),
+        axios.get(`${POINTS_URL}/${userId}`, { signal }),
+        axios.get(`${PERCENTILE_URL}/${userId}`, { signal }),
+      ]);
 
-        // Fetch percentile data
-        const percentileResponse = await axios.get(
-          `${PERCENTILE_URL}/${userId}`
-        );
-        console.log("✅ Percentile fetched:", percentileResponse.data);
-        setPercentileData(percentileResponse.data);
-      } catch (error) {
-        console.error("❌ Failed to fetch data:", error.message);
+      setUserData(userRes.data);
+      setPointsData(pointsRes.data);
+      setPercentileData(pctRes.data);
+    } catch (err) {
+      if (err.name !== "CanceledError" && err.message !== "canceled") {
+        console.error("❌ Fetch failed:", err.message);
       }
-    };
+    }
 
-    fetchData();
+    // return a cleanup function for whoever calls fetchAll inside an effect
+    return () => controller.abort();
   }, [userId]);
+
+  // Run on first mount and whenever userId changes
+  useEffect(() => {
+    let cleanup;
+    fetchAll().then((fn) => (cleanup = fn));
+    return () => {
+      if (cleanup) cleanup();
+    };
+  }, [fetchAll]);
+
+  // Re-run whenever the screen comes back into focus
+  useFocusEffect(
+    useCallback(() => {
+      let cleanup;
+      fetchAll().then((fn) => (cleanup = fn));
+      return () => {
+        if (cleanup) cleanup();
+      };
+    }, [fetchAll])
+  );
 
   return (
     <View style={baseStyles.container}>

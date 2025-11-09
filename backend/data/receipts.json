@@ -169,5 +169,41 @@
         ]
       }
     ]
+  },
+  {
+    "user": "3",
+    "receipts": [
+      {
+        "entry_id": "d4eb2005-d65b-4d0d-832d-15c8b49571b4",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1 MIRCH MASL 30 ROTI",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 PARLE-G ROYALE (360GM)",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 CUMIN POWDER 200G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 ITEM",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 MDH CHUNKY CHAT 100G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 ITEM",
+            "emissions_kg_co2e": 1.0
+          }
+        ],
+        "store": "NEIGHBOR FOOD DAIRY MART"
+      }
+    ]
   }
 ]
