@@ -6,7 +6,8 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import HTTPException
 
-from ..clients import LLMClient, LLMCarbonEstimate, SearchClient, SearchResult
+from LLM_Score.clients.llm_client import LLMClient, LLMCarbonEstimate
+from LLM_Score.clients.search_client import SearchClient, SearchResult
 
 
 class RetrievalStrategy(str, Enum):

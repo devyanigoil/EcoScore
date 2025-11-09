@@ -6,9 +6,8 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 
-from .auth import verify_firebase_token
-from .services import CarbonService, RetrievalStrategy
-
+from LLM_Score.auth import verify_firebase_token
+from LLM_Score.services.carbon_service import CarbonService, RetrievalStrategy
 
 class CarbonRequest(BaseModel):
     item_name: str = Field(..., min_length=2, description="Product name to lookup.")

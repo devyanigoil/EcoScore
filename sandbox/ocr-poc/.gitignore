@@ -1,7 +1,0 @@
-
-# OCR sandbox
-sandbox/ocr-poc/node_modules/
-# Keys (never commit)
-keys/
-# Env files
-**/.env

@@ -2,10 +2,14 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 
-from .ScoreCal import create_score_router
-from .clients import LLMClient, SearchClient
-from .services import CarbonService
+# from ScoreCal import create_score_router
+# from .clients import LLMClient, SearchClient
+# from .services import CarbonService
 
+from LLM_Score.ScoreCal import create_score_router
+from LLM_Score.clients.llm_client import LLMClient
+from LLM_Score.clients.search_client import SearchClient
+from LLM_Score.services.carbon_service import CarbonService
 
 def build_app() -> FastAPI:
     app = FastAPI(
