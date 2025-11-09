@@ -350,5 +350,85 @@
     "date": "2025-11-09",
     "carbon_emission": 1.0,
     "points": 9.0
+  },
+  {
+    "user": "1",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "1",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "1",
+    "item": "CHICKEN NAT BREAST BNLS",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "1",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "1",
+    "item": "ORG DK CHOC ALMOND BAR",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "1",
+    "item": "BREAD FOCACCIA FRENCH ON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "1",
+    "item": "SOURDOUGH BREAD",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "1",
+    "item": "LOVERS BAR DK CHOC 85%",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "1",
+    "item": "BAREBELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "1",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
   }
 ]

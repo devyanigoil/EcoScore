@@ -374,11 +374,7 @@ export default function Transportations() {
           </View>
         )}
 
-        <FlatList
-          ListHeaderComponent={!imageUri && !pdfName ? <History userId={userId} type="transport"/> : null}
-          data={[]}
-          renderItem={null}
-        />
+        {!imageUri && !pdfName ? <History userId={userId} type="transport"/> : null}
 
         {/* Preview before analysis */}
         {(imageUri || pdfName) && !loading && !result && (

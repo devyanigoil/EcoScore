@@ -23,6 +23,7 @@ import { Animated, Easing } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { resolveApiBase } from "./functions";
+import History from "./PastReceipts";
 
 const API_URL = `${resolveApiBase()}/ocr/upload`;
 // const API_URL = "http://10.0.0.145:8001/ocr/upload"; // <-- replace
@@ -200,6 +201,8 @@ export default function Shopping() {
             <Text style={scannerStyles.ctaText}>Upload</Text>
           </TouchableOpacity>
         </View>
+
+        {!imageUri && !result && <History userId={userId} type="shopping" />}
 
         {/* Preview */}
         {imageUri && !loading && !result && (

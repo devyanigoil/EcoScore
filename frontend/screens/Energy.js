@@ -131,11 +131,7 @@ export default function Energy() {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          ListHeaderComponent={!doc ? <History userId={userId} type="energy"/> : null}
-          data={[]}
-          renderItem={null}
-        />
+        {!doc ? <History userId={userId} type="energy"/> : null}
 
         {/* Preview (file meta) */}
         {doc && !loading && !result && (
