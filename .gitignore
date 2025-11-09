@@ -9,3 +9,10 @@ sandbox/ocr-poc/node_modules/
 # Secrets
 keys/
 **/.env
+
+
+/backend/LLM_Score/__*
+/backend/LLM_Score/venv/
+/backend/LLM_Score/keys.env
+/backend/LLM_Score/clients/__*
+/backend/LLM_Score/services/__*
