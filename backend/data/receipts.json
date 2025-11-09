@@ -252,7 +252,101 @@
         "store": "NEIGHBOR FOOD DAIRY MART"
       },
       {
-        "entry_id": "f2414f9f-2861-4d0d-bc77-70ce9d5290d8",
+        "entry_id": "901e511c-2a48-4163-ae15-abb409e75274",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854949 GN GOLFSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "3.001489812 PUMA SOCK",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "AID: A0000000031010",
+            "emissions_kg_co2e": 2.43
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 2.26
+          },
+          {
+            "item_name": "8",
+            "emissions_kg_co2e": 1.83
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 2.84
+          }
+        ],
+        "store": "COSTCO"
+      },
+      {
+        "entry_id": "03508db5-be12-4603-83db-6fb8701db772",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854949 GN GOLFSHORT",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "3.001489812 PUMA SOCK",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "AID: A0000000031010",
+            "emissions_kg_co2e": 1.65
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 1.84
+          },
+          {
+            "item_name": "8",
+            "emissions_kg_co2e": 2.35
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 2.29
+          }
+        ],
+        "store": "COSTCO"
+      },
+      {
+        "entry_id": "e33b4122-188c-439f-8da8-060228deb99f",
         "date": "2025-11-09",
         "items": [
           {
@@ -265,11 +359,11 @@
           },
           {
             "item_name": "CHICKEN NAT BREAST BNLS",
-            "emissions_kg_co2e": 6.0
+            "emissions_kg_co2e": 5.5
           },
           {
             "item_name": "FLATBREAD INDIAN STYLE G",
-            "emissions_kg_co2e": 1.0
+            "emissions_kg_co2e": 1.2
           },
           {
             "item_name": "ORG DK CHOC ALMOND BAR",
@@ -277,7 +371,7 @@
           },
           {
             "item_name": "BREAD FOCACCIA FRENCH ON",
-            "emissions_kg_co2e": 1.2
+            "emissions_kg_co2e": 1.8
           },
           {
             "item_name": "SOURDOUGH BREAD",
@@ -293,7 +387,7 @@
           },
           {
             "item_name": "FLATBREAD INDIAN STYLE G",
-            "emissions_kg_co2e": 1.0
+            "emissions_kg_co2e": 1.2
           }
         ],
         "store": "TRADER JOE'S"
@@ -440,6 +534,53 @@
           {
             "item_name": "06/22/2025 15:12 302 8 248 76",
             "emissions_kg_co2e": null
+          }
+        ],
+        "store": "COSTCO"
+      },
+      {
+        "entry_id": "f58eb0fd-e02e-486d-b366-a14dc95e401c",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854949 GN GOLFSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "3.001489812 PUMA SOCK",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "AID: A0000000031010",
+            "emissions_kg_co2e": 1.26
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 1.91
+          },
+          {
+            "item_name": "8",
+            "emissions_kg_co2e": 2.68
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 1.5
           }
         ],
         "store": "COSTCO"

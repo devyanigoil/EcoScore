@@ -118,6 +118,29 @@
         "vehicle_type": "gasoline",
         "emissions": 0.836,
         "points": 9.164
+      },
+      {
+        "entry_id": "6226b484-2d20-43f6-9dda-0a01ec5a79e5",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      }
+    ]
+  },
+  {
+    "user": "2",
+    "rides": [
+      {
+        "entry_id": "efe95532-0d39-4184-8a32-9facb3f64afe",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
       }
     ]
   }

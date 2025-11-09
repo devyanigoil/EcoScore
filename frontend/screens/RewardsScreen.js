@@ -23,7 +23,7 @@ const STORES = [
       Bronze: 5,
       Silver: 8,
       Gold: 12,
-      Platinum: 15,
+      Diamond: 15,
     },
   },
   {
@@ -36,7 +36,7 @@ const STORES = [
       Bronze: 5,
       Silver: 10,
       Gold: 15,
-      Platinum: 20,
+      Diamond: 20,
     },
   },
   {
@@ -49,7 +49,7 @@ const STORES = [
       Bronze: 3,
       Silver: 5,
       Gold: 8,
-      Platinum: 10,
+      Diamond: 10,
     },
   },
   {
@@ -62,7 +62,7 @@ const STORES = [
       Bronze: 5,
       Silver: 10,
       Gold: 15,
-      Platinum: 20,
+      Diamond: 20,
     },
   },
   {
@@ -74,7 +74,7 @@ const STORES = [
     discounts: {
       Silver: 8,
       Gold: 12,
-      Platinum: 15,
+      Diamond: 15,
     },
   },
   {
@@ -85,7 +85,7 @@ const STORES = [
     minTier: "Gold",
     discounts: {
       Gold: 10,
-      Platinum: 15,
+      Diamond: 15,
     },
   },
   {
@@ -96,14 +96,14 @@ const STORES = [
     minTier: "Gold",
     discounts: {
       Gold: 12,
-      Platinum: 18,
+      Diamond: 18,
     },
   },
 ];
 
 // Helper to check if user's tier qualifies for a store
 const canAccessStore = (userTier, storeTier) => {
-  const tierOrder = ["Bronze", "Silver", "Gold", "Platinum"];
+  const tierOrder = ["Bronze", "Silver", "Gold", "Diamond"];
   const userIndex = tierOrder.indexOf(userTier);
   const storeIndex = tierOrder.indexOf(storeTier);
   return userIndex >= storeIndex;
@@ -179,25 +179,25 @@ export default function RewardsScreen() {
 
               {isLocked ? (
                 <View style={styles.lockedSection}>
-                  <Text style={styles.lockedText}>🔒 Locked</Text>
-                  <Text style={styles.lockedSubtext}>
-                    Requires {store.minTier} tier or higher
-                  </Text>
-                </View>
+                <Text style={styles.lockedText}>🔒 Locked</Text>
+                <Text style={styles.lockedSubtext}>
+                  Requires {store.minTier} tier or higher
+                </Text>
+              </View>
               ) : (
                 <View style={styles.unlockedSection}>
-                  <View style={styles.discountBox}>
-                    <Text style={styles.discountPercent}>{discount}%</Text>
-                    <Text style={styles.discountLabel}>OFF</Text>
-                  </View>
-                  <Pressable
-                    style={styles.availBtn}
-                    onPress={() => handleAvail(store)}
-                    android_ripple={{ color: "#1a5f3d" }}
-                  >
-                    <Text style={styles.availText}>Avail</Text>
-                  </Pressable>
+                <View style={styles.discountBox}>
+                  <Text style={styles.discountPercent}>{discount}%</Text>
+                  <Text style={styles.discountLabel}>OFF</Text>
                 </View>
+                <Pressable
+                  style={styles.availBtn}
+                  onPress={() => handleAvail(store)}
+                  android_ripple={{ color: "#1a5f3d" }}
+                >
+                  <Text style={styles.availText}>Avail</Text>
+                </Pressable>
+              </View>
               )}
             </View>
           );

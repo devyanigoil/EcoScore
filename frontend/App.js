@@ -15,7 +15,7 @@ import RewardsScreen from "./screens/RewardsScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [userId, setUserId] = useState(3);
+  const [userId, setUserId] = useState(1);
   return (
     <NavigationContainer>
       <Stack.Navigator
