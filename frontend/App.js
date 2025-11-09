@@ -10,6 +10,7 @@ import Transportation from "./screens/Transportation";
 import Energy from "./screens/Energy";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "./styles/theme";
+import RewardsScreen from "./screens/RewardsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -95,6 +96,13 @@ export default function App() {
           component={Transportation}
           options={{ headerTitle: "Transportation" }}
           initialParams={{ userId }}
+        />
+        <Stack.Screen
+          name="Rewards"
+          component={RewardsScreen}
+          options={{
+            headerShown: false,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

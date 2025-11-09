@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: 31,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#0a4966", // ocean tint
+    backgroundColor: "#4CAF50", // ocean tint
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.18)",
     shadowColor: "#000",

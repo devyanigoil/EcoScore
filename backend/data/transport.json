@@ -18,6 +18,60 @@
         "vehicle_type": "gasoline",
         "emissions": 0.836,
         "points": 9.793
+      },
+      {
+        "entry_id": "a12fdbd6-36a0-45f0-9884-be935bffbc51",
+        "date": "2025-11-09",
+        "ride_date": "2025-12-01",
+        "distance_miles": null,
+        "vehicle_type": "gasoline",
+        "emissions": 0.0,
+        "points": 10.0
+      },
+      {
+        "entry_id": "b39ff568-38c4-455b-8e18-a52265a65fc0",
+        "date": "2025-11-09",
+        "ride_date": "2025-12-01",
+        "distance_miles": null,
+        "vehicle_type": "gasoline",
+        "emissions": 0.0,
+        "points": 10.0
+      },
+      {
+        "entry_id": "9fca7274-b8df-4368-b59c-493c1666c30a",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      },
+      {
+        "entry_id": "43afe9f6-6d2c-411d-bf7b-f1f6ce3c5c50",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      },
+      {
+        "entry_id": "c21be38b-39b5-4563-ae2c-d9d561241986",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      },
+      {
+        "entry_id": "906ac352-dd37-4701-8d98-324bc18478ca",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
       }
     ]
   },

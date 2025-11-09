@@ -492,7 +492,7 @@ async def get_user(user_id: str):
         with open("data/users.json", "r", encoding="utf-8") as f:
             users = json.load(f)
     except FileNotFoundError:
-        raise HTTPException(status_code=500, detail="user.json not found")
+        raise HTTPException(status_code=500, detail="users.json not found")
 
     # Look up user name
     name = users.get(user_id)
@@ -600,9 +600,6 @@ async def get_summary(user_id: str, type: str):
             status_code=400,
             detail="type must be one of: 'transport', 'energy', 'shopping'",
         )
-    
-
-
 
 @app.get("/percentile/{user_id}")
 def get_today_percentile(user_id: str):

@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  FlatList,
   ActivityIndicator,
   Alert,
 } from "react-native";
@@ -14,6 +15,7 @@ import Constants from "expo-constants";
 import { baseStyles, scannerStyles, COLORS } from "../styles/theme";
 import { useRoute } from "@react-navigation/native";
 import { resolveApiBase } from "./functions";
+import History from "./PastReceipts"
 
 const API_URL = `${resolveApiBase()}/ocr/energy/pdf`;
 
@@ -128,6 +130,8 @@ export default function Energy() {
             <Text style={scannerStyles.ctaText}>Reset</Text>
           </TouchableOpacity>
         </View>
+
+        {!doc ? <History userId={userId} type="energy"/> : null}
 
         {/* Preview (file meta) */}
         {doc && !loading && !result && (

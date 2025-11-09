@@ -19,6 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { baseStyles, homeStyles, COLORS } from "../styles/theme";
 import { useRoute } from "@react-navigation/native";
 import { resolveApiBase } from "./functions";
+import History from "./PastReceipts"
 
 const API_IMAGE_URL = `${resolveApiBase()}/ocr/transport/upload`;
 const API_PDF_URL = `${resolveApiBase()}/ocr/transport/pdf`;
@@ -372,6 +373,8 @@ export default function Transportations() {
             </TouchableOpacity>
           </View>
         )}
+
+        {!imageUri && !pdfName ? <History userId={userId} type="transport"/> : null}
 
         {/* Preview before analysis */}
         {(imageUri || pdfName) && !loading && !result && (

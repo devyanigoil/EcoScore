@@ -1,5 +1,5 @@
 // HomeScreen.js
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,31 +10,97 @@ import {
   StyleSheet,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from "@react-navigation/native"; // ← NEW
 import { MODULES } from "./modules.config";
 import { baseStyles, homeStyles, COLORS } from "../styles/theme";
 import RadialModulesFab from "./RadialModulesFab";
 import EcoScoreRing, { getTier, TIERS } from "./EcoScoreRing";
-import { useRoute } from "@react-navigation/native";
+import axios from "axios";
+import { resolveApiBase } from "./functions";
 
-// Mock data (wire up later to real backend)
-const monthlyBreakdown = [
-  { key: "Shopping", icon: "🛒", delta: 620 },
-  { key: "Transit", icon: "🚶", delta: 340 },
-  { key: "Energy", icon: "💡", delta: 180 },
-  { key: "Food", icon: "🥗", delta: 250 },
-];
+const API_URL = `${resolveApiBase()}/user`;
+const POINTS_URL = `${resolveApiBase()}/points`;
+const PERCENTILE_URL = `${resolveApiBase()}/percentile`;
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { params } = useRoute();
   const userId = params?.userId;
 
-  // Example eco score (0..1000); replace with real state from backend
-  const ecoScore = 300;
-  const tier = getTier(ecoScore);
+  const [userData, setUserData] = useState({ user_name: "" });
+  const [pointsData, setPointsData] = useState(null);
+  const [percentileData, setPercentileData] = useState(null);
 
   const [tiersOpen, setTiersOpen] = useState(false);
+
+  // Use percentile instead of raw score
+  const percentile = percentileData?.percentile || 0;
+  const tier = getTier(percentile);
+
+  // Build monthly breakdown from API data
+  const monthlyBreakdown = pointsData
+    ? [
+        { key: "Shopping", icon: "🛒", delta: pointsData.by_type.shopping },
+        {
+          key: "Transit",
+          icon: "🚶",
+          delta: pointsData.by_type.transportation,
+        },
+        { key: "Energy", icon: "💡", delta: pointsData.by_type.energy },
+        // Add Food if you have it in your API, otherwise remove or set to 0
+        { key: "Food", icon: "🥗", delta: 0 },
+      ]
+    : [];
+
+  const fetchAll = useCallback(async () => {
+    if (!userId) return;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    try {
+      const [userRes, pointsRes, pctRes] = await Promise.all([
+        axios.get(`${API_URL}/${userId}`, { signal }),
+        axios.get(`${POINTS_URL}/${userId}`, { signal }),
+        axios.get(`${PERCENTILE_URL}/${userId}`, { signal }),
+      ]);
+
+      setUserData(userRes.data);
+      setPointsData(pointsRes.data);
+      setPercentileData(pctRes.data);
+    } catch (err) {
+      if (err.name !== "CanceledError" && err.message !== "canceled") {
+        console.error("❌ Fetch failed:", err.message);
+      }
+    }
+
+    // return a cleanup function for whoever calls fetchAll inside an effect
+    return () => controller.abort();
+  }, [userId]);
+
+  // Run on first mount and whenever userId changes
+  useEffect(() => {
+    let cleanup;
+    fetchAll().then((fn) => (cleanup = fn));
+    return () => {
+      if (cleanup) cleanup();
+    };
+  }, [fetchAll]);
+
+  // Re-run whenever the screen comes back into focus
+  useFocusEffect(
+    useCallback(() => {
+      let cleanup;
+      fetchAll().then((fn) => (cleanup = fn));
+      return () => {
+        if (cleanup) cleanup();
+      };
+    }, [fetchAll])
+  );
 
   return (
     <View style={baseStyles.container}>
@@ -51,7 +117,9 @@ export default function HomeScreen() {
       >
         {/* Header pill */}
         <View style={homeStyles.headerPill}>
-          <Text style={homeStyles.headerTitle}>Welcome Vanshika</Text>
+          <Text style={homeStyles.headerTitle}>
+            Welcome {userData.user_name}
+          </Text>
         </View>
 
         {/* Score card */}
@@ -59,12 +127,9 @@ export default function HomeScreen() {
           {/* Top: animated EcoScore ring */}
           <View style={{ alignItems: "center", marginBottom: 16 }}>
             <EcoScoreRing
-              score={ecoScore}
+              score={percentile}
               // fixedColor="#3DDC84" // uncomment to force a single green
             />
-            <Text style={{ color: "#A7A7A7", marginTop: 6 }}>
-              Your EcoScore
-            </Text>
           </View>
 
           {/* Month breakdown */}
@@ -97,7 +162,6 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
-        {/* Suggested widgets (placeholders) */}
         <View style={homeStyles.row}>
           <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
             <Text style={homeStyles.widgetTitle}>Weekly Goal</Text>
@@ -109,19 +173,15 @@ export default function HomeScreen() {
               2 more for a 200-pt streak bonus
             </Text>
           </View>
-
-          <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
-            <Text style={homeStyles.widgetTitle}>CO₂ Saved</Text>
-            <Text style={homeStyles.widgetMetric}>18.4 kg</Text>
-            <Text style={homeStyles.widgetHint}>≈ 150 km avoided by car</Text>
-          </View>
         </View>
-
+        {/* Suggested widgets */}
         <View style={homeStyles.row}>
           <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
-            <Text style={homeStyles.widgetTitle}>Next Reward</Text>
-            <Text style={homeStyles.widgetMetric}>$5 cashback</Text>
-            <Text style={homeStyles.widgetHint}>Earn in ~350 pts</Text>
+            <Text style={homeStyles.widgetTitle}>Today's Points</Text>
+            <Text style={homeStyles.widgetMetric}>
+              {pointsData?.today_points || 0} pts
+            </Text>
+            <Text style={homeStyles.widgetHint}>Keep going to earn more!</Text>
           </View>
 
           <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
@@ -130,24 +190,33 @@ export default function HomeScreen() {
               Swap one meat meal with plant-based: save ~2 kg CO₂.
             </Text>
           </View>
-        </View>
 
-        <View style={[homeStyles.widget, homeStyles.full]}>
-          <Text style={homeStyles.widgetTitle}>Recent Actions</Text>
-          <View style={homeStyles.historyRow}>
-            <Text style={homeStyles.historyItem}>🚲 Biked to campus</Text>
-            <Text style={homeStyles.historyPts}>+60</Text>
-          </View>
-          <View style={homeStyles.historyRow}>
-            <Text style={homeStyles.historyItem}>
-              🔌 Turned off idle devices
-            </Text>
-            <Text style={homeStyles.historyPts}>+35</Text>
-          </View>
-          <View style={homeStyles.historyRow}>
-            <Text style={homeStyles.historyItem}>🥗 Cooked at home</Text>
-            <Text style={homeStyles.historyPts}>+45</Text>
-          </View>
+          {/* Rewards Card - Enhanced Button Style */}
+        </View>
+        <View style={homeStyles.row}>
+          <Pressable
+            style={({ pressed }) => [
+              homeStyles.widget,
+              homeStyles.widgetHalf,
+              localStyles.rewardsButton,
+              pressed && localStyles.rewardsButtonPressed,
+            ]}
+            onPress={() =>
+              navigation.navigate("Rewards", {
+                userId,
+                ecoScore: percentile,
+                tier,
+              })
+            }
+            android_ripple={{ color: "#333" }}
+          >
+            <View style={localStyles.rewardsContent}>
+              <Text style={homeStyles.widgetTitle}>Rewards</Text>
+              <Text style={localStyles.rewardsIcon}>🎁</Text>
+              <Text style={homeStyles.widgetHint}>View discounts</Text>
+              <Text style={localStyles.rewardsArrow}>→</Text>
+            </View>
+          </Pressable>
         </View>
       </ScrollView>
 
@@ -178,7 +247,7 @@ export default function HomeScreen() {
                     style={[localStyles.badge, { backgroundColor: item.color }]}
                   />
                   <Text style={localStyles.rowText}>
-                    {item.name} — {item.min}–{item.max}
+                    {item.name} — {item.min}–{item.max}%
                   </Text>
                 </View>
               )}
@@ -203,6 +272,39 @@ const localStyles = StyleSheet.create({
     gap: 10,
   },
   dot: { width: 10, height: 10, borderRadius: 6, marginRight: 4 },
+
+  // Enhanced Rewards Button Styles
+  rewardsButton: {
+    elevation: 6,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  rewardsButtonPressed: {
+    transform: [{ scale: 0.96 }],
+    elevation: 2,
+    shadowOpacity: 0.15,
+  },
+  rewardsContent: {
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rewardsIcon: {
+    fontSize: 48,
+    marginVertical: 4,
+  },
+  rewardsArrow: {
+    position: "absolute",
+    bottom: 8,
+    right: 8,
+    fontSize: 20,
+    color: "#888",
+    fontWeight: "600",
+  },
+
+  // Modal Styles
   backdrop: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.6)",

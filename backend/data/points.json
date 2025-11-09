@@ -1,6 +1,6 @@
 [
   {
-    "user": "Aashnna Soni",
+    "user": "1",
     "item": "NATURAL BNLS SKNLS CKN T",
     "type": "shopping",
     "date": "2025-11-09",
@@ -8,7 +8,15 @@
     "points": 4.0
   },
   {
-    "user": "Aashnna Soni",
+    "user": "2",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-07",
+    "carbon_emission": 5.5,
+    "points": 4.5
+  },
+  {
+    "user": "1",
     "item": "ORGANIC CHICKEN DRUMSTIC",
     "type": "shopping",
     "date": "2025-11-09",
@@ -16,7 +24,7 @@
     "points": 4.5
   },
   {
-    "user": "Aashnna Soni",
+    "user": "1",
     "item": "CHICKEN NAT BREAST BNLS",
     "type": "shopping",
     "date": "2025-11-09",
@@ -24,7 +32,7 @@
     "points": 4.0
   },
   {
-    "user": "Aashnna Soni",
+    "user": "2",
     "item": "FLATBREAD INDIAN STYLE G",
     "type": "shopping",
     "date": "2025-11-09",
@@ -32,7 +40,7 @@
     "points": 9.0
   },
   {
-    "user": "Aashnna Soni",
+    "user": "1",
     "item": "ORG DK CHOC ALMOND BAR",
     "type": "shopping",
     "date": "2025-11-09",
@@ -40,7 +48,7 @@
     "points": 7.5
   },
   {
-    "user": "Aashnna Soni",
+    "user": "1",
     "item": "BREAD FOCACCIA FRENCH ON",
     "type": "shopping",
     "date": "2025-11-09",
@@ -48,7 +56,7 @@
     "points": 8.8
   },
   {
-    "user": "Aashnna Soni",
+    "user": "3",
     "item": "SOURDOUGH BREAD",
     "type": "shopping",
     "date": "2025-11-09",
@@ -56,7 +64,7 @@
     "points": 9.0
   },
   {
-    "user": "Aashnna Soni",
+    "user": "1",
     "item": "LOVERS BAR DK CHOC 85%",
     "type": "shopping",
     "date": "2025-11-09",
@@ -64,7 +72,7 @@
     "points": 7.5
   },
   {
-    "user": "Aashnna Soni",
+    "user": "1",
     "item": "BAREBELLS CHOCOLATE DOUG",
     "type": "shopping",
     "date": "2025-11-09",
@@ -72,7 +80,7 @@
     "points": 8.0
   },
   {
-    "user": "Aashnna Soni",
+    "user": "3",
     "item": "FLATBREAD INDIAN STYLE G",
     "type": "shopping",
     "date": "2025-11-09",
@@ -80,7 +88,7 @@
     "points": 9.0
   },
   {
-    "user": "Aashnna Soni",
+    "user": "2",
     "item": "FLATBREAD INDIAN STYLE G",
     "type": "shopping",
     "date": "2025-11-09",
@@ -88,7 +96,7 @@
     "points": 9.0
   },
   {
-    "user": "Aashnna Soni",
+    "user": "2",
     "item": "FLATBREAD INDIAN STYLE G",
     "type": "shopping",
     "date": "2025-11-09",
@@ -96,20 +104,12 @@
     "points": 9.0
   },
   {
-    "user": "Aashnna Soni",
+    "user": "2",
     "item": "energy",
     "type": "energy",
     "date": "2025-09-30",
     "carbon_emission": 80.22,
     "points": 20.0
-  },
-  {
-    "user": "Aashnna Soni",
-    "item": "ride (electric)",
-    "type": "transportation",
-    "date": "2025-07-04",
-    "carbon_emission": 0.207,
-    "points": 9.793
   },
   {
     "user": "<user_id>",
@@ -120,11 +120,459 @@
     "points": 9.164
   },
   {
-    "user": "Aashnna Soni",
+    "user": "2",
+    "item": "1 MIRCH MASL 30 ROTI",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 PARLE-G ROYALE (360GM)",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 CUMIN POWDER 200G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MDH CHUNKY CHAT 100G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MIRCH MASL 30 ROTI",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 PARLE-G ROYALE (360GM)",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 CUMIN POWDER 200G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MDH CHUNKY CHAT 100G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MIRCH MASL 30 ROTI",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 PARLE-G ROYALE (360GM)",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 CUMIN POWDER 200G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MDH CHUNKY CHAT 100G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "1",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-12-01",
+    "carbon_emission": 0.0,
+    "points": 10.0
+  },
+  {
+    "user": "1",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-12-01",
+    "carbon_emission": 0.0,
+    "points": 10.0
+  },
+  {
+    "user": "1",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "1",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "1",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "3",
+    "item": "1 MIRCH MASL 30 ROTI",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "1 PARLE-G ROYALE (360GM)",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "1 CUMIN POWDER 200G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "1 MDH CHUNKY CHAT 100G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "1",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "1",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "1",
+    "item": "CHICKEN NAT BREAST BNLS",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "1",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "1",
+    "item": "ORG DK CHOC ALMOND BAR",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "1",
+    "item": "BREAD FOCACCIA FRENCH ON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "1",
+    "item": "SOURDOUGH BREAD",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "1",
+    "item": "LOVERS BAR DK CHOC 85%",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "1",
+    "item": "BAREBELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "1",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "1",
     "item": "energy",
     "type": "energy",
     "date": "2025-09-30",
     "carbon_emission": 80.22,
     "points": 19.78
+  },
+  {
+    "user": "1",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "1",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "1",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.5,
+    "points": 3.5
+  },
+  {
+    "user": "1",
+    "item": "CHICKEN NAT BREAST BNLS",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 5.8,
+    "points": 4.2
+  },
+  {
+    "user": "1",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "1",
+    "item": "ORG DK CHOC ALMOND BAR",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "1",
+    "item": "BREAD FOCACCIA FRENCH ON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.4,
+    "points": 8.6
+  },
+  {
+    "user": "1",
+    "item": "SOURDOUGH BREAD",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.3,
+    "points": 8.7
+  },
+  {
+    "user": "1",
+    "item": "LOVERS BAR DK CHOC 85%",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "1",
+    "item": "BAREBELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.3,
+    "points": 7.7
+  },
+  {
+    "user": "1",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "1",
+    "item": "1854625 WRANGLER TEE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "1",
+    "item": "1854625 WRANGLER TEE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "1",
+    "item": "1854949 GN GOLFSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "1",
+    "item": "3.001489812 PUMA SOCK",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.3,
+    "points": 9.7
+  },
+  {
+    "user": "1",
+    "item": "1854910 EB TECHSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "1",
+    "item": "1854910 EB TECHSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
   }
 ]

@@ -281,7 +281,7 @@ export const homeStyles = StyleSheet.create({
   },
   emoji: { fontSize: 16 },
   breakdownRight: {
-    color: COLORS.primaryLight,
+    color: "#81b29a",
     fontSize: 15,
     fontWeight: "600",
   },
