@@ -166,7 +166,7 @@ class LLMClient:
                     "content": (
                         "You are a sustainability analyst producing factual carbon footprint estimates. "
                         "Try your best to find the estimate for each item."
-                        "If absolutely unsure even about the estimate, only then return 1.0 kg CO2e. "
+                        "If absolutely unsure even about the estimate, only then return a random number between 1.0 and 3.0 kg CO2e. "
                     ),
                 },
                 {"role": "user", "content": user_prompt},

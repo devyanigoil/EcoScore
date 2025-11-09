@@ -329,10 +329,11 @@ async def ocr_energy_upload(
         resp = make_min_response(result)
         resp_json =json.loads(resp.body.decode("utf-8"))
 
-        add_energy(user=userId, bill=resp_json)
-
         carbon = resp_json.get("carbonFootPrint", 0)
         energy_points = 100 - float(carbon)  # 🔸 new energy logic
+        resp_json["points"] = energy_points;
+        add_energy(user=userId, bill=resp_json)
+
         add_points_entry(
             user=userId,
             item="energy",
@@ -364,9 +365,10 @@ async def ocr_energy_pdf(
         resp = make_min_response(result)
         resp_json =json.loads(resp.body.decode("utf-8"))
 
-        add_energy(user=userId, bill=resp_json)
         carbon = resp_json.get("carbonFootPrint", 0)
         energy_points = 100 - float(carbon)  # 🔸 new energy logic
+        resp_json["points"] = energy_points;
+        add_energy(user=userId, bill=resp_json)
         add_points_entry(
             user=userId,
             item="energy",
@@ -571,10 +573,21 @@ async def get_summary(user_id: str, type: str):
 
         # if you’re using Receipts.json structure, this will be "receipts"
         receipts = user_block.get("receipts", [])
+        # entries = [
+        #     {   "date": receipt.get("date"),
+        #         "store": receipt.get("store"),
+        #         "items": receipt.get("items"),
+        #     }
+        #     for receipt in receipts
+        # ]
         entries = [
-            {   "date": receipt.get("date"),
+            {
+                "date": receipt.get("date"),
                 "store": receipt.get("store"),
-                "items": receipt.get("items"),
+                "emissions": sum(
+                    item.get("emissions_kg_co2e", 0) 
+                    for item in receipt.get("items", [])
+                ),
             }
             for receipt in receipts
         ]
