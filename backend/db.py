@@ -64,7 +64,8 @@ def add_energy(user,bill):
         "start_date": bill['startDate'],
         "end_date": bill['endDate'],
         "consumption_kwh": bill['energy'],
-        "emissions": bill['carbonFootPrint']
+        "emissions": bill['carbonFootPrint'],
+        "points": bill['points']
     }
 
     data = []
@@ -113,7 +114,8 @@ def add_rides(user,bill):
         "ride_date": bill['date'],
         "distance_miles": bill['distance_miles'],
         "vehicle_type": bill['vehicle_type'],
-        "emissions": bill['carbonFootPrint']
+        "emissions": bill['carbonFootPrint'],
+        "points": bill['points']
     }
 
     data = []
@@ -155,15 +157,18 @@ if __name__ == "__main__":
     items = [
         {
             "item_name": "NATURAL BNLS SKNLS CKN T",
-            "emissions": 6.0
+            "emissions": 6.0,
+            "points": 4.0
         },
         {
             "item_name": "NATURAL BNLS SKNLS CKN T",
-            "emissions": 6.0
+            "emissions": 6.0,
+            "points": 4.0
         },
         {
             "item_name": "ORGANIC CHICKEN DRUMSTIC",
-            "emissions": 5.5
+            "emissions": 5.5,
+            "points": 4.5
         }
     ]
     add_receipt(user, items)
