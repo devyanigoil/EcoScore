@@ -1,5 +1,1 @@
-fastapi>=0.115.0
-uvicorn[standard]>=0.30.0
-google-cloud-vision>=3.7.0
-pydantic>=2.6.0
-python-multipart
+wheel @ file:///opt/homebrew/Cellar/python%403.13/3.13.2/libexec/wheel-0.45.1-py3-none-any.whl#sha256=b9235939e2096903717cb6bfc132267f8a7e46deb2ec3ef9c5e234ea301795d0

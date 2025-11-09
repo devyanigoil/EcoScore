@@ -3,9 +3,12 @@
 .DS_Store
 **/.DS_Store
 
-# OCR sandbox
-sandbox/ocr-poc/node_modules/
-
 # Secrets
 keys/
 **/.env
+
+backend/venv
+backend/.env
+backend.LLM_Score/keys.env
+backend/__pycache__
+backend.LLM_Score/__pycache__
