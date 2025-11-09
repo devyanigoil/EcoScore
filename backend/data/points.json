@@ -1,114 +1,122 @@
 [
-    {
-        "user": "Aashnna Soni",
-        "item": "NATURAL BNLS SKNLS CKN T",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 6.0,
-        "points": 4.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "ORGANIC CHICKEN DRUMSTIC",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 5.5,
-        "points": 4.5
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "CHICKEN NAT BREAST BNLS",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 6.0,
-        "points": 4.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "FLATBREAD INDIAN STYLE G",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 1.0,
-        "points": 9.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "ORG DK CHOC ALMOND BAR",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 2.5,
-        "points": 7.5
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "BREAD FOCACCIA FRENCH ON",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 1.2,
-        "points": 8.8
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "SOURDOUGH BREAD",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 1.0,
-        "points": 9.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "LOVERS BAR DK CHOC 85%",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 2.5,
-        "points": 7.5
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "BAREBELLS CHOCOLATE DOUG",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 2.0,
-        "points": 8.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "FLATBREAD INDIAN STYLE G",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 1.0,
-        "points": 9.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "FLATBREAD INDIAN STYLE G",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 1.0,
-        "points": 9.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "FLATBREAD INDIAN STYLE G",
-        "type": "shopping",
-        "date": "2025-11-09",
-        "carbon_emission": 1.0,
-        "points": 9.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "energy",
-        "type": "energy",
-        "date": "2025-09-30",
-        "carbon_emission": 80.22,
-        "points": 20.0
-    },
-    {
-        "user": "Aashnna Soni",
-        "item": "ride (electric)",
-        "type": "transportation",
-        "date": "2025-07-04",
-        "carbon_emission": 0.207,
-        "points": 9.793
-    }
+  {
+    "user": "Aashnna Soni",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 5.5,
+    "points": 4.5
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "CHICKEN NAT BREAST BNLS",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "ORG DK CHOC ALMOND BAR",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "BREAD FOCACCIA FRENCH ON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "SOURDOUGH BREAD",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "LOVERS BAR DK CHOC 85%",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "BAREBELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 20.0
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "ride (electric)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.207,
+    "points": 9.793
+  },
+  {
+    "user": "<user_id>",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  }
 ]

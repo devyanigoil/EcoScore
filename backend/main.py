@@ -64,7 +64,7 @@ def add_points_entry(user, item, entry_type, date, carbon_emission, points):
     }
 
     data.append(new_entry)  # Simply append the entry to the flat list
-    #save_points(data)
+    save_points(data)
     print(f"✅ Added new points entry for {user}: {item} ({entry_type})")
 
 app = FastAPI(title="EcoScore Upload API", version="3.0.0")
@@ -397,7 +397,7 @@ async def ocr_transport_upload(
         t = result.get("transport", {})
         dist = t.get("distance_miles")
         carbon = compute_transport_carbon(vehicle_type, dist if dist is not None else 0.0)
-
+        ride_points = max(0, 10 - float(carbon))
         out = {
             "provider": t.get("provider"),
             "date": t.get("date"),
@@ -410,14 +410,15 @@ async def ocr_transport_upload(
             "price_total": t.get("price_total"),
             "vehicle_type": vehicle_type,
             "carbonFootPrint": carbon,
+            "points": ride_points
+
         }
         if return_cleaned:
             out["cleaned_text"] = t.get("cleaned_text")
 
 
         add_rides(user=userId, bill=out)
-        carbon = out.get("carbonFootPrint", 0)
-        ride_points = max(0, 10 - float(carbon))
+        
         add_points_entry(
             user=userId,
             item=f"ride ({vehicle_type})",
@@ -446,7 +447,7 @@ async def ocr_transport_pdf(
         t = result.get("transport", {})
         dist = t.get("distance_miles")
         carbon = compute_transport_carbon(vehicle_type, dist if dist is not None else 0.0)
-
+        ride_points = max(0, 10 - float(carbon))
         out = {
             "provider": t.get("provider"),
             "date": t.get("date"),
@@ -459,14 +460,12 @@ async def ocr_transport_pdf(
             "price_total": t.get("price_total"),
             "vehicle_type": vehicle_type,
             "carbonFootPrint": carbon,
+            "points": ride_points
         }
         if return_cleaned:
             out["cleaned_text"] = t.get("cleaned_text")
 
-
         add_rides(user=userId, bill=out)
-        carbon = out.get("carbonFootPrint", 0)
-        ride_points = max(0, 10 - float(carbon))
         add_points_entry(
             user=userId,
             item=f"ride ({vehicle_type})",
