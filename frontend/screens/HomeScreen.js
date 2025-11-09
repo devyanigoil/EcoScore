@@ -137,6 +137,7 @@ export default function HomeScreen() {
         onSelect={(key) => {
           if (key === "shopping") navigation.navigate("Shopping");
           if (key === "transport") navigation.navigate("Transportation");
+          if (key === "energy") navigation.navigate("Energy");
         }}
       />
     </View>

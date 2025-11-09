@@ -6,6 +6,7 @@ import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import Shopping from "./screens/Shopping";
 import Transportation from "./screens/Transportation";
+import Energy from "./screens/Energy";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
@@ -68,6 +69,12 @@ export default function App() {
           name="Shopping"
           component={Shopping}
           options={{ headerTitle: "Shopping" }}
+        />
+
+        <Stack.Screen
+          name="Energy"
+          component={Energy}
+          options={{ headerTitle: "Energy" }}
         />
 
         <Stack.Screen
