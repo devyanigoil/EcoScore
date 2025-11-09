@@ -21,13 +21,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import { baseStyles, scannerStyles, COLORS } from "../styles/theme";
 import { Animated, Easing } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
+import { resolveApiBase } from "./functions";
 
-const API_URL = "http://172.31.173.9:8001/ocr/upload"; // <-- replace
+const API_URL = `${resolveApiBase()}/ocr/upload`;
 
 export default function Shopping() {
   const [imageUri, setImageUri] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const { params } = useRoute();
+  const userId = params?.userId;
 
   // "idle" | "scan" | "analyze"
   const [loadingStage, setLoadingStage] = useState("idle");
@@ -117,6 +121,8 @@ export default function Shopping() {
         name: "receipt.jpg",
         type: "image/jpeg",
       });
+
+      form.append("userId", String(userId));
 
       // Call API
       const resp = await fetch(API_URL, {
@@ -212,17 +218,7 @@ export default function Shopping() {
         {/* Results */}
         {result && (
           <View style={scannerStyles.resultsWrap}>
-            {/* Top: Score Donut  store tag */}
             <View style={scannerStyles.scoreWrap}>
-              {/* <ScoreDonut
-                score={result.overallScore}
-                size={160}
-                strokeWidth={14}
-              /> */}
-              {/* <Text style={scannerStyles.metaHint}>
-                Total: {result.totalKg.toFixed(1)} kg CO₂e
-              </Text> */}
-
               <View style={scannerStyles.scoreMeta}>
                 {!!result.store && (
                   <Text style={scannerStyles.storeTag}>🏬 {result.store}</Text>
@@ -252,7 +248,6 @@ export default function Shopping() {
 
             {/* Equivalents / CTA */}
             <View style={scannerStyles.resultsWrap}>
-              {/* <EquivalentsPill score={result.overallScore} /> */}
               <TouchableOpacity
                 style={scannerStyles.secondaryBtn}
                 onPress={reset}
@@ -401,62 +396,6 @@ function clamp(v, lo, hi) {
   return Math.max(lo, Math.min(hi, v));
 }
 
-function toPercent(value, maxValue) {
-  if (!maxValue || !value) return 0;
-  return clamp(Math.round((value / maxValue) * 100), 0, 100);
-}
-
-function gradeLabel(score) {
-  if (score <= 20) return "A";
-  if (score <= 35) return "A";
-  if (score <= 50) return "B";
-  if (score <= 70) return "C";
-  return "D";
-}
-
-/* Donut score */
-function ScoreDonut({ score = 0, size = 160, strokeWidth = 14 }) {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const clamped = clamp(score, 0, 100);
-  const offset = circumference - (clamped / 100) * circumference;
-
-  return (
-    <View
-      style={{
-        width: size,
-        height: size,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Svg width={size} height={size}>
-        <Circle
-          stroke="rgba(255,255,255,0.18)"
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          strokeWidth={strokeWidth}
-          fill="none"
-        />
-        <Circle
-          stroke={COLORS.primary}
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          fill="none"
-        />
-      </Svg>
-      <Text style={scannerStyles.donutValue}>{clamped}</Text>
-      <Text style={scannerStyles.donutLabel}>Overall</Text>
-    </View>
-  );
-}
-
 /* Bubbles */
 function ItemBubbles({ items = [] }) {
   // Filter out items with zero or falsy score, then take top 8
@@ -493,27 +432,5 @@ function ItemBubbles({ items = [] }) {
         );
       })}
     </View>
-  );
-}
-
-/* Equivalents pill */
-function EquivalentsPill({ totalKg = 0 }) {
-  // Factors: ~0.404 kg CO2e per mile; ~21 kg CO2e absorbed per tree/year.
-  const miles = Math.round(totalKg / 0.404);
-  const trees = Math.max(0.01, totalKg / 21).toFixed(2);
-
-  return (
-    <LinearGradient
-      colors={[COLORS.primary, COLORS.primaryDark]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={scannerStyles.eqPill}
-    >
-      <Text style={scannerStyles.eqTitle}>What this means</Text>
-      <Text style={scannerStyles.eqLine}>🚗 ≈ {miles} miles driven</Text>
-      <Text style={scannerStyles.eqLine}>
-        🌳 ≈ {trees} trees/year to offset
-      </Text>
-    </LinearGradient>
   );
 }

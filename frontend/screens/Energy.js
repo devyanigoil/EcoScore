@@ -12,19 +12,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Circle } from "react-native-svg";
 import Constants from "expo-constants";
 import { baseStyles, scannerStyles, COLORS } from "../styles/theme";
+import { useRoute } from "@react-navigation/native";
+import { resolveApiBase } from "./functions";
 
-/** ===== API host resolution ===== */
-function resolveApiBase() {
-  const host = Constants.expoConfig?.hostUri?.split(":")[0];
-  const baseHost = host || "192.168.0.42";
-  return `http://${baseHost}:8001`;
-}
 const API_URL = `${resolveApiBase()}/ocr/energy/pdf`;
 
 export default function Energy() {
   const [doc, setDoc] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const { params } = useRoute();
+  const userId = params?.userId;
 
   const pickPdf = useCallback(async () => {
     try {
@@ -64,6 +62,7 @@ export default function Energy() {
           name: fileMeta.name || "bill.pdf",
           type: fileMeta.mimeType || "application/pdf",
         });
+        form.append("userId", String(userId));
 
         console.log("Just before hitting the api");
         const resp = await fetch(API_URL, {

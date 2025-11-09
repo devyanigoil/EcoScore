@@ -18,13 +18,9 @@ import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import Constants from "expo-constants";
 import { baseStyles, homeStyles, COLORS } from "../styles/theme";
+import { useRoute } from "@react-navigation/native";
+import { resolveApiBase } from "./functions";
 
-/** ===== API host resolution ===== */
-function resolveApiBase() {
-  const host = Constants.expoConfig?.hostUri?.split(":")[0];
-  const baseHost = host || "192.168.0.42"; // adjust to your LAN IP if needed
-  return `http://${baseHost}:8001`;
-}
 const API_IMAGE_URL = `${resolveApiBase()}/ocr/transport/upload`;
 const API_PDF_URL = `${resolveApiBase()}/ocr/transport/pdf`;
 
@@ -38,6 +34,9 @@ export default function Transportations() {
   const [carType, setCarType] = useState("Petrol");
   const [open, setOpen] = useState(false);
   const options = ["Petrol", "Diesel", "Electric", "Hybrid"];
+
+  const { params } = useRoute();
+  const userId = params?.userId;
 
   const select = (val) => {
     setCarType(val);
@@ -222,6 +221,7 @@ export default function Transportations() {
       const vt = normalizeVehicleType(carType);
       form.append("vehicle_type", vt);
       form.append("return_cleaned", "false");
+      form.append("userId", String(userId));
 
       const name = filenameFromUri(uri, "image.jpg");
       const type = guessMimeFromUri(uri, "image/jpeg");
@@ -270,6 +270,7 @@ export default function Transportations() {
       const vt = normalizeVehicleType(carType);
       form.append("vehicle_type", vt);
       form.append("return_cleaned", "false");
+      form.append("userId", String(userId));
 
       if (Platform.OS === "web") {
         await appendWebFile(form, "pdf", uri, name, mime);

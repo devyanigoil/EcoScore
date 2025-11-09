@@ -15,6 +15,7 @@ import { MODULES } from "./modules.config";
 import { baseStyles, homeStyles, COLORS } from "../styles/theme";
 import RadialModulesFab from "./RadialModulesFab";
 import EcoScoreRing, { getTier, TIERS } from "./EcoScoreRing";
+import { useRoute } from "@react-navigation/native";
 
 // Mock data (wire up later to real backend)
 const monthlyBreakdown = [
@@ -26,6 +27,8 @@ const monthlyBreakdown = [
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const { params } = useRoute();
+  const userId = params?.userId;
 
   // Example eco score (0..1000); replace with real state from backend
   const ecoScore = 300;
@@ -48,7 +51,7 @@ export default function HomeScreen() {
       >
         {/* Header pill */}
         <View style={homeStyles.headerPill}>
-          <Text style={homeStyles.headerTitle}>Dashboard</Text>
+          <Text style={homeStyles.headerTitle}>Welcome Vanshika</Text>
         </View>
 
         {/* Score card */}
@@ -151,9 +154,10 @@ export default function HomeScreen() {
       <RadialModulesFab
         modules={MODULES}
         onSelect={(key) => {
-          if (key === "shopping") navigation.navigate("Shopping");
-          if (key === "transport") navigation.navigate("Transportation");
-          if (key === "energy") navigation.navigate("Energy");
+          if (key === "shopping") navigation.navigate("Shopping", { userId });
+          if (key === "transport")
+            navigation.navigate("Transportation", { userId });
+          if (key === "energy") navigation.navigate("Energy", { userId });
         }}
       />
 
