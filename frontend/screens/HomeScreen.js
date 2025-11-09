@@ -1,10 +1,21 @@
-import React from "react";
-import { View, Text, ScrollView } from "react-native";
+// HomeScreen.js
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  Modal,
+  Pressable,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { MODULES } from "./modules.config";
 import { baseStyles, homeStyles, COLORS } from "../styles/theme";
 import RadialModulesFab from "./RadialModulesFab";
+import EcoScoreRing, { getTier, TIERS } from "./EcoScoreRing";
+import { useRoute } from "@react-navigation/native";
 
 // Mock data (wire up later to real backend)
 const monthlyBreakdown = [
@@ -16,6 +27,14 @@ const monthlyBreakdown = [
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const { params } = useRoute();
+  const userId = params?.userId;
+
+  // Example eco score (0..1000); replace with real state from backend
+  const ecoScore = 300;
+  const tier = getTier(ecoScore);
+
+  const [tiersOpen, setTiersOpen] = useState(false);
 
   return (
     <View style={baseStyles.container}>
@@ -25,26 +44,28 @@ export default function HomeScreen() {
         <View style={[baseStyles.circle, baseStyles.circle2]} />
         <View style={[baseStyles.circle, baseStyles.circle3]} />
       </View>
+
       <ScrollView
         contentContainerStyle={homeStyles.content}
         showsVerticalScrollIndicator={false}
       >
         {/* Header pill */}
         <View style={homeStyles.headerPill}>
-          <Text style={homeStyles.headerTitle}>Dashboard</Text>
+          <Text style={homeStyles.headerTitle}>Welcome Vanshika</Text>
         </View>
 
         {/* Score card */}
         <View style={homeStyles.card}>
-          <LinearGradient
-            colors={[COLORS.primary, COLORS.accent, COLORS.accentDark]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={homeStyles.scorePill}
-          >
-            <Text style={homeStyles.scoreValue}>2,847</Text>
-            <Text style={homeStyles.scoreLabel}>Your EcoScore</Text>
-          </LinearGradient>
+          {/* Top: animated EcoScore ring */}
+          <View style={{ alignItems: "center", marginBottom: 16 }}>
+            <EcoScoreRing
+              score={ecoScore}
+              // fixedColor="#3DDC84" // uncomment to force a single green
+            />
+            <Text style={{ color: "#A7A7A7", marginTop: 6 }}>
+              Your EcoScore
+            </Text>
+          </View>
 
           {/* Month breakdown */}
           <Text style={homeStyles.sectionTitle}>This Month:</Text>
@@ -60,11 +81,20 @@ export default function HomeScreen() {
             ))}
           </View>
 
-          {/* Status ribbon */}
-          <View style={homeStyles.statusRibbon}>
-            <Text style={homeStyles.statusTitle}>Status: Gold Member</Text>
-            <Text style={homeStyles.statusSub}>Top 8% of users</Text>
-          </View>
+          {/* Status ribbon -> press to open tiers */}
+          <Pressable
+            onPress={() => setTiersOpen(true)}
+            style={[homeStyles.statusRibbon, localStyles.statusPressable]}
+            android_ripple={{ color: "#222" }}
+          >
+            <View style={[localStyles.dot, { backgroundColor: tier.color }]} />
+            <View style={{ flex: 1 }}>
+              <Text style={homeStyles.statusTitle}>
+                Status: {tier.name} Member
+              </Text>
+              <Text style={homeStyles.statusSub}>Tap to view tiers</Text>
+            </View>
+          </Pressable>
         </View>
 
         {/* Suggested widgets (placeholders) */}
@@ -120,14 +150,81 @@ export default function HomeScreen() {
           </View>
         </View>
       </ScrollView>
+
       <RadialModulesFab
         modules={MODULES}
         onSelect={(key) => {
-          if (key === "shopping") navigation.navigate("Shopping");
-          if (key === "transport") navigation.navigate("Transportation");
-          if (key === "energy") navigation.navigate("Energy");
+          if (key === "shopping") navigation.navigate("Shopping", { userId });
+          if (key === "transport")
+            navigation.navigate("Transportation", { userId });
+          if (key === "energy") navigation.navigate("Energy", { userId });
         }}
       />
+
+      {/* Tiers modal */}
+      <Modal visible={tiersOpen} transparent animationType="fade">
+        <Pressable
+          style={localStyles.backdrop}
+          onPress={() => setTiersOpen(false)}
+        >
+          <View style={localStyles.sheet}>
+            <Text style={localStyles.title}>EcoScore Tiers</Text>
+            <FlatList
+              data={TIERS}
+              keyExtractor={(t) => t.name}
+              renderItem={({ item }) => (
+                <View style={localStyles.row}>
+                  <View
+                    style={[localStyles.badge, { backgroundColor: item.color }]}
+                  />
+                  <Text style={localStyles.rowText}>
+                    {item.name} — {item.min}–{item.max}
+                  </Text>
+                </View>
+              )}
+            />
+            <Pressable
+              style={localStyles.close}
+              onPress={() => setTiersOpen(false)}
+            >
+              <Text style={{ color: "black", fontWeight: "600" }}>Close</Text>
+            </Pressable>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
+
+const localStyles = StyleSheet.create({
+  statusPressable: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  dot: { width: 10, height: 10, borderRadius: 6, marginRight: 4 },
+  backdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "flex-end",
+  },
+  sheet: {
+    backgroundColor: "#121212",
+    padding: 20,
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+    gap: 8,
+  },
+  title: { color: "white", fontSize: 18, fontWeight: "600", marginBottom: 8 },
+  row: { flexDirection: "row", alignItems: "center", paddingVertical: 6 },
+  badge: { width: 12, height: 12, borderRadius: 6, marginRight: 12 },
+  rowText: { color: "white" },
+  close: {
+    marginTop: 10,
+    alignSelf: "flex-end",
+    backgroundColor: "#E5E4E2",
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+  },
+});

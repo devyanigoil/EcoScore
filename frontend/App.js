@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { TouchableOpacity, Text, Alert } from "react-native";
@@ -14,6 +14,7 @@ import { COLORS } from "./styles/theme";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [userId, setUserId] = useState(1);
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -30,6 +31,7 @@ export default function App() {
           name="Welcome"
           component={WelcomeScreen}
           options={{ headerShown: false }}
+          initialParams={{ userId }}
         />
 
         <Stack.Screen
@@ -71,24 +73,28 @@ export default function App() {
               </TouchableOpacity>
             ),
           })}
+          initialParams={{ userId }}
         />
 
         <Stack.Screen
           name="Shopping"
           component={Shopping}
           options={{ headerTitle: "Shopping" }}
+          initialParams={{ userId }}
         />
 
         <Stack.Screen
           name="Energy"
           component={Energy}
           options={{ headerTitle: "Energy" }}
+          initialParams={{ userId }}
         />
 
         <Stack.Screen
           name="Transportation"
           component={Transportation}
           options={{ headerTitle: "Transportation" }}
+          initialParams={{ userId }}
         />
       </Stack.Navigator>
     </NavigationContainer>

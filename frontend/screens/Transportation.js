@@ -15,18 +15,27 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import Svg, { Circle } from "react-native-svg";
-import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { baseStyles, homeStyles, COLORS } from "../styles/theme";
+import { useRoute } from "@react-navigation/native";
+import { resolveApiBase } from "./functions";
+
+const API_IMAGE_URL = `${resolveApiBase()}/ocr/transport/upload`;
+const API_PDF_URL = `${resolveApiBase()}/ocr/transport/pdf`;
 
 export default function Transportations() {
   const [imageUri, setImageUri] = useState(null);
   const [pdfName, setPdfName] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+
+  // Keep your visible options as-is; map to backend enum later
   const [carType, setCarType] = useState("Petrol");
   const [open, setOpen] = useState(false);
-  const options = ["Petrol", "Diesel", "Electric"];
+  const options = ["Petrol", "Diesel", "Electric", "Hybrid"];
+
+  const { params } = useRoute();
+  const userId = params?.userId;
 
   const select = (val) => {
     setCarType(val);
@@ -54,20 +63,185 @@ export default function Transportations() {
     return true;
   };
 
-  /** ---------- Upload Image (Uber screenshot) ---------- */
+  /** ---------- Helpers ---------- */
+
+  function fmt(val, fallback = "—") {
+    if (val === null || val === undefined || val === "") return fallback;
+    return String(val);
+  }
+  function fmtMiles(n) {
+    if (n === null || n === undefined || isNaN(Number(n))) return "—";
+    return `${Number(n).toFixed(2)} mi`;
+  }
+  function fmtMinutes(n) {
+    if (n === null || n === undefined || isNaN(Number(n))) return "—";
+    return `${Number(n)} min`;
+  }
+  function fmtMoney(n) {
+    if (n === null || n === undefined || isNaN(Number(n))) return "—";
+    return `$${Number(n).toFixed(2)}`;
+  }
+  function fmtCO2(n) {
+    if (n === null || n === undefined || isNaN(Number(n))) return "—";
+    // keep unit as provided by your backend semantics; adjust label if needed
+    return `${Number(n).toFixed(3)}`;
+  }
+
+  function RowBlock({ label, value }) {
+    return (
+      <View style={styles.blockRow}>
+        <Text style={styles.blockLabel}>{label}</Text>
+        <Text style={styles.blockValue}>{value}</Text>
+      </View>
+    );
+  }
+
+  function TransportDetails({ data }) {
+    return (
+      <View style={styles.blocksWrap}>
+        <RowBlock label="Provider" value={fmt(data.provider)} />
+        <RowBlock label="Date" value={fmt(data.date)} />
+        {/* <RowBlock label="Start Time" value={fmt(data.startTime)} />
+        <RowBlock label="End Time" value={fmt(data.endTime)} />
+        <RowBlock label="Pickup" value={fmt(data.pickup)} />
+        <RowBlock label="Dropoff" value={fmt(data.dropoff)} /> */}
+        <RowBlock label="Distance" value={fmtMiles(data.distance_miles)} />
+        <RowBlock label="Duration" value={fmtMinutes(data.duration_min)} />
+        <RowBlock label="Fare" value={fmtMoney(data.price_total)} />
+        <RowBlock label="Vehicle" value={fmt(data.vehicle_type)} />
+        <RowBlock
+          label="Carbon Footprint"
+          value={fmtCO2(data.carbonFootPrint)}
+        />
+      </View>
+    );
+  }
+
+  // Map visible selection -> backend enum (gasoline | hybrid | electric)
+  function normalizeVehicleType(label) {
+    const l = (label || "").toLowerCase();
+    if (l === "electric") return "electric";
+    if (l === "hybrid") return "hybrid";
+    // Treat Petrol/Diesel as gasoline unless you add diesel support server-side
+    return "gasoline";
+  }
+
+  function guessMimeFromUri(uri, fallback = "application/octet-stream") {
+    const ext = uri.split(".").pop()?.toLowerCase();
+    if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
+    if (ext === "png") return "image/png";
+    if (ext === "webp") return "image/webp";
+    if (ext === "pdf") return "application/pdf";
+    return fallback;
+  }
+
+  function filenameFromUri(uri, fallback = "upload") {
+    try {
+      const seg = uri.split("/").pop();
+      if (seg) return seg;
+      return fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  async function appendWebFile(form, field, uri, name, type) {
+    // Web needs Blob/File
+    const res = await fetch(uri);
+    const blob = await res.blob();
+    const file = new File([blob], name, {
+      type: type || blob.type || "application/octet-stream",
+    });
+    form.append(field, file);
+  }
+
+  function appendNativeFile(form, field, uri, name, type) {
+    form.append(field, { uri, name, type });
+  }
+
+  async function postMultipart(url, form) {
+    // Do NOT set explicit Content-Type with boundary; let fetch/React Native handle it
+    const r = await fetch(url, { method: "POST", body: form });
+    if (!r.ok) {
+      const msg = await r.text().catch(() => "");
+      throw new Error(`HTTP ${r.status}: ${msg || "Request failed"}`);
+    }
+    return r.json();
+  }
+
+  function toUiResult(api) {
+    // Your UI expects { overallScore, items[], source, ... }
+    // Backend returns the atomic transport record. Compute a normalized shape for display.
+    const overall = Number(api?.carbonFootPrint ?? 0);
+    const items = [
+      {
+        name: api?.provider || "Ride",
+        carbonScore: Number(api?.carbonFootPrint ?? 0),
+      },
+    ];
+    return {
+      overallScore: isFinite(overall) ? Math.max(0, Math.round(overall)) : 0,
+      items,
+      source: `${api?.provider || "Transport"} • ${api?.date || ""}`.trim(),
+      details: {
+        date: api?.date,
+        startTime: api?.startTime,
+        endTime: api?.endTime,
+        pickup: api?.pickup,
+        dropoff: api?.dropoff,
+        distance_miles: api?.distance_miles,
+        duration_min: api?.duration_min,
+        price_total: api?.price_total,
+        vehicle_type: api?.vehicle_type,
+      },
+      cleaned_text: api?.cleaned_text,
+    };
+  }
+
+  /** ---------- Pickers ---------- */
+
   const pickImage = useCallback(async () => {
     if (!(await askMediaPerms())) return;
     const res = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.9,
     });
-    if (!res.canceled && res.assets?.[0]?.uri) {
-      setImageUri(res.assets[0].uri);
-      simulateAnalysis("image");
-    }
-  }, []);
+    if (res?.canceled) return;
+    const uri = res?.assets?.[0]?.uri;
+    if (!uri) return;
 
-  /** ---------- Upload PDF (Uber Ride History) ---------- */
+    setImageUri(uri);
+    setPdfName(null);
+    setResult(null);
+
+    try {
+      setLoading(true);
+      const form = new FormData();
+      const vt = normalizeVehicleType(carType);
+      form.append("vehicle_type", vt);
+      form.append("return_cleaned", "false");
+      form.append("userId", String(userId));
+
+      const name = filenameFromUri(uri, "image.jpg");
+      const type = guessMimeFromUri(uri, "image/jpeg");
+
+      if (Platform.OS === "web") {
+        await appendWebFile(form, "image", uri, name, type);
+      } else {
+        appendNativeFile(form, "image", uri, name, type);
+      }
+
+      const data = await postMultipart(API_IMAGE_URL, form);
+      // setResult(toUiResult(data));
+      setResult(data);
+    } catch (e) {
+      console.log(e);
+      Alert.alert("Upload failed", String(e.message || e));
+    } finally {
+      setLoading(false);
+    }
+  }, [carType]);
+
   const pickPdf = useCallback(async () => {
     try {
       if (!(await askMediaPerms())) return;
@@ -75,41 +249,45 @@ export default function Transportations() {
       const res = await DocumentPicker.getDocumentAsync({
         type: "application/pdf",
         copyToCacheDirectory: true,
+        multiple: false,
       });
 
-      if (res.type === "cancel") return;
+      // Newer Expo returns {assets:[{uri,name,mimeType}]}; older returns {uri,name,mimeType,type}
+      const doc = Array.isArray(res?.assets) ? res.assets[0] : res;
+      if (!doc || doc.type === "cancel") return;
 
-      setPdfName(res.name);
-      simulateAnalysis("pdf");
+      const uri = doc.uri;
+      const name = doc.name || filenameFromUri(uri, "document.pdf");
+      const mime = doc.mimeType || guessMimeFromUri(uri, "application/pdf");
+
+      setPdfName(name);
+      setImageUri(null);
+      setResult(null);
+
+      setLoading(true);
+      const form = new FormData();
+      const vt = normalizeVehicleType(carType);
+      form.append("vehicle_type", vt);
+      form.append("return_cleaned", "false");
+      form.append("userId", String(userId));
+
+      if (Platform.OS === "web") {
+        await appendWebFile(form, "pdf", uri, name, mime);
+      } else {
+        appendNativeFile(form, "pdf", uri, name, mime);
+      }
+
+      const data = await postMultipart(API_PDF_URL, form);
+      console.log(data);
+      // setResult(toUiResult(data));
+      setResult(data);
     } catch (e) {
       console.log(e);
-      Alert.alert("Error", "Couldn't read PDF.");
-    }
-  }, []);
-
-  /** ---------- Simulated API Call ---------- */
-  const simulateAnalysis = (sourceType) => {
-    setLoading(true);
-    setResult(null);
-
-    setTimeout(() => {
+      Alert.alert("PDF upload failed", String(e.message || e));
+    } finally {
       setLoading(false);
-
-      // Mocked results for UI demo
-      setResult({
-        overallScore: sourceType === "pdf" ? 62 : 48,
-        items: [
-          { name: "UberX", carbonScore: 12.4 },
-          { name: "Uber Black", carbonScore: 17.9 },
-          { name: "Uber Pool", carbonScore: 6.8 },
-        ],
-        source:
-          sourceType === "pdf"
-            ? "Uber Ride History (PDF)"
-            : "Uber Ride Screenshot",
-      });
-    }, 1800);
-  };
+    }
+  }, [carType]);
 
   const reset = useCallback(() => {
     setImageUri(null);
@@ -138,40 +316,41 @@ export default function Transportations() {
         </View>
 
         {/* Car Type Dropdown */}
-        {/* <CarTypeDropdown value={carType} onChange={setCarType} /> */}
-        <View style={styles.container}>
-          <Text style={styles.label}>Car Type</Text>
+        {!result && !loading && (
+          <View style={styles.container}>
+            <Text style={styles.label}>Car Type</Text>
 
-          <TouchableOpacity
-            style={styles.dropdown}
-            onPress={() => setOpen(true)}
-          >
-            <Text style={styles.selected}>{carType}</Text>
-            <Text style={styles.arrow}>▼</Text>
-          </TouchableOpacity>
-
-          <Modal visible={open} transparent animationType="fade">
             <TouchableOpacity
-              style={styles.modalOverlay}
-              onPress={() => setOpen(false)}
+              style={styles.dropdown}
+              onPress={() => setOpen(true)}
             >
-              <View style={styles.modalContent}>
-                <FlatList
-                  data={options}
-                  keyExtractor={(item) => item}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity
-                      style={styles.option}
-                      onPress={() => select(item)}
-                    >
-                      <Text style={styles.optionText}>{item}</Text>
-                    </TouchableOpacity>
-                  )}
-                />
-              </View>
+              <Text style={styles.selected}>{carType}</Text>
+              <Text style={styles.arrow}>▼</Text>
             </TouchableOpacity>
-          </Modal>
-        </View>
+
+            <Modal visible={open} transparent animationType="fade">
+              <TouchableOpacity
+                style={styles.modalOverlay}
+                onPress={() => setOpen(false)}
+              >
+                <View style={styles.modalContent}>
+                  <FlatList
+                    data={options}
+                    keyExtractor={(item) => item}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        style={styles.option}
+                        onPress={() => select(item)}
+                      >
+                        <Text style={styles.optionText}>{item}</Text>
+                      </TouchableOpacity>
+                    )}
+                  />
+                </View>
+              </TouchableOpacity>
+            </Modal>
+          </View>
+        )}
 
         {/* Actions */}
         {!result && !loading && (
@@ -216,13 +395,7 @@ export default function Transportations() {
         {result && (
           <View style={styles.resultsWrap}>
             <View style={styles.scoreWrap}>
-              <ScoreDonut
-                score={result.overallScore}
-                size={160}
-                strokeWidth={14}
-              />
               <View style={styles.scoreMeta}>
-                <Text style={styles.storeTag}>🚙 {result.source}</Text>
                 <LinearGradient
                   colors={["#edae49", "#d1495b"]}
                   start={{ x: 0, y: 0 }}
@@ -230,7 +403,7 @@ export default function Transportations() {
                   style={styles.badge}
                 >
                   <Text style={styles.badgeText}>
-                    {gradeLabel(result.overallScore)}
+                    Total: {result.carbonFootPrint} kg CO₂e
                   </Text>
                 </LinearGradient>
                 <Text style={styles.metaHint}>
@@ -239,14 +412,18 @@ export default function Transportations() {
               </View>
             </View>
 
-            {/* Ride Types & Impact */}
-            <View style={styles.bubblesCard}>
-              <Text style={styles.sectionTitle}>Top Impact Ride Types</Text>
-              <ItemBubbles items={result.items} />
+            <View style={styles.detailsCard}>
+              <Text style={styles.sectionTitle}>Details</Text>
+              <TransportDetails data={result} />
             </View>
 
+            {/* <View style={styles.bubblesCard}>
+              <Text style={styles.sectionTitle}>Top Impact Ride Types</Text>
+              <ItemBubbles items={result.items} />
+            </View> */}
+
             <View style={styles.bottomRow}>
-              <EquivalentsPill score={result.overallScore} />
+              {/* <EquivalentsPill score={result.overallScore} /> */}
               <TouchableOpacity style={styles.secondaryBtn} onPress={reset}>
                 <Text style={styles.secondaryBtnText}>Analyze again</Text>
               </TouchableOpacity>
@@ -258,7 +435,7 @@ export default function Transportations() {
   );
 }
 
-/* -------- Helper Components (same as Shopping) -------- */
+/* -------- Helper Components (unchanged) -------- */
 
 function clamp(v, lo, hi) {
   return Math.max(lo, Math.min(hi, v));
@@ -366,14 +543,9 @@ function EquivalentsPill({ score }) {
   );
 }
 
-/* ---------- Styles ---------- */
-
+/* ---------- Styles (unchanged) ---------- */
 const styles = StyleSheet.create({
-  content: {
-    paddingTop: 18,
-    paddingBottom: 60,
-    paddingHorizontal: 18,
-  },
+  content: { paddingTop: 18, paddingBottom: 60, paddingHorizontal: 18 },
   headerPill: {
     borderRadius: 18,
     backgroundColor: "rgba(255,255,255,0.10)",
@@ -384,16 +556,8 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     alignItems: "center",
   },
-  headerTitle: {
-    color: "#EAF4F6",
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  headerSub: {
-    color: "rgba(255,255,255,0.85)",
-    fontSize: 13,
-    marginTop: 4,
-  },
+  headerTitle: { color: "#EAF4F6", fontSize: 18, fontWeight: "700" },
+  headerSub: { color: "rgba(255,255,255,0.85)", fontSize: 13, marginTop: 4 },
   row: { flexDirection: "row", gap: 10, marginBottom: 14 },
   cta: {
     flex: 1,
@@ -436,11 +600,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginTop: 12,
   },
-  loadingText: {
-    marginTop: 10,
-    color: "#EAF4F6",
-    fontWeight: "600",
-  },
+  loadingText: { marginTop: 10, color: "#EAF4F6", fontWeight: "600" },
   resultsWrap: { gap: 14 },
   scoreWrap: {
     flexDirection: "row",
@@ -453,11 +613,7 @@ const styles = StyleSheet.create({
     padding: 14,
   },
   scoreMeta: { flex: 1 },
-  storeTag: {
-    color: "#CDE8FF",
-    fontWeight: "700",
-    marginBottom: 6,
-  },
+  storeTag: { color: "#CDE8FF", fontWeight: "700", marginBottom: 6 },
   badge: {
     alignSelf: "flex-start",
     paddingHorizontal: 10,
@@ -492,11 +648,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 16,
   },
-  bubblesWrap: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-  },
+  bubblesWrap: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   bubble: {
     borderRadius: 999,
     paddingHorizontal: 10,
@@ -504,17 +656,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  bubbleName: {
-    color: "#FFFFFF",
-    fontSize: 11,
-    textAlign: "center",
-  },
-  bubbleScore: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 12,
-    marginTop: 2,
-  },
+  bubbleName: { color: "#FFFFFF", fontSize: 11, textAlign: "center" },
+  bubbleScore: { color: "#fff", fontWeight: "700", fontSize: 12, marginTop: 2 },
   bottomRow: { gap: 10 },
   eqPill: {
     borderRadius: 18,
@@ -539,11 +682,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 12,
   },
-
-  halfBtn: {
-    flex: 1,
-    marginHorizontal: 4,
-  },
+  halfBtn: { flex: 1, marginHorizontal: 4 },
   container: { marginBottom: 14 },
   label: { color: "#EAF4F6", fontWeight: "600", marginBottom: 6 },
   dropdown: {
@@ -572,4 +711,39 @@ const styles = StyleSheet.create({
   },
   option: { padding: 12, borderBottomWidth: 1, borderBottomColor: "#444" },
   optionText: { color: "#fff", fontSize: 16 },
+  detailsCard: {
+    borderRadius: 22,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.14)",
+    padding: 14,
+  },
+
+  blocksWrap: {
+    marginTop: 6,
+    gap: 8, // row-wise stacking
+  },
+
+  blockRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+  },
+
+  blockLabel: {
+    color: "rgba(255,255,255,0.85)",
+    fontSize: 12,
+  },
+
+  blockValue: {
+    color: "#FFFFFF",
+    fontWeight: "700",
+    fontSize: 13,
+  },
 });

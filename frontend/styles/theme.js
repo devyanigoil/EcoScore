@@ -361,6 +361,11 @@ export const scannerStyles = StyleSheet.create({
     paddingBottom: 60,
     paddingHorizontal: 18,
   },
+  statsCol: {
+    width: "100%",
+    flexDirection: "column",
+    gap: 12, // if your RN version lacks gap, remove this and use marginBottom on statCard
+  },
   headerPill: {
     borderRadius: 18,
     backgroundColor: COLORS.darkGray,

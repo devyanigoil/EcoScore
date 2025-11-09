@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import {
   View,
   Text,
@@ -13,13 +19,50 @@ import * as ImagePicker from "expo-image-picker";
 import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { baseStyles, scannerStyles, COLORS } from "../styles/theme";
+import { Animated, Easing } from "react-native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
+import { resolveApiBase } from "./functions";
 
-const API_URL = "http://172.31.173.9:8001/ocr/upload"; // <-- replace
+const API_URL = `${resolveApiBase()}/ocr/upload`;
+// const API_URL = "http://10.0.0.145:8001/ocr/upload"; // <-- replace
 
 export default function Shopping() {
   const [imageUri, setImageUri] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const { params } = useRoute();
+  const userId = params?.userId;
+
+  // "idle" | "scan" | "analyze"
+  const [loadingStage, setLoadingStage] = useState("idle");
+
+  // Gentle pulse for icons / ring
+  const pulse = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    if (loadingStage === "idle") {
+      pulse.setValue(1);
+      return;
+    }
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, {
+          toValue: 1.08,
+          duration: 650,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulse, {
+          toValue: 1,
+          duration: 650,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [loadingStage]);
 
   const askMediaPerms = async () => {
     if (Platform.OS === "web") return true;
@@ -64,12 +107,15 @@ export default function Shopping() {
 
   const upload = useCallback(async (uri) => {
     try {
-      console.log("Entered upload");
       setLoading(true);
       setResult(null);
+      setLoadingStage("scan"); // Stage 1 begins
 
-      console.log(uri);
+      // --- Always show stage 1 for 2 seconds ---
+      await new Promise((r) => setTimeout(r, 2000));
+      setLoadingStage("analyze"); // Move to stage 2
 
+      // Prepare image form
       const form = new FormData();
       form.append("image", {
         uri,
@@ -77,12 +123,14 @@ export default function Shopping() {
         type: "image/jpeg",
       });
 
-      console.log(API_URL);
+      form.append("userId", String(userId));
+
+      console.log(form);
+
+      // Call API
       const resp = await fetch(API_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
         body: form,
       });
 
@@ -90,21 +138,28 @@ export default function Shopping() {
         const txt = await resp.text();
         throw new Error(`Upload failed: ${resp.status} ${txt}`);
       }
+
       const data = await resp.json();
 
       console.log(data);
+
+      // Briefly hold the analyze state (optional ~0.6 s)
+      await new Promise((r) => setTimeout(r, 600));
+
+      // Done — show results
       setResult(normalizePayload(data));
     } catch (e) {
       console.log(e);
       Alert.alert("Error", e.message || "Failed to analyze receipt.");
     } finally {
       setLoading(false);
+      setLoadingStage("idle");
     }
   }, []);
 
   const reset = useCallback(() => {
-    setImageUri(null);
-    setResult(null);
+    setLoading(false);
+    setLoadingStage("idle");
   }, []);
 
   return (
@@ -123,7 +178,9 @@ export default function Shopping() {
         {/* Header */}
         <View style={scannerStyles.headerPill}>
           <Text style={scannerStyles.headerTitle}>Shopping Scanner</Text>
-          <Text style={scannerStyles.headerSub}>Upload or capture a receipt</Text>
+          <Text style={scannerStyles.headerSub}>
+            Upload or capture a receipt
+          </Text>
         </View>
 
         {/* Actions */}
@@ -152,24 +209,21 @@ export default function Shopping() {
           </View>
         )}
 
-        {/* Loading */}
+        {/* Two-stage Loading */}
         {loading && (
           <View style={scannerStyles.loadingCard}>
-            <ActivityIndicator size="large" color={COLORS.primary} />
-            <Text style={scannerStyles.loadingText}>Scanning your receipt…</Text>
+            {loadingStage === "scan" ? (
+              <StageScan pulse={pulse} />
+            ) : (
+              <StageAnalyze pulse={pulse} />
+            )}
           </View>
         )}
 
         {/* Results */}
         {result && (
           <View style={scannerStyles.resultsWrap}>
-            {/* Top: Score Donut + store tag */}
             <View style={scannerStyles.scoreWrap}>
-              <ScoreDonut
-                score={result.overallScore}
-                size={160}
-                strokeWidth={14}
-              />
               <View style={scannerStyles.scoreMeta}>
                 {!!result.store && (
                   <Text style={scannerStyles.storeTag}>🏬 {result.store}</Text>
@@ -181,11 +235,12 @@ export default function Shopping() {
                   style={scannerStyles.badge}
                 >
                   <Text style={scannerStyles.badgeText}>
-                    {gradeLabel(result.overallScore)}
+                    Total: {result.totalKg.toFixed(1)} kg CO₂e
                   </Text>
                 </LinearGradient>
                 <Text style={scannerStyles.metaHint}>
-                  Lower is better. Keep shopping smart to improve your footprint.
+                  Lower is better. Keep shopping smart to improve your
+                  footprint.
                 </Text>
               </View>
             </View>
@@ -198,8 +253,10 @@ export default function Shopping() {
 
             {/* Equivalents / CTA */}
             <View style={scannerStyles.resultsWrap}>
-              <EquivalentsPill score={result.overallScore} />
-              <TouchableOpacity style={scannerStyles.secondaryBtn} onPress={reset}>
+              <TouchableOpacity
+                style={scannerStyles.secondaryBtn}
+                onPress={reset}
+              >
                 <Text style={scannerStyles.secondaryBtnText}>Scan another</Text>
               </TouchableOpacity>
             </View>
@@ -212,30 +269,131 @@ export default function Shopping() {
 
 /* ---------- helpers / components ---------- */
 
-function normalizePayload(data) {
-  const overall =
-    typeof data.overallScore === "number"
-      ? clamp(data.overallScore, 0, 100)
-      : toPercent(data.totalEmissions, data.maxEmissions);
+function StageScan({ pulse }) {
+  return (
+    <View style={{ alignItems: "center", gap: 14 }}>
+      <Animated.View
+        style={{
+          transform: [{ scale: pulse }],
+          padding: 20,
+          borderRadius: 999,
+          backgroundColor: "rgba(74,158,255,0.12)",
+        }}
+      >
+        <MaterialCommunityIcons
+          name="receipt"
+          size={46}
+          color={COLORS.primary}
+        />
+      </Animated.View>
 
-  const items = Array.isArray(data.items)
-    ? data.items
-        .map((it) => ({
-          name: it.name ?? "Item",
-          carbonScore:
-            typeof it.carbonScore === "number"
-              ? it.carbonScore
-              : typeof it.emission === "number"
-              ? it.emission
-              : 0,
-        }))
-        .sort((a, b) => b.carbonScore - a.carbonScore)
-    : [];
+      <Text style={scannerStyles.loadingText}>Scanning the receipt…</Text>
+
+      {/* Animated scanning ring */}
+      <Animated.View
+        style={{
+          marginTop: 4,
+          width: 72,
+          height: 72,
+          borderRadius: 36,
+          borderWidth: 3,
+          borderColor: "rgba(255,255,255,0.18)",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+        }}
+      >
+        <Animated.View
+          style={{
+            position: "absolute",
+            width: "120%",
+            height: 6,
+            backgroundColor: COLORS.primary,
+            opacity: 0.5,
+            transform: [
+              {
+                translateY: pulse.interpolate({
+                  inputRange: [1, 1.08],
+                  outputRange: [-28, 28],
+                }),
+              },
+            ],
+          }}
+        />
+        <Ionicons name="scan" size={24} color="white" />
+      </Animated.View>
+    </View>
+  );
+}
+
+function StageAnalyze({ pulse }) {
+  return (
+    <View style={{ alignItems: "center", gap: 14 }}>
+      <Animated.View
+        style={{
+          transform: [{ scale: pulse }],
+          padding: 20,
+          borderRadius: 999,
+          backgroundColor: "rgba(237,174,73,0.14)",
+        }}
+      >
+        <MaterialCommunityIcons name="brain" size={46} color={COLORS.accent} />
+      </Animated.View>
+
+      <Text style={scannerStyles.loadingText}>Analyzing the receipt…</Text>
+
+      {/* Subtle spinner ring */}
+      <Animated.View
+        style={{
+          marginTop: 4,
+          width: 56,
+          height: 56,
+          borderRadius: 28,
+          borderWidth: 3,
+          borderColor: "rgba(255,255,255,0.18)",
+          borderTopColor: COLORS.accent,
+          transform: [
+            {
+              rotate: pulse.interpolate({
+                inputRange: [1, 1.08],
+                outputRange: ["0deg", "360deg"],
+              }),
+            },
+          ],
+        }}
+      />
+    </View>
+  );
+}
+
+function normalizePayload(data) {
+  const raw = Array.isArray(data?.items) ? data.items : [];
+
+  // Map payload → UI model
+  const items = raw
+    .map((it) => ({
+      name: it.item_name ?? "Item",
+      carbonScore: Number(it.emissions_kg_co2e) || 0, // keep numeric (kg)
+    }))
+    .sort((a, b) => b.carbonScore - a.carbonScore);
+
+  // Aggregate (kg CO2e)
+  const totalKg = items.reduce((s, i) => s + (i.carbonScore || 0), 0);
+
+  // Convert total kg → 0..100 score (lower is better).
+  // Tune this baseline to your domain. 25 kg ≙ score 100 by default.
+  const MAX_RECEIPT_EMISSIONS_KG = 25;
+  const overallScore = clamp(
+    Math.round((totalKg / MAX_RECEIPT_EMISSIONS_KG) * 100),
+    0,
+    100
+  );
 
   return {
-    overallScore: overall ?? 0,
-    items,
-    store: data.store ?? data.merchant ?? "",
+    overallScore, // 0..100 (lower is better)
+    totalKg, // keep the true total for equivalents
+    items, // [{name, carbonScore(kg)}]
+    store: data.store ?? data.merchant ?? "", // if backend adds later
   };
 }
 
@@ -243,65 +401,13 @@ function clamp(v, lo, hi) {
   return Math.max(lo, Math.min(hi, v));
 }
 
-function toPercent(value, maxValue) {
-  if (!maxValue || !value) return 0;
-  return clamp(Math.round((value / maxValue) * 100), 0, 100);
-}
-
-function gradeLabel(score) {
-  if (score <= 20) return "A+";
-  if (score <= 35) return "A";
-  if (score <= 50) return "B";
-  if (score <= 70) return "C";
-  return "D";
-}
-
-/* Donut score */
-function ScoreDonut({ score = 0, size = 160, strokeWidth = 14 }) {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const clamped = clamp(score, 0, 100);
-  const offset = circumference - (clamped / 100) * circumference;
-
-  return (
-    <View
-      style={{
-        width: size,
-        height: size,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Svg width={size} height={size}>
-        <Circle
-          stroke="rgba(255,255,255,0.18)"
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          strokeWidth={strokeWidth}
-          fill="none"
-        />
-        <Circle
-          stroke={COLORS.primary}
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          fill="none"
-        />
-      </Svg>
-      <Text style={scannerStyles.donutValue}>{clamped}</Text>
-      <Text style={scannerStyles.donutLabel}>Overall</Text>
-    </View>
-  );
-}
-
 /* Bubbles */
 function ItemBubbles({ items = [] }) {
-  const top = useMemo(() => items.slice(0, 8), [items]);
+  // Filter out items with zero or falsy score, then take top 8
+  const top = useMemo(
+    () => items.filter((i) => i.carbonScore > 0).slice(0, 8),
+    [items]
+  );
   const max = useMemo(
     () => Math.max(1, ...top.map((i) => i.carbonScore || 0)),
     [top]
@@ -331,24 +437,5 @@ function ItemBubbles({ items = [] }) {
         );
       })}
     </View>
-  );
-}
-
-/* Equivalents pill */
-function EquivalentsPill({ score }) {
-  const miles = (score * 0.9).toFixed(0);
-  const trees = Math.max(0.1, score / 40).toFixed(2);
-
-  return (
-    <LinearGradient
-      colors={[COLORS.primary, COLORS.primaryDark]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={scannerStyles.eqPill}
-    >
-      <Text style={scannerStyles.eqTitle}>What this means</Text>
-      <Text style={scannerStyles.eqLine}>🚗 ≈ {miles} miles driven</Text>
-      <Text style={scannerStyles.eqLine}>🌳 ≈ {trees} trees/year to offset</Text>
-    </LinearGradient>
   );
 }

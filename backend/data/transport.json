@@ -8,7 +8,15 @@
         "ride_date": "2025-07-04",
         "distance_miles": 2.07,
         "vehicle_type": "electric",
-        "emissions": 0.207,
+        "emissions": 0.207
+      },
+      {
+        "entry_id": "4145ee96-49e4-49e0-9893-eedd05092aaa",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
         "points": 9.793
       }
     ]
