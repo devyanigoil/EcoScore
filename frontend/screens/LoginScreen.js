@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from "expo-auth-session";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { oceanSunsetNeumorphicStyles as styles } from "../colorThemes";
 // import { oceanSunsetStyles as styles } from "./colorThemes";
+
 import {
   useFonts,
   PlayfairDisplay_400Regular,
@@ -27,7 +29,8 @@ const { width, height } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const navigation = useNavigation();
-
+  const redirectUri = AuthSession.makeRedirectUri({ useProxy: true });
+  console.log("redirectURI:",redirectUri);
   const [fadeAnim] = useState(new Animated.Value(0));
   const [slideAnim] = useState(new Animated.Value(50));
   const [scaleAnim] = useState(new Animated.Value(0.9));
@@ -41,12 +44,20 @@ export default function LoginScreen() {
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: "93116964233-2nn1m34uj3j4hd5r0j2skda5m9m8tbq1.apps.googleusercontent.com",
     iosClientId: "93116964233-i8dt8gathqh7ddbnhqq8u9jr6i827urm.apps.googleusercontent.com",
+    webClientId: "93116964233-28rchgmcqpd68gda808i4dl31hc66737.apps.googleusercontent.com",
     scopes: [
       "openid",
       "profile",
       "email",
     ],
+    redirectUri,
   });
+
+  useEffect(() => {
+    if (request) {
+      console.log("Auth Request Details:", JSON.stringify(request, null, 2));
+    }
+  }, [request]);
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -75,21 +86,22 @@ export default function LoginScreen() {
   useEffect(() => {
     if (response) {
       console.log("Auth Response:", response);
-      
+      console.log("redirectURI:",redirectUri);
       if (response.type === "error") {
         console.log("Auth Error:", response.error);
       }
-    if (response?.type === "success") {
+      if (response?.type === "success") {
       const { authentication } = response;
       const idToken = authentication.idToken;
       const accessToken = authentication.accessToken;
 
       console.log("ID Token:", idToken);
       console.log("Access Token:", accessToken);
+      console.log(redirectUri)
 
       // Send ID token to FastAPI backend
       axios
-        .post("http://127.0.0.1:8000/auth/google", {
+        .post("http://172.30.145.177:8000/auth/google", {
           id_token: idToken,
           access_token: accessToken
         })
@@ -159,8 +171,8 @@ export default function LoginScreen() {
         {/* Sign In Button */}
         <TouchableOpacity
           style={[styles.signInButton, !request && styles.signInButtonDisabled]}
-          onPress={() => promptAsync()}
-          // onPress={() => navigation.navigate("Home")}
+          // onPress={() => promptAsync({useProxy: true})}
+          onPress={() => navigation.navigate("Home")}
           disabled={!request}
           activeOpacity={0.8}
         >

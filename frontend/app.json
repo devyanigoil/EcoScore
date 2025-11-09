@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "dgoil",
     "name": "carbon-calculator",
     "slug": "carbon-calculator",
     "scheme": "com.carboncal.app",
