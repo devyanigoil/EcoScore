@@ -177,6 +177,45 @@ QTY_AT_PRICE_RE = re.compile(
     re.I
 )
 
+STORE_HINT_RE = re.compile(r"(market|mart|foods?|grocery|super\s*market|superstore|store|trader joe|whole foods|walmart|target|costco|safeway|kroger|aldi|heb|h[- ]?e[- ]?b|sprouts|wegmans|publix|meijer|stop ?& ?shop|giant|vons|ralphs|winco|shoprite)", re.I)
+PHONE_RE = re.compile(r"\(?\+?1?\)?[ .-]?\d{3}[ .-]?\d{3}[ .-]?\d{4}")
+ADDRESS_LIKE_RE = re.compile(r"\d{1,6}\s+\w+(\s+\w+){0,5}\s*(st|street|ave|avenue|rd|road|dr|drive|blvd|lane|ln|way|ct|court)\b", re.I)
+
+def _mostly_caps(s: str) -> bool:
+    letters = [c for c in s if c.isalpha()]
+    if not letters:
+        return False
+    caps = sum(1 for c in letters if c.isupper())
+    return caps / len(letters) >= 0.6
+
+def extract_store_name(cleaned_text: str) -> Optional[str]:
+    """
+    Heuristic:
+      - Look at the first ~10 non-empty lines.
+      - Prefer a line that either matches STORE_HINT_RE or looks mostly-caps and isn't an address/phone.
+      - Skip obvious metadata lines (phone/address).
+    """
+    lines = [l.strip() for l in cleaned_text.split("\n") if l.strip()]
+    head = lines[:10]
+
+    # 1) Strong hint match
+    for l in head:
+        if STORE_HINT_RE.search(l) and not PHONE_RE.search(l):
+            if not ADDRESS_LIKE_RE.search(l):
+                return l
+
+    # 2) Fallback: first mostly-caps, non-address/phone line
+    for l in head:
+        if _mostly_caps(l) and not PHONE_RE.search(l) and not ADDRESS_LIKE_RE.search(l):
+            return l
+
+    # 3) Weak fallback: very first line if reasonable
+    if head:
+        l0 = head[0]
+        if not PHONE_RE.search(l0):
+            return l0
+    return None
+
 # Lines to ignore entirely as “generic” items
 GENERIC_ITEM_RE = re.compile(r"^\s*(item|items?)\s*$", re.I)
 
@@ -533,6 +572,7 @@ def ocr_from_bytes(img_bytes: bytes, return_cleaned: bool = False) -> dict:
 
     full = response.full_text_annotation.text if response.full_text_annotation else ""
     cleaned = basic_clean(full)
+    store = extract_store_name(cleaned)
     items_lines  = extract_likely_items(cleaned)
     items_parsed = extract_items_structured(cleaned)
 
@@ -543,6 +583,7 @@ def ocr_from_bytes(img_bytes: bytes, return_cleaned: bool = False) -> dict:
         "items": items_lines,
         "items_parsed": items_parsed,
         "charCount": len(cleaned),
+        "store": store
     }
     if return_cleaned:
         result["cleaned_text"] = cleaned
