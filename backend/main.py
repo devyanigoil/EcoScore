@@ -361,41 +361,78 @@ async def get_user(user_id: str):
 
 @app.get("/summary")
 async def get_summary(user_id: str, type: str):
-    # For now, we only support type="transport"
-    if type != "transport":
-        raise HTTPException(status_code=400, detail="Only type='transport' is supported")
+    # -------- transport --------
+    if type == "transport":
+        try:
+            with open("data/transport.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            raise HTTPException(status_code=500, detail="transport.json not found")
 
-    
-    try:
-        with open("data/transport.json", "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except FileNotFoundError:
-        raise HTTPException(status_code=500, detail="transport.json not found")
+        user_block = next((item for item in data if item.get("user") == user_id), None)
 
-    # Find this user's transport block
-    user_block = next((item for item in data if item.get("user") == user_id), None)
+        if not user_block:
+            return {"user_id": user_id, "type": type, "entries": []}
 
-    # If user not found in transport.json, just return empty list
-    if not user_block:
-        return {
-            "user_id": user_id,
-            "type": type,
-            "entries": []
-        }
+        rides = user_block.get("rides", [])
+        entries = [
+            {
+                "date": ride.get("ride_date"),
+                "miles": ride.get("distance_miles"),
+                "emissions": ride.get("emissions"),
+            }
+            for ride in rides
+        ]
 
-    # Build the simplified list: date, miles, emissions
-    rides = user_block.get("rides", [])
-    entries = [
-        {
-            "date": ride.get("ride_date"),
-            "miles": ride.get("distance_miles"),
-            "emissions": ride.get("emissions"),
-        }
-        for ride in rides
-    ]
+        return {"user_id": user_id, "type": type, "entries": entries}
 
-    return {
-        "user_id": user_id,
-        "type": type,
-        "entries": entries
-    }
+    # -------- energy --------
+    elif type == "energy":
+        try:
+            with open("data/energy.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            raise HTTPException(status_code=500, detail="energy.json not found")
+
+        user_block = next((item for item in data if item.get("user") == user_id), None)
+
+        if not user_block:
+            return {"user_id": user_id, "type": type, "entries": []}
+
+        # adjust "bills" key based on how you store energy entries
+        energy_bills = user_block.get("energy_bills", [])
+        entries = [
+            {   "start_date": bill.get("start_date"),
+                "end_date": bill.get("end_date"),
+                "kwh": bill.get("consumption_kwh"),
+                "emissions": bill.get("emissions"),
+            }
+            for bill in energy_bills
+        ]
+
+        return {"user_id": user_id, "type": type, "entries": entries}
+
+    # -------- shopping --------
+    elif type == "shopping":
+        try:
+            with open("data/shopping.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            raise HTTPException(status_code=500, detail="shopping.json not found")
+
+        user_block = next((item for item in data if item.get("user") == user_id), None)
+
+        if not user_block:
+            return {"user_id": user_id, "type": type, "entries": []}
+
+        # if you’re using Receipts.json structure, this will be "receipts"
+        entries = user_block.get("receipts", [])
+
+        return {"user_id": user_id, "type": type, "entries": entries}
+
+    # -------- unsupported type --------
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail="type must be one of: 'transport', 'energy', 'shopping'",
+        )
