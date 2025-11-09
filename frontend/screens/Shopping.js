@@ -1,8 +1,7 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   Image,
   TouchableOpacity,
@@ -13,7 +12,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
-import { oceanSunsetNeumorphicStyles as base } from "../colorThemes";
+import { baseStyles, scannerStyles, COLORS } from "../styles/theme";
 
 const API_URL = "http://172.31.173.9:8001/ocr/upload"; // <-- replace
 
@@ -71,17 +70,12 @@ export default function Shopping() {
 
       console.log(uri);
 
-      // build multipart form
       const form = new FormData();
       form.append("image", {
         uri,
         name: "receipt.jpg",
         type: "image/jpeg",
       });
-
-      // if your API needs extra fields:
-      // form.append("userId", "123");
-      // form.append("source", "mobile-app");
 
       console.log(API_URL);
       const resp = await fetch(API_URL, {
@@ -99,13 +93,6 @@ export default function Shopping() {
       const data = await resp.json();
 
       console.log(data);
-
-      // Expected shape:
-      // {
-      //   overallScore: number,
-      //   items: [{ name: string, carbonScore: number }, ...],
-      //   store?: string,
-      // }
       setResult(normalizePayload(data));
     } catch (e) {
       console.log(e);
@@ -121,100 +108,99 @@ export default function Shopping() {
   }, []);
 
   return (
-    <View style={base.container}>
+    <View style={baseStyles.container}>
       {/* Background theme */}
-      <View style={base.backgroundGradient}>
-        <View style={[base.circle, base.circle1]} />
-        <View style={[base.circle, base.circle2]} />
-        <View style={[base.circle, base.circle3]} />
+      <View style={baseStyles.backgroundGradient}>
+        <View style={[baseStyles.circle, baseStyles.circle1]} />
+        <View style={[baseStyles.circle, baseStyles.circle2]} />
+        <View style={[baseStyles.circle, baseStyles.circle3]} />
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={scannerStyles.content}
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View style={styles.headerPill}>
-          <Text style={styles.headerTitle}>Shopping Scanner</Text>
-          <Text style={styles.headerSub}>Upload or capture a receipt</Text>
+        <View style={scannerStyles.headerPill}>
+          <Text style={scannerStyles.headerTitle}>Shopping Scanner</Text>
+          <Text style={scannerStyles.headerSub}>Upload or capture a receipt</Text>
         </View>
 
         {/* Actions */}
-        <View style={styles.row}>
+        <View style={scannerStyles.row}>
           <TouchableOpacity
-            style={[styles.cta, styles.ctaPrimary]}
+            style={[scannerStyles.cta, scannerStyles.ctaPrimary]}
             onPress={takePhoto}
           >
-            <Text style={styles.ctaEmoji}>📷</Text>
-            <Text style={styles.ctaText}>Take Photo</Text>
+            <Text style={scannerStyles.ctaEmoji}>📷</Text>
+            <Text style={scannerStyles.ctaText}>Take Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.cta, styles.ctaSecondary]}
+            style={[scannerStyles.cta, scannerStyles.ctaSecondary]}
             onPress={pickImage}
           >
-            <Text style={styles.ctaEmoji}>📤</Text>
-            <Text style={styles.ctaText}>Upload</Text>
+            <Text style={scannerStyles.ctaEmoji}>📤</Text>
+            <Text style={scannerStyles.ctaText}>Upload</Text>
           </TouchableOpacity>
         </View>
 
         {/* Preview */}
         {imageUri && !loading && !result && (
-          <View style={styles.previewCard}>
-            <Image source={{ uri: imageUri }} style={styles.preview} />
-            <Text style={styles.previewHint}>Analyzing…</Text>
+          <View style={scannerStyles.previewCard}>
+            <Image source={{ uri: imageUri }} style={scannerStyles.preview} />
+            <Text style={scannerStyles.previewHint}>Analyzing…</Text>
           </View>
         )}
 
         {/* Loading */}
         {loading && (
-          <View style={styles.loadingCard}>
-            <ActivityIndicator size="large" color="#CDE8FF" />
-            <Text style={styles.loadingText}>Scanning your receipt…</Text>
+          <View style={scannerStyles.loadingCard}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+            <Text style={scannerStyles.loadingText}>Scanning your receipt…</Text>
           </View>
         )}
 
         {/* Results */}
         {result && (
-          <View style={styles.resultsWrap}>
+          <View style={scannerStyles.resultsWrap}>
             {/* Top: Score Donut + store tag */}
-            <View style={styles.scoreWrap}>
+            <View style={scannerStyles.scoreWrap}>
               <ScoreDonut
-                score={result.overallScore} // 0–100
+                score={result.overallScore}
                 size={160}
                 strokeWidth={14}
               />
-              <View style={styles.scoreMeta}>
+              <View style={scannerStyles.scoreMeta}>
                 {!!result.store && (
-                  <Text style={styles.storeTag}>🏬 {result.store}</Text>
+                  <Text style={scannerStyles.storeTag}>🏬 {result.store}</Text>
                 )}
                 <LinearGradient
-                  colors={["#edae49", "#d1495b"]}
+                  colors={[COLORS.primary, COLORS.accent]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
-                  style={styles.badge}
+                  style={scannerStyles.badge}
                 >
-                  <Text style={styles.badgeText}>
+                  <Text style={scannerStyles.badgeText}>
                     {gradeLabel(result.overallScore)}
                   </Text>
                 </LinearGradient>
-                <Text style={styles.metaHint}>
-                  Lower is better. Keep shopping smart to improve your
-                  footprint.
+                <Text style={scannerStyles.metaHint}>
+                  Lower is better. Keep shopping smart to improve your footprint.
                 </Text>
               </View>
             </View>
 
             {/* Bubbles: items by impact */}
-            <View style={styles.bubblesCard}>
-              <Text style={styles.sectionTitle}>Top Impact Items</Text>
+            <View style={scannerStyles.bubblesCard}>
+              <Text style={scannerStyles.sectionTitle}>Top Impact Items</Text>
               <ItemBubbles items={result.items} />
             </View>
 
             {/* Equivalents / CTA */}
-            <View style={styles.bottomRow}>
+            <View style={scannerStyles.resultsWrap}>
               <EquivalentsPill score={result.overallScore} />
-              <TouchableOpacity style={styles.secondaryBtn} onPress={reset}>
-                <Text style={styles.secondaryBtnText}>Scan another</Text>
+              <TouchableOpacity style={scannerStyles.secondaryBtn} onPress={reset}>
+                <Text style={scannerStyles.secondaryBtnText}>Scan another</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -227,11 +213,10 @@ export default function Shopping() {
 /* ---------- helpers / components ---------- */
 
 function normalizePayload(data) {
-  // Flexible normalizer to handle varied server shapes
   const overall =
     typeof data.overallScore === "number"
       ? clamp(data.overallScore, 0, 100)
-      : toPercent(data.totalEmissions, data.maxEmissions); // fallback if needed
+      : toPercent(data.totalEmissions, data.maxEmissions);
 
   const items = Array.isArray(data.items)
     ? data.items
@@ -297,7 +282,7 @@ function ScoreDonut({ score = 0, size = 160, strokeWidth = 14 }) {
           fill="none"
         />
         <Circle
-          stroke="#edae49"
+          stroke={COLORS.primary}
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -308,16 +293,14 @@ function ScoreDonut({ score = 0, size = 160, strokeWidth = 14 }) {
           fill="none"
         />
       </Svg>
-      <View style={StyleSheet.absoluteFillObject} />
-      <Text style={styles.donutValue}>{clamped}</Text>
-      <Text style={styles.donutLabel}>Overall</Text>
+      <Text style={scannerStyles.donutValue}>{clamped}</Text>
+      <Text style={scannerStyles.donutLabel}>Overall</Text>
     </View>
   );
 }
 
 /* Bubbles */
 function ItemBubbles({ items = [] }) {
-  // take top 8 by impact
   const top = useMemo(() => items.slice(0, 8), [items]);
   const max = useMemo(
     () => Math.max(1, ...top.map((i) => i.carbonScore || 0)),
@@ -325,23 +308,23 @@ function ItemBubbles({ items = [] }) {
   );
 
   return (
-    <View style={styles.bubblesWrap}>
+    <View style={scannerStyles.bubblesWrap}>
       {top.map((it, idx) => {
-        const weight = (it.carbonScore || 0) / max; // 0..1
-        const size = 54 + Math.round(54 * weight); // 54..108
-        const bg = `rgba(209,73,91,${0.22 + 0.4 * weight})`; // amaranth tint
+        const weight = (it.carbonScore || 0) / max;
+        const size = 54 + Math.round(54 * weight);
+        const bg = `rgba(74, 158, 255, ${0.22 + 0.4 * weight})`;
         return (
           <View
             key={`${it.name}-${idx}`}
             style={[
-              styles.bubble,
+              scannerStyles.bubble,
               { width: size, height: size, backgroundColor: bg },
             ]}
           >
-            <Text style={styles.bubbleName} numberOfLines={2}>
+            <Text style={scannerStyles.bubbleName} numberOfLines={2}>
               {it.name}
             </Text>
-            <Text style={styles.bubbleScore}>
+            <Text style={scannerStyles.bubbleScore}>
               {(it.carbonScore ?? 0).toFixed(1)}
             </Text>
           </View>
@@ -351,201 +334,21 @@ function ItemBubbles({ items = [] }) {
   );
 }
 
-/* Equivalents pill (simple heuristic) */
+/* Equivalents pill */
 function EquivalentsPill({ score }) {
-  // Treat score (0–100) as relative intensity to generate equivalents
   const miles = (score * 0.9).toFixed(0);
   const trees = Math.max(0.1, score / 40).toFixed(2);
 
   return (
     <LinearGradient
-      colors={["#00798c", "#003d5b"]}
+      colors={[COLORS.primary, COLORS.primaryDark]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      style={styles.eqPill}
+      style={scannerStyles.eqPill}
     >
-      <Text style={styles.eqTitle}>What this means</Text>
-      <Text style={styles.eqLine}>🚗 ≈ {miles} miles driven</Text>
-      <Text style={styles.eqLine}>🌳 ≈ {trees} trees/year to offset</Text>
+      <Text style={scannerStyles.eqTitle}>What this means</Text>
+      <Text style={scannerStyles.eqLine}>🚗 ≈ {miles} miles driven</Text>
+      <Text style={scannerStyles.eqLine}>🌳 ≈ {trees} trees/year to offset</Text>
     </LinearGradient>
   );
 }
-
-/* ---------- styles ---------- */
-
-const styles = StyleSheet.create({
-  content: {
-    paddingTop: 18,
-    paddingBottom: 60,
-    paddingHorizontal: 18,
-  },
-
-  headerPill: {
-    borderRadius: 18,
-    backgroundColor: "rgba(255,255,255,0.10)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    marginBottom: 14,
-    alignItems: "center",
-  },
-  headerTitle: {
-    color: "#EAF4F6",
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  headerSub: {
-    color: "rgba(255,255,255,0.85)",
-    fontSize: 13,
-    marginTop: 4,
-  },
-
-  row: { flexDirection: "row", gap: 10, marginBottom: 14 },
-  cta: {
-    flex: 1,
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: "center",
-    borderWidth: 1,
-  },
-  ctaPrimary: {
-    backgroundColor: "#0a4966",
-    borderColor: "rgba(255,255,255,0.16)",
-  },
-  ctaSecondary: {
-    backgroundColor: "rgba(255,255,255,0.12)",
-    borderColor: "rgba(255,255,255,0.16)",
-  },
-  ctaEmoji: { fontSize: 24, marginBottom: 6 },
-  ctaText: { color: "#FFFFFF", fontWeight: "700" },
-
-  previewCard: {
-    borderRadius: 18,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-    backgroundColor: "rgba(255,255,255,0.08)",
-    marginBottom: 12,
-  },
-  preview: { width: "100%", height: 240, resizeMode: "cover" },
-  previewHint: {
-    color: "rgba(255,255,255,0.85)",
-    padding: 8,
-    textAlign: "center",
-  },
-
-  loadingCard: {
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-    backgroundColor: "rgba(255,255,255,0.08)",
-    paddingVertical: 28,
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  loadingText: {
-    marginTop: 10,
-    color: "#EAF4F6",
-    fontWeight: "600",
-  },
-
-  resultsWrap: { gap: 14 },
-
-  scoreWrap: {
-    flexDirection: "row",
-    gap: 14,
-    alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.08)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-    borderRadius: 22,
-    padding: 14,
-  },
-  scoreMeta: { flex: 1 },
-  storeTag: {
-    color: "#CDE8FF",
-    fontWeight: "700",
-    marginBottom: 6,
-  },
-  badge: {
-    alignSelf: "flex-start",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
-    marginBottom: 6,
-  },
-  badgeText: { color: "#fff", fontWeight: "700", fontSize: 12 },
-  metaHint: { color: "rgba(255,255,255,0.85)", fontSize: 12, marginTop: 2 },
-
-  donutValue: {
-    position: "absolute",
-    color: "#FFFFFF",
-    fontSize: 32,
-    fontWeight: "800",
-  },
-  donutLabel: {
-    position: "absolute",
-    marginTop: 34,
-    color: "rgba(255,255,255,0.9)",
-    fontSize: 12,
-  },
-
-  bubblesCard: {
-    borderRadius: 22,
-    backgroundColor: "rgba(255,255,255,0.08)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-    padding: 14,
-  },
-  sectionTitle: {
-    color: "#EAF4F6",
-    fontWeight: "700",
-    marginBottom: 10,
-    fontSize: 16,
-  },
-  bubblesWrap: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-  },
-  bubble: {
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  bubbleName: {
-    color: "#FFFFFF",
-    fontSize: 11,
-    textAlign: "center",
-  },
-  bubbleScore: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 12,
-    marginTop: 2,
-  },
-
-  bottomRow: { gap: 10 },
-  eqPill: {
-    borderRadius: 18,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-  },
-  eqTitle: { color: "#EAF4F6", fontWeight: "700", marginBottom: 4 },
-  eqLine: { color: "rgba(255,255,255,0.9)", fontSize: 12 },
-
-  secondaryBtn: {
-    alignSelf: "flex-start",
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 12,
-    backgroundColor: "rgba(255,255,255,0.12)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.18)",
-  },
-  secondaryBtnText: { color: "#fff", fontWeight: "700" },
-});
