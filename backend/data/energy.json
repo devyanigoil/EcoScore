@@ -72,6 +72,15 @@
         "consumption_kwh": 191.0,
         "emissions": 80.22,
         "points": 19.78
+      },
+      {
+        "entry_id": "a1b2aa20-4eeb-4917-aa6a-085143477c2a",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
       }
     ]
   }
