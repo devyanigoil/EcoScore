@@ -16,7 +16,7 @@ import base64
 import re
 from datetime import datetime
 from io import BytesIO
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple 
 
 from fastapi import FastAPI, HTTPException
 from google.cloud import vision
@@ -51,6 +51,89 @@ def extract_base64_payload(s: str) -> str:
     m = DATAURI_RE.match(s)
     payload = m.group(1) if m else s
     return "".join(payload.split())
+
+# ----------------------------
+# Transport parsing helpers
+# ----------------------------
+DIST_RE = re.compile(r'(\d+(?:\.\d+)?)\s*(?:mi|miles)\b', re.I)
+DUR_RE  = re.compile(r'(\d+(?:\.\d+)?)\s*(?:min|mins|minutes)\b', re.I)
+TIME_RE = re.compile(r'\b(\d{1,2}:\d{2}\s*[AP]M)\b', re.I)
+DATE_RE_MDY = re.compile(r'\b([A-Z][a-z]{2,9}\s+\d{1,2},\s*\d{4})\b')  # e.g., Jun 16, 2025
+DATE_RE_NUM = re.compile(r'\b(\d{1,2}/\d{1,2}/\d{2,4})\b')             # e.g., 7/4/25
+
+def _guess_provider(txt: str) -> Optional[str]:
+    low = txt.lower()
+    if "lyft" in low: return "Lyft"
+    if "uber" in low: return "Uber"
+    return None
+
+def _first_match(regex, txt: str) -> Optional[str]:
+    m = regex.search(txt)
+    return m.group(1) if m else None
+
+def _find_date(txt: str) -> Optional[str]:
+    m = DATE_RE_MDY.search(txt)
+    if m:
+        for fmt in ("%b %d, %Y", "%B %d, %Y"):
+            try:
+                return datetime.strptime(m.group(1), fmt).strftime("%Y-%m-%d")
+            except Exception:
+                pass
+    m = DATE_RE_NUM.search(txt)
+    if m:
+        for fmt in ("%m/%d/%Y", "%m/%d/%y"):
+            try:
+                return datetime.strptime(m.group(1), fmt).strftime("%Y-%m-%d")
+            except Exception:
+                pass
+    return None
+
+def _find_pick_drop(txt: str) -> Tuple[Optional[str], Optional[str]]:
+    pickup = drop = None
+    lines = [l.strip() for l in txt.split("\n") if l.strip()]
+    for i, line in enumerate(lines):
+        low = line.lower()
+        if "pickup" in low and i > 0:
+            pickup = lines[i-1]
+        if ("drop-off" in low or "drop off" in low) and i > 0:
+            drop = lines[i-1]
+    return pickup, drop
+
+def parse_transport_text(full_text: str) -> dict:
+    cleaned = basic_clean(full_text)
+    provider = _guess_provider(cleaned)
+    date = _find_date(cleaned)
+    distance = _first_match(DIST_RE, cleaned)
+    duration = _first_match(DUR_RE, cleaned)
+    time_matches = TIME_RE.findall(cleaned)
+    start_time = time_matches[0] if time_matches else None
+    end_time   = time_matches[1] if len(time_matches) > 1 else None
+
+    # best-effort total price
+    price_total = None
+    m_price = re.search(r'\$\s*(\d+(?:\.\d{2})?)', cleaned)
+    if m_price:
+        try: price_total = float(m_price.group(1))
+        except Exception: pass
+
+    pickup, dropoff = _find_pick_drop(cleaned)
+    distance_miles = float(distance) if distance else None
+    duration_min   = float(duration) if duration else None
+
+    return {
+        "provider": provider,
+        "date": date,
+        "startTime": start_time,
+        "endTime": end_time,
+        "pickup": pickup,
+        "dropoff": dropoff,
+        "distance_miles": distance_miles,
+        "duration_min": duration_min,
+        "price_total": price_total,
+        "charCount": len(cleaned),
+        "cleaned_text": cleaned,
+    }
+
 
 # ----------------------------
 # Receipt helpers (unchanged legacy behavior)
@@ -460,6 +543,59 @@ def energy_from_pdf_bytes(pdf_bytes: bytes, return_cleaned: bool = False) -> dic
     if return_cleaned:
         out["cleaned_text"] = cleaned
     return out
+
+def transport_from_image_bytes(img_bytes: bytes) -> dict:
+    """Transport OCR from image bytes → structured transport JSON."""
+    if not img_bytes:
+        raise ValueError("empty image")
+    if len(img_bytes) > MAX_IMAGE_BYTES:
+        raise ValueError(f"image too large (>{MAX_IMAGE_BYTES // (1024*1024)}MB)")
+
+    image = vision.Image(content=img_bytes)
+    response = vision_client.document_text_detection(
+        image=image, image_context={"language_hints": ["en"]}
+    )
+    if response.error.message:
+        raise RuntimeError(response.error.message)
+
+    full = response.full_text_annotation.text if response.full_text_annotation else ""
+    parsed = parse_transport_text(full)
+
+    return {
+        "ok": True,
+        "method": "vision+bytes:transport",
+        "bytes": len(img_bytes),
+        "transport": parsed,
+    }
+
+def transport_from_pdf_bytes(pdf_bytes: bytes) -> dict:
+    """Transport OCR from text-based PDF bytes → structured transport JSON."""
+    if not pdf_bytes:
+        raise ValueError("empty pdf")
+    if len(pdf_bytes) > MAX_PDF_BYTES:
+        raise ValueError(f"pdf too large (>{MAX_PDF_BYTES // (1024*1024)}MB)")
+
+    try:
+        from pdfminer.high_level import extract_text as pdf_extract_text
+    except Exception:
+        raise RuntimeError("pdfminer.six not installed. Install with: pip install pdfminer.six")
+
+    try:
+        text = pdf_extract_text(BytesIO(pdf_bytes))
+    except Exception as e:
+        raise RuntimeError(f"pdf text extraction failed: {e}")
+
+    cleaned = basic_clean(text or "")
+    if not cleaned:
+        raise RuntimeError("empty PDF text; scanned PDFs need image conversion or Vision async with GCS")
+
+    parsed = parse_transport_text(cleaned)
+    return {
+        "ok": True,
+        "method": "pdf:text:transport",
+        "bytes": len(pdf_bytes),
+        "transport": parsed,
+    }
 
 # ----------------------------
 # Optional base64 FastAPI app (handy for quick CLI tests)
