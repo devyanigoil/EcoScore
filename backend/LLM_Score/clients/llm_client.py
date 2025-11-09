@@ -5,7 +5,7 @@ import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -54,32 +54,107 @@ class LLMClient:
     def is_configured(self) -> bool:
         return bool(self.api_key)
 
-    async def estimate_carbon(
+    # async def estimate_carbon(
+    #     self,
+    #     item_name: str,
+    #     context: Optional[str] = None,
+    #     search_snippets: Optional[Iterable[str]] = None,
+    # ) -> LLMCarbonEstimate:
+    #     if not self.api_key or not self._client:
+    #         raise RuntimeError("OPENAI_API_KEY is not configured")
+
+    #     snippets_block = ""
+    #     if search_snippets:
+    #         formatted = "\n".join(f"- {snippet}" for snippet in search_snippets)
+    #         snippets_block = f"\nSupporting evidence:\n{formatted}"
+
+    #     user_prompt = (
+    #         f"Estimate the carbon emissions for the product '{item_name}'. "
+    #         f"Prefer quantitative answers in kilograms of CO2e. "
+    #         f"Return a JSON object with keys item_name, emissions_kg_co2e, confidence (0-1), "
+    #         f"methodology, and references (list of URLs)."
+    #     )
+
+    #     if context:
+    #         user_prompt += f"\nAdditional context:\n{context}"
+
+    #     if snippets_block:
+    #         user_prompt += snippets_block
+
+    #     payload = {
+    #         "model": self.model,
+    #         "temperature": 0.2,
+    #         "response_format": {"type": "json_object"},
+    #         "messages": [
+    #             {
+    #                 "role": "system",
+    #                 "content": (
+    #                     "You are a sustainability analyst producing factual carbon footprint estimates. "
+    #                     "Cite trustworthy public sources whenever possible."
+    #                 ),
+    #             },
+    #             {"role": "user", "content": user_prompt},
+    #         ],
+    #         "timeout": self.timeout_seconds,
+    #     }
+
+    #     response = await asyncio.to_thread(
+    #         self._client.chat.completions.create,
+    #         **payload,
+    #     )
+
+    #     raw_text = _extract_content(response.choices[0].message.content)
+
+    #     try:
+    #         parsed = json.loads(raw_text)
+    #     except json.JSONDecodeError:
+    #         parsed = {
+    #             "item_name": item_name,
+    #             "emissions_kg_co2e": None,
+    #             "confidence": None,
+    #             "methodology": None,
+    #             "references": [],
+    #         }
+
+    #     return LLMCarbonEstimate(
+    #         item_name=parsed.get("item_name", item_name),
+    #         emissions_kg_co2e=_to_float(parsed.get("emissions_kg_co2e")),
+    #         confidence=_to_float(parsed.get("confidence")),
+    #         methodology=parsed.get("methodology"),
+    #         references=parsed.get("references") or [],
+    #         raw_response=parsed,
+    #     )
+
+    async def estimate_carbon_batch(
         self,
-        item_name: str,
-        context: Optional[str] = None,
-        search_snippets: Optional[Iterable[str]] = None,
-    ) -> LLMCarbonEstimate:
+        items: List[dict[str, Optional[str]]],
+        shared_context: Optional[str] = None,
+    ) -> List[Dict[str, Optional[float]]]:
         if not self.api_key or not self._client:
             raise RuntimeError("OPENAI_API_KEY is not configured")
 
-        snippets_block = ""
-        if search_snippets:
-            formatted = "\n".join(f"- {snippet}" for snippet in search_snippets)
-            snippets_block = f"\nSupporting evidence:\n{formatted}"
+        normalized_items = []
+        for entry in items:
+            name = entry.get("item_name")
+            if not name:
+                continue
+            normalized_items.append(
+                {
+                    "item_name": name,
+                    "context": entry.get("context") or shared_context,
+                }
+            )
+
+        if not normalized_items:
+            return []
 
         user_prompt = (
-            f"Estimate the carbon emissions for the product '{item_name}'. "
-            f"Prefer quantitative answers in kilograms of CO2e. "
-            f"Return a JSON object with keys item_name, emissions_kg_co2e, confidence (0-1), "
-            f"methodology, and references (list of URLs)."
+            "You are given a list of grocery or retail items. "
+            "Estimate the carbon emissions per item (kg CO2e). "
+            "Respond with JSON: {\"items\":[{\"item_name\":<str>,\"emissions_kg_co2e\":<number|null>}]}."
         )
 
-        if context:
-            user_prompt += f"\nAdditional context:\n{context}"
-
-        if snippets_block:
-            user_prompt += snippets_block
+        user_prompt += "\nItems JSON:\n" + json.dumps(normalized_items, ensure_ascii=False)
 
         payload = {
             "model": self.model,
@@ -90,7 +165,7 @@ class LLMClient:
                     "role": "system",
                     "content": (
                         "You are a sustainability analyst producing factual carbon footprint estimates. "
-                        "Cite trustworthy public sources whenever possible."
+                        "If unsure, return null for emissions."
                     ),
                 },
                 {"role": "user", "content": user_prompt},
@@ -104,26 +179,24 @@ class LLMClient:
         )
 
         raw_text = _extract_content(response.choices[0].message.content)
-
         try:
             parsed = json.loads(raw_text)
         except json.JSONDecodeError:
-            parsed = {
-                "item_name": item_name,
-                "emissions_kg_co2e": None,
-                "confidence": None,
-                "methodology": None,
-                "references": [],
-            }
+            parsed = {"items": []}
 
-        return LLMCarbonEstimate(
-            item_name=parsed.get("item_name", item_name),
-            emissions_kg_co2e=_to_float(parsed.get("emissions_kg_co2e")),
-            confidence=_to_float(parsed.get("confidence")),
-            methodology=parsed.get("methodology"),
-            references=parsed.get("references") or [],
-            raw_response=parsed,
-        )
+        batch = []
+        for entry in parsed.get("items", []):
+            name = entry.get("item_name")
+            if not name:
+                continue
+            batch.append(
+                {
+                    "item_name": name,
+                    "emissions_kg_co2e": _to_float(entry.get("emissions_kg_co2e")),
+                }
+            )
+
+        return batch
 
 
 def _to_float(value: Any) -> Optional[float]:
