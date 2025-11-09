@@ -358,3 +358,44 @@ async def get_user(user_id: str):
         "user_id": user_id,
         "user_name": name
     }
+
+@app.get("/summary")
+async def get_summary(user_id: str, type: str):
+    # For now, we only support type="transport"
+    if type != "transport":
+        raise HTTPException(status_code=400, detail="Only type='transport' is supported")
+
+    
+    try:
+        with open("data/transport.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        raise HTTPException(status_code=500, detail="transport.json not found")
+
+    # Find this user's transport block
+    user_block = next((item for item in data if item.get("user") == user_id), None)
+
+    # If user not found in transport.json, just return empty list
+    if not user_block:
+        return {
+            "user_id": user_id,
+            "type": type,
+            "entries": []
+        }
+
+    # Build the simplified list: date, miles, emissions
+    rides = user_block.get("rides", [])
+    entries = [
+        {
+            "date": ride.get("ride_date"),
+            "miles": ride.get("distance_miles"),
+            "emissions": ride.get("emissions"),
+        }
+        for ride in rides
+    ]
+
+    return {
+        "user_id": user_id,
+        "type": type,
+        "entries": entries
+    }
