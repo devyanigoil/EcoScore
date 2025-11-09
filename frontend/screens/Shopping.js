@@ -123,7 +123,9 @@ export default function Shopping() {
         {/* Header */}
         <View style={scannerStyles.headerPill}>
           <Text style={scannerStyles.headerTitle}>Shopping Scanner</Text>
-          <Text style={scannerStyles.headerSub}>Upload or capture a receipt</Text>
+          <Text style={scannerStyles.headerSub}>
+            Upload or capture a receipt
+          </Text>
         </View>
 
         {/* Actions */}
@@ -156,7 +158,9 @@ export default function Shopping() {
         {loading && (
           <View style={scannerStyles.loadingCard}>
             <ActivityIndicator size="large" color={COLORS.primary} />
-            <Text style={scannerStyles.loadingText}>Scanning your receipt…</Text>
+            <Text style={scannerStyles.loadingText}>
+              Scanning your receipt…
+            </Text>
           </View>
         )}
 
@@ -165,11 +169,15 @@ export default function Shopping() {
           <View style={scannerStyles.resultsWrap}>
             {/* Top: Score Donut + store tag */}
             <View style={scannerStyles.scoreWrap}>
-              <ScoreDonut
+              {/* <ScoreDonut
                 score={result.overallScore}
                 size={160}
                 strokeWidth={14}
-              />
+              /> */}
+              {/* <Text style={scannerStyles.metaHint}>
+                Total: {result.totalKg.toFixed(1)} kg CO₂e
+              </Text> */}
+
               <View style={scannerStyles.scoreMeta}>
                 {!!result.store && (
                   <Text style={scannerStyles.storeTag}>🏬 {result.store}</Text>
@@ -181,11 +189,12 @@ export default function Shopping() {
                   style={scannerStyles.badge}
                 >
                   <Text style={scannerStyles.badgeText}>
-                    {gradeLabel(result.overallScore)}
+                    Total: {result.totalKg.toFixed(1)} kg CO₂e
                   </Text>
                 </LinearGradient>
                 <Text style={scannerStyles.metaHint}>
-                  Lower is better. Keep shopping smart to improve your footprint.
+                  Lower is better. Keep shopping smart to improve your
+                  footprint.
                 </Text>
               </View>
             </View>
@@ -198,8 +207,11 @@ export default function Shopping() {
 
             {/* Equivalents / CTA */}
             <View style={scannerStyles.resultsWrap}>
-              <EquivalentsPill score={result.overallScore} />
-              <TouchableOpacity style={scannerStyles.secondaryBtn} onPress={reset}>
+              {/* <EquivalentsPill score={result.overallScore} /> */}
+              <TouchableOpacity
+                style={scannerStyles.secondaryBtn}
+                onPress={reset}
+              >
                 <Text style={scannerStyles.secondaryBtnText}>Scan another</Text>
               </TouchableOpacity>
             </View>
@@ -213,29 +225,33 @@ export default function Shopping() {
 /* ---------- helpers / components ---------- */
 
 function normalizePayload(data) {
-  const overall =
-    typeof data.overallScore === "number"
-      ? clamp(data.overallScore, 0, 100)
-      : toPercent(data.totalEmissions, data.maxEmissions);
+  const raw = Array.isArray(data.items) ? data.items : [];
 
-  const items = Array.isArray(data.items)
-    ? data.items
-        .map((it) => ({
-          name: it.name ?? "Item",
-          carbonScore:
-            typeof it.carbonScore === "number"
-              ? it.carbonScore
-              : typeof it.emission === "number"
-              ? it.emission
-              : 0,
-        }))
-        .sort((a, b) => b.carbonScore - a.carbonScore)
-    : [];
+  // Map payload → UI model
+  const items = raw
+    .map((it) => ({
+      name: it.item_name ?? "Item",
+      carbonScore: Number(it.emissions_kg_co2e) || 0, // keep numeric (kg)
+    }))
+    .sort((a, b) => b.carbonScore - a.carbonScore);
+
+  // Aggregate (kg CO2e)
+  const totalKg = items.reduce((s, i) => s + (i.carbonScore || 0), 0);
+
+  // Convert total kg → 0..100 score (lower is better).
+  // Tune this baseline to your domain. 25 kg ≙ score 100 by default.
+  const MAX_RECEIPT_EMISSIONS_KG = 25;
+  const overallScore = clamp(
+    Math.round((totalKg / MAX_RECEIPT_EMISSIONS_KG) * 100),
+    0,
+    100
+  );
 
   return {
-    overallScore: overall ?? 0,
-    items,
-    store: data.store ?? data.merchant ?? "",
+    overallScore, // 0..100 (lower is better)
+    totalKg, // keep the true total for equivalents
+    items, // [{name, carbonScore(kg)}]
+    store: data.store ?? data.merchant ?? "", // if backend adds later
   };
 }
 
@@ -335,9 +351,10 @@ function ItemBubbles({ items = [] }) {
 }
 
 /* Equivalents pill */
-function EquivalentsPill({ score }) {
-  const miles = (score * 0.9).toFixed(0);
-  const trees = Math.max(0.1, score / 40).toFixed(2);
+function EquivalentsPill({ totalKg = 0 }) {
+  // Factors: ~0.404 kg CO2e per mile; ~21 kg CO2e absorbed per tree/year.
+  const miles = Math.round(totalKg / 0.404);
+  const trees = Math.max(0.01, totalKg / 21).toFixed(2);
 
   return (
     <LinearGradient
@@ -348,7 +365,9 @@ function EquivalentsPill({ score }) {
     >
       <Text style={scannerStyles.eqTitle}>What this means</Text>
       <Text style={scannerStyles.eqLine}>🚗 ≈ {miles} miles driven</Text>
-      <Text style={scannerStyles.eqLine}>🌳 ≈ {trees} trees/year to offset</Text>
+      <Text style={scannerStyles.eqLine}>
+        🌳 ≈ {trees} trees/year to offset
+      </Text>
     </LinearGradient>
   );
 }
