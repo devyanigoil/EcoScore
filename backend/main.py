@@ -51,23 +51,21 @@ def save_points(points_data):
         json.dump(points_data, f, indent=2)
 
 def add_points_entry(user, item, entry_type, date, carbon_emission, points):
-    """Adds a single unified entry to points.json."""
-    data = load_points()
-    user_entry = next((u for u in data if u["user"] == user), None)
-    if not user_entry:
-        user_entry = {"user": user, "points": []}
-        data.append(user_entry)
-
-    user_entry["points"].append({
+    """Adds a single unified entry to a flat points.json structure."""
+    data = load_points()  # Load the existing list from points.json
+    
+    new_entry = {
         "user": user,
         "item": item,
         "type": entry_type,
         "date": date,
         "carbon_emission": round(float(carbon_emission), 3),
         "points": round(float(points), 3)
-    })
-    print(data)
+    }
+
+    data.append(new_entry)  # Simply append the entry to the flat list
     #save_points(data)
+    print(f"✅ Added new points entry for {user}: {item} ({entry_type})")
 
 app = FastAPI(title="EcoScore Upload API", version="3.0.0")
 
