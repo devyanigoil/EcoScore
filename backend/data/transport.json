@@ -1,0 +1,15 @@
+[
+  {
+    "user": "Aashnna Soni",
+    "rides": [
+      {
+        "entry_id": "ba3666c2-d7b8-401e-b976-d71838ce4454",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "electric",
+        "emissions": 0.207
+      }
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "user": "Aashnna Soni",
+    "receipts": [
+      {
+        "entry_id": "f68bf036-c791-44b2-8109-8a67c9a38e53",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "ORGANIC CHICKEN DRUMSTIC",
+            "emissions_kg_co2e": 5.5
+          },
+          {
+            "item_name": "CHICKEN NAT BREAST BNLS",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "ORG DK CHOC ALMOND BAR",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BREAD FOCACCIA FRENCH ON",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "SOURDOUGH BREAD",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "LOVERS BAR DK CHOC 85%",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BAREBELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          }
+        ]
+      }
+    ]
+  }
+]
