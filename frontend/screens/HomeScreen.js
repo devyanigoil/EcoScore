@@ -30,6 +30,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const { params } = useRoute();
   const userId = params?.userId;
+
   const [userData, setUserData] = useState({ user_name: "" });
   const [pointsData, setPointsData] = useState(null);
   const [percentileData, setPercentileData] = useState(null);

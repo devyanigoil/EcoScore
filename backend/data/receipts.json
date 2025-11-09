@@ -255,6 +255,100 @@
           }
         ],
         "store": "TRADER JOE'S"
+      },
+      {
+        "entry_id": "47b7064e-7649-4005-b2bc-bd659c3504c9",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "ORGANIC CHICKEN DRUMSTIC",
+            "emissions_kg_co2e": 6.5
+          },
+          {
+            "item_name": "CHICKEN NAT BREAST BNLS",
+            "emissions_kg_co2e": 5.8
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "ORG DK CHOC ALMOND BAR",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BREAD FOCACCIA FRENCH ON",
+            "emissions_kg_co2e": 1.4
+          },
+          {
+            "item_name": "SOURDOUGH BREAD",
+            "emissions_kg_co2e": 1.3
+          },
+          {
+            "item_name": "LOVERS BAR DK CHOC 85%",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "BAREBELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 2.3
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.2
+          }
+        ],
+        "store": "TRADER JOE'S"
+      },
+      {
+        "entry_id": "cfa14995-413c-4e7e-ac40-59e1e2c7c7c6",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "1854949 GN GOLFSHORT",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "3.001489812 PUMA SOCK",
+            "emissions_kg_co2e": 0.3
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "AID: A0000000031010",
+            "emissions_kg_co2e": null
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": null
+          },
+          {
+            "item_name": "8",
+            "emissions_kg_co2e": null
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": null
+          }
+        ],
+        "store": "COSTCO"
       }
     ]
   }
