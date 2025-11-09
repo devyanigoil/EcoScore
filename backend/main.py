@@ -193,7 +193,6 @@ def healthz():
 # -------- Receipts (unchanged) --------
 @app.post("/ocr/upload")
 async def ocr_upload(
-    userId: str = Form(..., description="User Id"),
     image: UploadFile = File(..., description="Receipt image (jpg/png/webp)"),
     return_cleaned: bool = Form(False),
 ):
@@ -207,7 +206,7 @@ async def ocr_upload(
         response = await score_receipt(result)   # <-- IMPORTANT: await
 
         # Add the receipt to the database
-        add_receipt(user=userId, items=response)
+        add_receipt(user="Aashnna Soni", items=response)
 
         print("Response from LLM Success")
         return JSONResponse(content={"items": response})
@@ -222,7 +221,6 @@ async def ocr_upload(
 # -------- Energy bills (images) --------
 @app.post("/ocr/energy/upload")
 async def ocr_energy_upload(
-    userId: str = Form(..., description="User Id"),
     image: UploadFile = File(..., description="Energy bill image (jpg/png/webp)"),
     return_cleaned: bool = Form(False),
 ):
@@ -233,7 +231,7 @@ async def ocr_energy_upload(
         result = energy_from_image_bytes(data, return_cleaned=bool(return_cleaned))
         resp = make_min_response(result)
         resp_json =json.loads(resp.body.decode("utf-8"))
-        add_energy(user=userId, bill=resp_json)
+        add_energy(user="Aashnna Soni", bill=resp_json)
         return resp
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
@@ -245,7 +243,6 @@ async def ocr_energy_upload(
 # -------- Energy bills (PDFs: text-based) --------
 @app.post("/ocr/energy/pdf")
 async def ocr_energy_pdf(
-    userId: str = Form(..., description="User Id"),
     pdf: UploadFile = File(..., description="Energy bill PDF (text-based, not scanned)"),
     return_cleaned: bool = Form(False),
 ):
@@ -256,7 +253,7 @@ async def ocr_energy_pdf(
         result = energy_from_pdf_bytes(data, return_cleaned=bool(return_cleaned))
         resp = make_min_response(result)
         resp_json =json.loads(resp.body.decode("utf-8"))
-        add_energy(user=userId, bill=resp_json)
+        add_energy(user="Aashnna Soni", bill=resp_json)
         return resp
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
@@ -270,7 +267,6 @@ async def ocr_energy_pdf(
 # -------- Transport (images) --------
 @app.post("/ocr/transport/upload")
 async def ocr_transport_upload(
-    userId: str = Form(..., description="User Id"),
     vehicle_type: str = Form(..., description="gasoline | hybrid | electric"),
     image: UploadFile = File(..., description="Trip screenshot / receipt (jpg/png/webp)"),
     return_cleaned: bool = Form(False),
@@ -300,7 +296,7 @@ async def ocr_transport_upload(
         if return_cleaned:
             out["cleaned_text"] = t.get("cleaned_text")
 
-        add_rides(user=userId, bill=out)
+        add_rides(user="Aashnna Soni", bill=out)
         return JSONResponse(out)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Transport OCR failed: {e}")
@@ -308,7 +304,6 @@ async def ocr_transport_upload(
 # -------- Transport (PDFs: text-based) --------
 @app.post("/ocr/transport/pdf")
 async def ocr_transport_pdf(
-    userId: str = Form(..., description="User Id"),
     vehicle_type: str = Form(..., description="gasoline | hybrid | electric"),
     pdf: UploadFile = File(..., description="Transport receipt PDF (text-based, not scanned)"),
     return_cleaned: bool = Form(False),
@@ -338,7 +333,28 @@ async def ocr_transport_pdf(
         if return_cleaned:
             out["cleaned_text"] = t.get("cleaned_text")
 
-        add_rides(user=userId, bill=out)
+        add_rides(user="Aashnna Soni", bill=out)
         return JSONResponse(out)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Transport PDF OCR failed: {e}")
+
+
+@app.get("/user/{user_id}")
+async def get_user(user_id: str):
+    # Load users from JSON file
+    try:
+        with open("data/user.json", "r", encoding="utf-8") as f:
+            users = json.load(f)
+    except FileNotFoundError:
+        raise HTTPException(status_code=500, detail="user.json not found")
+
+    # Look up user name
+    name = users.get(user_id)
+    if not name:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Return simple response
+    return {
+        "user_id": user_id,
+        "user_name": name
+    }
