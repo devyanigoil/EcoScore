@@ -286,10 +286,11 @@ async def ocr_upload(
         #print("OCR Result:", result)
         response = await score_receipt(result)   # <-- IMPORTANT: await
         #print("Scoring Result:", response)
+        store= result.get("store")
 
         # Add the receipt to the database
 
-        add_receipt(user=userId, items=response)
+        add_receipt(user=userId, items=response, store=store)
         for item in response:
             carbon = item.get("emissions_kg_co2e", 0)
             item_points = max(0, 10 - float(carbon))  # shopping logic
@@ -304,7 +305,7 @@ async def ocr_upload(
 
 
         print("Response from LLM Success")
-        return JSONResponse(content={"items": response})
+        return JSONResponse(content={"store": store, "items": response})
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
     except RuntimeError as e:
@@ -558,7 +559,7 @@ async def get_summary(user_id: str, type: str):
     # -------- shopping --------
     elif type == "shopping":
         try:
-            with open("data/shopping.json", "r", encoding="utf-8") as f:
+            with open("data/receipts.json", "r", encoding="utf-8") as f:
                 data = json.load(f)
         except FileNotFoundError:
             raise HTTPException(status_code=500, detail="shopping.json not found")
@@ -569,7 +570,14 @@ async def get_summary(user_id: str, type: str):
             return {"user_id": user_id, "type": type, "entries": []}
 
         # if you’re using Receipts.json structure, this will be "receipts"
-        entries = user_block.get("receipts", [])
+        receipts = user_block.get("receipts", [])
+        entries = [
+            {   "date": receipt.get("date"),
+                "store": receipt.get("store"),
+                "items": receipt.get("items"),
+            }
+            for receipt in receipts
+        ]
 
         return {"user_id": user_id, "type": type, "entries": entries}
 

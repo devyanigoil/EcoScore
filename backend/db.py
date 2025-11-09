@@ -6,7 +6,7 @@ import uuid
 
 
 
-def add_receipt(user,items):
+def add_receipt(user,items, store=None):
     RECEIPTS_PATH = "data/receipts.json"
     
 
@@ -14,7 +14,8 @@ def add_receipt(user,items):
     new_receipt = {
         "entry_id": str(uuid.uuid4()),          # unique id
         "date": date.today().isoformat(),         # e.g. "2025-11-08"
-        "items": items
+        "items": items,
+        "store": store or "Unknown Store"
     }
 
     data = []
