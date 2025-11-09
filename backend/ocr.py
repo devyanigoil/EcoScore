@@ -16,7 +16,7 @@ import base64
 import re
 from datetime import datetime
 from io import BytesIO
-from typing import Any, Dict, List, Optional, Tuple 
+from typing import Any, Dict, List, Optional, Tuple
 
 from fastapi import FastAPI, HTTPException
 from google.cloud import vision
@@ -134,28 +134,80 @@ def parse_transport_text(full_text: str) -> dict:
         "cleaned_text": cleaned,
     }
 
+# ----------------------------
+# Receipt helpers (improved)
+# ----------------------------
 
-# ----------------------------
-# Receipt helpers (unchanged legacy behavior)
-# ----------------------------
+# --- Currency & summary detection ---
+def _detect_currency(lines: List[str]) -> str:
+    blob = " ".join(lines)
+    if "₹" in blob or re.search(r"\bRs\.?\b|\bINR\b", blob, re.I):
+        return "INR"
+    if "$" in blob or re.search(r"\bUSD\b", blob, re.I):
+        return "USD"
+    if "€" in blob or re.search(r"\bEUR\b", blob, re.I):
+        return "EUR"
+    if "£" in blob or re.search(r"\bGBP\b", blob, re.I):
+        return "GBP"
+    return "USD"
 
 BAD_LINE_RE = re.compile(
-    r"(subtotal|total|balance|items in transaction|tax|gst|pst|hst|change|cash|visa|mastercard|amex|debit|tender|rounding|purchase transaction)",
+    r"(subtotal|sub total|grand\s*total|total\s*(due|amount)?|balance|"
+    r"items?\s+in\s+transaction|tax|gst|pst|hst|cgst|sgst|igst|rounding|"
+    r"change|cash|card|visa|master\s*card|mastercard|amex|debit|tender|"
+    r"purchase\s*transaction|amount\s*paid|you\s*saved|discount|"
+    r"thank\s*you|visit\s*again|bill\s*no\.?|invoice\s*no\.?)",
     re.I,
 )
-PRICE_RE        = re.compile(r"(^|[^0-9])\d+\.\d{2}(\b|[^0-9])")
-PRICE_ONLY_RE   = re.compile(r"^\$?\s*(\d+\.\d{2})\s*$")
-QTY_AT_PRICE_RE = re.compile(r"^\s*(\d+)\s*@\s*\$?\s*(\d+\.\d{2})\s*$")
+
+# Amount patterns:
+#  - normal: 12.34 / 1,234.56
+#  - OCR split: "12 34" (we'll repair to "12.34")
+AMT_NORMAL = r"(?:\d{1,4}(?:,\d{3})*\.\d{2})"
+AMT_SPLIT  = r"(?:\d{1,4}(?:\s|,)\d{2})"  # e.g., "30 83" or "30,83" from OCR
+AMT_ANY    = rf"(?:{AMT_NORMAL}|{AMT_SPLIT})"
+
+# lines containing any amount
+PRICE_RE       = re.compile(rf"(^|[^0-9]){AMT_ANY}(\b|[^0-9])")
+# an amount-only line
+PRICE_ONLY_RE  = re.compile(rf"^\s*(?:₹|Rs\.?|INR|\$|€|£)?\s*{AMT_ANY}\s*$", re.I)
+# qty @ price (allow OCR split amounts)
+QTY_AT_PRICE_RE = re.compile(
+    rf"^\s*(\d+)\s*@\s*(?:₹|Rs\.?|INR|\$|€|£)?\s*({AMT_ANY})\s*$",
+    re.I
+)
+
+# Lines to ignore entirely as “generic” items
+GENERIC_ITEM_RE = re.compile(r"^\s*(item|items?)\s*$", re.I)
+
+def _fix_amount_token(tok: str) -> str:
+    """Turn '30 83' or '30,83' into '30.83' when it looks like price cents."""
+    tok = tok.strip()
+    m = re.match(r"^(\d{1,4})[ ,](\d{2})$", tok)
+    if m:
+        return f"{m.group(1)}.{m.group(2)}"
+    return tok
+
+def _repair_amounts_in_line(line: str) -> str:
+    """Repair obvious OCR price splits inside a line."""
+    parts = line.split()
+    for i, p in enumerate(parts):
+        parts[i] = _fix_amount_token(p)
+    s = " ".join(parts)
+    # Also repair patterns like "₹ 30 83" or "$ 30 83"
+    s = re.sub(r"(₹|Rs\.?|INR|\$|€|£)\s*(\d{1,4})[ ,](\d{2})",
+               lambda m: f"{m.group(1)} {m.group(2)}.{m.group(3)}", s)
+    return s
 
 def extract_likely_items(text: str, limit: int = 60) -> List[str]:
     out: List[str] = []
-    for line in text.split("\n"):
-        l = line.strip()
+    for raw in text.split("\n"):
+        l = _repair_amounts_in_line(raw.strip())
         if not l:
             continue
-        if not PRICE_RE.search(l):
+        if BAD_LINE_RE.search(l) or GENERIC_ITEM_RE.match(l):
             continue
-        if BAD_LINE_RE.search(l):
+        if not PRICE_RE.search(l):
             continue
         out.append(l)
         if len(out) >= limit:
@@ -165,58 +217,79 @@ def extract_likely_items(text: str, limit: int = 60) -> List[str]:
 def _is_summary_line(l: str) -> bool:
     return bool(BAD_LINE_RE.search(l))
 
-def _detect_currency(lines: List[str]) -> str:
-    return "USD" if "$" in " ".join(lines) else "USD"
-
 def extract_items_structured(cleaned_text: str, limit: int = 60) -> List[Dict[str, Any]]:
-    lines = [l.strip() for l in cleaned_text.split("\n") if l.strip()]
+    lines = [_repair_amounts_in_line(l.strip()) for l in cleaned_text.split("\n") if l.strip()]
     currency = _detect_currency(lines)
 
     items: List[Dict[str, Any]] = []
     prev_desc: Optional[str] = None
 
+    def _push(desc: str, qty: int, unit: float):
+        total = round(qty * unit, 2)
+        items.append({
+            "name": desc.strip(),
+            "qty": qty,
+            "unit_price": unit,
+            "total": total,
+            "currency": currency,
+        })
+
     for l in lines:
-        if _is_summary_line(l):
+        if BAD_LINE_RE.search(l) or GENERIC_ITEM_RE.match(l):
             continue
 
+        # Pattern: "2 @ 3.99"
         m_qty = QTY_AT_PRICE_RE.match(l)
         if m_qty:
-            qty  = int(m_qty.group(1))
-            unit = float(m_qty.group(2))
-            total = round(qty * unit, 2)
-            if items:
-                last = items[-1]
-                last["qty"] = qty
-                last["unit_price"] = unit
-                last["total"] = total
-                last["currency"] = currency
-            else:
-                items.append({
-                    "name": prev_desc or "",
-                    "qty": qty,
-                    "unit_price": unit,
-                    "total": total,
-                    "currency": currency,
-                })
+            qty = int(m_qty.group(1))
+            unit_tok = _fix_amount_token(m_qty.group(2))
+            try:
+                unit = float(unit_tok.replace(",", ""))
+            except Exception:
+                unit = None
+            if unit is not None:
+                if prev_desc and not BAD_LINE_RE.search(prev_desc) and not GENERIC_ITEM_RE.match(prev_desc):
+                    _push(prev_desc, qty, unit)
+                else:
+                    _push("", qty, unit)
             continue
 
-        m_price = PRICE_ONLY_RE.match(l)
-        if m_price:
-            amount = float(m_price.group(1))
-            items.append({
-                "name": (prev_desc or "").strip(),
-                "qty": 1,
-                "unit_price": amount,
-                "total": amount,
-                "currency": currency,
-            })
+        # Pattern: amount-only line → attach to previous description if it exists
+        if PRICE_ONLY_RE.match(l):
+            amt_tok = _fix_amount_token(l)
+            amt_tok = re.sub(r"^(?:₹|Rs\.?|INR|\$|€|£)\s*", "", amt_tok, flags=re.I)
+            try:
+                amount = float(amt_tok.replace(",", ""))
+            except Exception:
+                amount = None
+            if amount is not None and prev_desc and not BAD_LINE_RE.search(prev_desc) and not GENERIC_ITEM_RE.match(prev_desc):
+                _push(prev_desc, 1, amount)
+            prev_desc = None
             if len(items) >= limit:
                 break
             continue
 
+        # Otherwise treat as description (but also consider inline trailing price)
         prev_desc = l
+        if PRICE_RE.search(l):
+            amts = []
+            for tok in re.findall(r"(?:₹|Rs\.?|INR|\$|€|£)?\s*([0-9][0-9 ,]*[0-9])", l, flags=re.I):
+                tok_fixed = _fix_amount_token(tok)
+                if re.match(r"^\d{1,4}(?:,\d{3})*\.\d{2}$", tok_fixed):
+                    amts.append(tok_fixed)
+            if amts:
+                try:
+                    unit = float(amts[-1].replace(",", ""))
+                    desc = re.sub(r"(?:₹|Rs\.?|INR|\$|€|£)?\s*" + re.escape(amts[-1]) + r"\s*$", "", l).strip()
+                    if desc and not BAD_LINE_RE.search(desc) and not GENERIC_ITEM_RE.match(desc):
+                        _push(desc, 1, unit)
+                        prev_desc = None
+                        if len(items) >= limit:
+                            break
+                except Exception:
+                    pass
 
-    items = [it for it in items if it.get("name") and not _is_summary_line(it["name"])]
+    items = [it for it in items if it.get("name")]
     return items[:limit]
 
 # ----------------------------
@@ -523,7 +596,6 @@ def energy_from_pdf_bytes(pdf_bytes: bytes, return_cleaned: bool = False) -> dic
         raise RuntimeError("pdfminer.six not installed. Install with: pip install pdfminer.six")
 
     try:
-        # IMPORTANT: pdfminer expects a file path or a file-like object.
         text = pdf_extract_text(BytesIO(pdf_bytes))
     except Exception as e:
         raise RuntimeError(f"pdf text extraction failed: {e}")
