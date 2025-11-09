@@ -33,7 +33,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const { params } = useRoute();
   const userId = params?.userId;
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({ user_name: "" });
 
   // Example eco score (0..1000); replace with real state from backend
   const ecoScore = 300;
