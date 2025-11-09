@@ -133,29 +133,24 @@ export default function HomeScreen() {
             </Text>
           </View>
 
-          <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
-            <Text style={homeStyles.widgetTitle}>CO₂ Saved</Text>
-            <Text style={homeStyles.widgetMetric}>18.4 kg</Text>
-            <Text style={homeStyles.widgetHint}>≈ 150 km avoided by car</Text>
-          </View>
+          {/* Rewards Card - Now Interactive */}
         </View>
 
         <View style={homeStyles.row}>
-          <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
-            <Text style={homeStyles.widgetTitle}>Next Reward</Text>
-            <Text style={homeStyles.widgetMetric}>$5 cashback</Text>
-            <Text style={homeStyles.widgetHint}>Earn in ~350 pts</Text>
-          </View>
-
-          <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
-            <Text style={homeStyles.widgetTitle}>Tip of the Day</Text>
-            <Text style={homeStyles.widgetHint}>
-              Swap one meat meal with plant-based: save ~2 kg CO₂.
-            </Text>
-          </View>
+          <Pressable
+            style={[homeStyles.widget, homeStyles.widgetHalf]}
+            onPress={() =>
+              navigation.navigate("Rewards", { userId, ecoScore, tier })
+            }
+            android_ripple={{ color: "#222" }}
+          >
+            <Text style={homeStyles.widgetTitle}>Rewards</Text>
+            <Text style={homeStyles.widgetMetric}>🎁</Text>
+            <Text style={homeStyles.widgetHint}>Tap to view discounts</Text>
+          </Pressable>
         </View>
 
-        <View style={[homeStyles.widget, homeStyles.full]}>
+        {/* <View style={[homeStyles.widget, homeStyles.full]}>
           <Text style={homeStyles.widgetTitle}>Recent Actions</Text>
           <View style={homeStyles.historyRow}>
             <Text style={homeStyles.historyItem}>🚲 Biked to campus</Text>
@@ -171,7 +166,7 @@ export default function HomeScreen() {
             <Text style={homeStyles.historyItem}>🥗 Cooked at home</Text>
             <Text style={homeStyles.historyPts}>+45</Text>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
 
       <RadialModulesFab
