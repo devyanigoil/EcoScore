@@ -17,7 +17,7 @@ import * as DocumentPicker from "expo-document-picker";
 import Svg, { Circle } from "react-native-svg";
 import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
-import { oceanSunsetNeumorphicStyles as base } from "../colorThemes";
+import { baseStyles, homeStyles, COLORS } from "../styles/theme";
 
 export default function Transportations() {
   const [imageUri, setImageUri] = useState(null);
@@ -118,12 +118,12 @@ export default function Transportations() {
   }, []);
 
   return (
-    <View style={base.container}>
+    <View style={baseStyles.container}>
       {/* Background theme */}
-      <View style={base.backgroundGradient}>
-        <View style={[base.circle, base.circle1]} />
-        <View style={[base.circle, base.circle2]} />
-        <View style={[base.circle, base.circle3]} />
+      <View style={baseStyles.backgroundGradient}>
+        <View style={[baseStyles.circle, baseStyles.circle1]} />
+        <View style={[baseStyles.circle, baseStyles.circle2]} />
+        <View style={[baseStyles.circle, baseStyles.circle3]} />
       </View>
 
       <ScrollView
