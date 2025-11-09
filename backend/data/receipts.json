@@ -74,5 +74,100 @@
         ]
       }
     ]
+  },
+  {
+    "user": "2",
+    "receipts": [
+      {
+        "entry_id": "cca07a83-ece2-43c2-b3da-0d8b8aa60e8e",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1 MIRCH MASL 30 ROTI",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 PARLE-G ROYALE (360GM)",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 CUMIN POWDER 200G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 ITEM",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 MDH CHUNKY CHAT 100G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 ITEM",
+            "emissions_kg_co2e": 1.0
+          }
+        ]
+      },
+      {
+        "entry_id": "e23c3a42-bdb4-4c12-a6f3-f0524944dcdb",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1 MIRCH MASL 30 ROTI",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 PARLE-G ROYALE (360GM)",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 CUMIN POWDER 200G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 ITEM",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 MDH CHUNKY CHAT 100G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 ITEM",
+            "emissions_kg_co2e": 1.0
+          }
+        ]
+      },
+      {
+        "entry_id": "c3c16b0b-d21e-4bf5-9464-864bf3c8aa13",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1 MIRCH MASL 30 ROTI",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 PARLE-G ROYALE (360GM)",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 CUMIN POWDER 200G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 ITEM",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 MDH CHUNKY CHAT 100G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1 ITEM",
+            "emissions_kg_co2e": 1.0
+          }
+        ]
+      }
+    ]
   }
 ]

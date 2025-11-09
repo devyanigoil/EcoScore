@@ -109,9 +109,6 @@ export default function HomeScreen() {
               score={percentile}
               // fixedColor="#3DDC84" // uncomment to force a single green
             />
-            <Text style={{ color: "#A7A7A7", marginTop: 6 }}>
-              Top {percentile.toFixed(0)}% Percentile
-            </Text>
           </View>
 
           {/* Month breakdown */}
@@ -144,6 +141,18 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
+        <View style={homeStyles.row}>
+          <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
+            <Text style={homeStyles.widgetTitle}>Weekly Goal</Text>
+            <Text style={homeStyles.widgetMetric}>3/5 actions</Text>
+            <View style={homeStyles.progressBar}>
+              <View style={[homeStyles.progressFill, { width: "60%" }]} />
+            </View>
+            <Text style={homeStyles.widgetHint}>
+              2 more for a 200-pt streak bonus
+            </Text>
+          </View>
+        </View>
         {/* Suggested widgets */}
         <View style={homeStyles.row}>
           <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
@@ -154,9 +163,23 @@ export default function HomeScreen() {
             <Text style={homeStyles.widgetHint}>Keep going to earn more!</Text>
           </View>
 
-          {/* Rewards Card - Interactive */}
+          <View style={[homeStyles.widget, homeStyles.widgetHalf]}>
+            <Text style={homeStyles.widgetTitle}>Tip of the Day</Text>
+            <Text style={homeStyles.widgetHint}>
+              Swap one meat meal with plant-based: save ~2 kg CO₂.
+            </Text>
+          </View>
+
+          {/* Rewards Card - Enhanced Button Style */}
+        </View>
+        <View style={homeStyles.row}>
           <Pressable
-            style={[homeStyles.widget, homeStyles.widgetHalf]}
+            style={({ pressed }) => [
+              homeStyles.widget,
+              homeStyles.widgetHalf,
+              localStyles.rewardsButton,
+              pressed && localStyles.rewardsButtonPressed,
+            ]}
             onPress={() =>
               navigation.navigate("Rewards", {
                 userId,
@@ -164,11 +187,14 @@ export default function HomeScreen() {
                 tier,
               })
             }
-            android_ripple={{ color: "#222" }}
+            android_ripple={{ color: "#333" }}
           >
-            <Text style={homeStyles.widgetTitle}>Rewards</Text>
-            <Text style={homeStyles.widgetMetric}>🎁</Text>
-            <Text style={homeStyles.widgetHint}>Tap to view discounts</Text>
+            <View style={localStyles.rewardsContent}>
+              <Text style={homeStyles.widgetTitle}>Rewards</Text>
+              <Text style={localStyles.rewardsIcon}>🎁</Text>
+              <Text style={homeStyles.widgetHint}>View discounts</Text>
+              <Text style={localStyles.rewardsArrow}>→</Text>
+            </View>
           </Pressable>
         </View>
       </ScrollView>
@@ -225,6 +251,39 @@ const localStyles = StyleSheet.create({
     gap: 10,
   },
   dot: { width: 10, height: 10, borderRadius: 6, marginRight: 4 },
+
+  // Enhanced Rewards Button Styles
+  rewardsButton: {
+    elevation: 6,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  rewardsButtonPressed: {
+    transform: [{ scale: 0.96 }],
+    elevation: 2,
+    shadowOpacity: 0.15,
+  },
+  rewardsContent: {
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rewardsIcon: {
+    fontSize: 48,
+    marginVertical: 4,
+  },
+  rewardsArrow: {
+    position: "absolute",
+    bottom: 8,
+    right: 8,
+    fontSize: 20,
+    color: "#888",
+    fontWeight: "600",
+  },
+
+  // Modal Styles
   backdrop: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.6)",

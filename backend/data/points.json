@@ -8,7 +8,7 @@
     "points": 4.0
   },
   {
-    "user": "1",
+    "user": "2",
     "item": "ORGANIC CHICKEN DRUMSTIC",
     "type": "shopping",
     "date": "2025-11-07",
@@ -32,7 +32,7 @@
     "points": 4.0
   },
   {
-    "user": "1",
+    "user": "2",
     "item": "FLATBREAD INDIAN STYLE G",
     "type": "shopping",
     "date": "2025-11-09",
@@ -56,7 +56,7 @@
     "points": 8.8
   },
   {
-    "user": "1",
+    "user": "3",
     "item": "SOURDOUGH BREAD",
     "type": "shopping",
     "date": "2025-11-09",
@@ -80,7 +80,7 @@
     "points": 8.0
   },
   {
-    "user": "1",
+    "user": "3",
     "item": "FLATBREAD INDIAN STYLE G",
     "type": "shopping",
     "date": "2025-11-09",
@@ -88,7 +88,7 @@
     "points": 9.0
   },
   {
-    "user": "1",
+    "user": "2",
     "item": "FLATBREAD INDIAN STYLE G",
     "type": "shopping",
     "date": "2025-11-09",
@@ -96,7 +96,7 @@
     "points": 9.0
   },
   {
-    "user": "1",
+    "user": "2",
     "item": "FLATBREAD INDIAN STYLE G",
     "type": "shopping",
     "date": "2025-11-09",
@@ -104,7 +104,7 @@
     "points": 9.0
   },
   {
-    "user": "1",
+    "user": "2",
     "item": "energy",
     "type": "energy",
     "date": "2025-09-30",
@@ -126,5 +126,149 @@
     "date": "2025-07-04",
     "carbon_emission": 0.836,
     "points": 9.164
+  },
+  {
+    "user": "2",
+    "item": "1 MIRCH MASL 30 ROTI",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 PARLE-G ROYALE (360GM)",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 CUMIN POWDER 200G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MDH CHUNKY CHAT 100G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MIRCH MASL 30 ROTI",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 PARLE-G ROYALE (360GM)",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 CUMIN POWDER 200G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MDH CHUNKY CHAT 100G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MIRCH MASL 30 ROTI",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 PARLE-G ROYALE (360GM)",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 CUMIN POWDER 200G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 MDH CHUNKY CHAT 100G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "2",
+    "item": "1 ITEM",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
   }
 ]

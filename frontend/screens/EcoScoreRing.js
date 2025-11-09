@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, Animated, StyleSheet } from "react-native";
 import Svg, { Circle, G } from "react-native-svg";
+import { COLORS } from "../styles/theme";
 
 // ---- PERCENTILE-BASED TIERS ----
 // Diamond: Top 5% (95-100%)
@@ -10,11 +11,11 @@ import Svg, { Circle, G } from "react-native-svg";
 // Silver: Top 75% (25-49.99%)
 // Bronze: Bottom 25% (0-24.99%)
 export const TIERS = [
-  { name: "Diamond", min: 95, max: 100, color: "#B9F2FF" },
-  { name: "Platinum", min: 80, max: 94.99, color: "#E5E4E2" },
-  { name: "Gold", min: 50, max: 79.99, color: "#FFD700" },
-  { name: "Silver", min: 25, max: 49.99, color: "#C0C0C0" },
-  { name: "Bronze", min: 0, max: 24.99, color: "#CD7F32" },
+  { name: "Diamond", min: 95, max: 100, color: "#0FF" }, // Neon Cyan (shorthand)
+  { name: "Platinum", min: 80, max: 94.99, color: "#F0F0F0" }, // Almost White
+  { name: "Gold", min: 50, max: 79.99, color: "#FFE135" }, // Neon Yellow-Gold
+  { name: "Silver", min: 25, max: 49.99, color: "#E5E5E5" }, // Bright Gray
+  { name: "Bronze", min: 0, max: 24.99, color: "#FF9966" }, // Bright Copper/Orange
 ];
 
 export function getTier(percentile) {
@@ -23,7 +24,8 @@ export function getTier(percentile) {
   );
 }
 
-export default function EcoScoreRing({ score = 0, fixedColor = null }) {
+// 81b29a
+export default function EcoScoreRing({ score = 0, fixedColor = "#4CAF50" }) {
   const animVal = useRef(new Animated.Value(0)).current;
 
   const radius = 65;
