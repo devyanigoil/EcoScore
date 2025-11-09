@@ -16,7 +16,8 @@
         "start_date": "2025-09-30",
         "end_date": "2025-10-29",
         "consumption_kwh": 191.0,
-        "emissions": 80.22
+        "emissions": 80.22,
+        "points": 20
       }
     ]
   }

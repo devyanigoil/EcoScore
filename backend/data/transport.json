@@ -16,7 +16,8 @@
         "ride_date": "2025-07-04",
         "distance_miles": 2.07,
         "vehicle_type": "gasoline",
-        "emissions": 0.836
+        "emissions": 0.836,
+        "points": 9.793
       }
     ]
   }
