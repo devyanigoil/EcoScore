@@ -15,7 +15,7 @@ import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { oceanSunsetNeumorphicStyles as base } from "../colorThemes";
 
-const API_URL = "http://YOUR_SERVER_IP:8000/receipts/analyze"; // <-- replace
+const API_URL = "http://172.31.173.9:8001/ocr/upload"; // <-- replace
 
 export default function Shopping() {
   const [imageUri, setImageUri] = useState(null);
@@ -63,86 +63,57 @@ export default function Shopping() {
     }
   }, []);
 
-  // at top of Shopping.js (optional, keeps intent explicit)
-  const USE_MOCK = true;
-
-  // Replace your existing `upload` with this mock-only version
   const upload = useCallback(async (uri) => {
-    // absolutely no fetch/multipart here
-    setLoading(true);
-    setResult(null);
-
-    // show preview while "analyzing"
     try {
-      // simulate analysis delay
-      await new Promise((r) => setTimeout(r, 2500));
+      console.log("Entered upload");
+      setLoading(true);
+      setResult(null);
 
-      // mock API-like payload
-      const mockResponse = {
-        store: "Whole Foods Market",
-        overallScore: 47,
-        items: [
-          { name: "Beef Steak", carbonScore: 28.5 },
-          { name: "Organic Chicken Breast", carbonScore: 12.8 },
-          { name: "Spinach", carbonScore: 2.3 },
-          { name: "Almond Milk", carbonScore: 4.9 },
-          { name: "Bananas", carbonScore: 1.8 },
-          { name: "Cheddar Cheese", carbonScore: 9.7 },
-          { name: "Rice", carbonScore: 3.2 },
-        ],
-      };
+      console.log(uri);
 
-      setResult(normalizePayload(mockResponse));
+      // build multipart form
+      const form = new FormData();
+      form.append("image", {
+        uri,
+        name: "receipt.jpg",
+        type: "image/jpeg",
+      });
+
+      // if your API needs extra fields:
+      // form.append("userId", "123");
+      // form.append("source", "mobile-app");
+
+      console.log(API_URL);
+      const resp = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: form,
+      });
+
+      if (!resp.ok) {
+        const txt = await resp.text();
+        throw new Error(`Upload failed: ${resp.status} ${txt}`);
+      }
+      const data = await resp.json();
+
+      console.log(data);
+
+      // Expected shape:
+      // {
+      //   overallScore: number,
+      //   items: [{ name: string, carbonScore: number }, ...],
+      //   store?: string,
+      // }
+      setResult(normalizePayload(data));
+    } catch (e) {
+      console.log(e);
+      Alert.alert("Error", e.message || "Failed to analyze receipt.");
     } finally {
       setLoading(false);
     }
   }, []);
-
-  //   const upload = useCallback(async (uri) => {
-  //     try {
-  //       setLoading(true);
-  //       setResult(null);
-
-  //       // build multipart form
-  //       const form = new FormData();
-  //       form.append("file", {
-  //         uri,
-  //         name: "receipt.jpg",
-  //         type: "image/jpeg",
-  //       });
-
-  //       // if your API needs extra fields:
-  //       // form.append("userId", "123");
-  //       // form.append("source", "mobile-app");
-
-  //       const resp = await fetch(API_URL, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //         body: form,
-  //       });
-
-  //       if (!resp.ok) {
-  //         const txt = await resp.text();
-  //         throw new Error(`Upload failed: ${resp.status} ${txt}`);
-  //       }
-  //       const data = await resp.json();
-
-  //       // Expected shape:
-  //       // {
-  //       //   overallScore: number,
-  //       //   items: [{ name: string, carbonScore: number }, ...],
-  //       //   store?: string,
-  //       // }
-  //       setResult(normalizePayload(data));
-  //     } catch (e) {
-  //       console.log(e);
-  //       Alert.alert("Error", e.message || "Failed to analyze receipt.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }, []);
 
   const reset = useCallback(() => {
     setImageUri(null);
