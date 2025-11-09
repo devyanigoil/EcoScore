@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
+import sys
 
 from ocr import (
     ocr_from_bytes,
@@ -19,6 +21,18 @@ from ocr import (
     transport_from_image_bytes,
     transport_from_pdf_bytes,
 )
+
+
+
+# REPO_ROOT = Path(__file__).resolve().parents[1]
+# SCORECAL_PARENT = REPO_ROOT / "-LLM_Score"
+# if SCORECAL_PARENT.exists():
+#     sys.path.insert(0, str(SCORECAL_PARENT))
+REPO_ROOT = Path(__file__).resolve().parents[1]   # .../CarbonScoreCalculator
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from LLM_Score.ScoreCal import score_receipt
+
 
 app = FastAPI(title="EcoScore Upload API", version="3.0.0")
 
@@ -182,17 +196,20 @@ async def ocr_upload(
 ):
     if not image.content_type or not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="file must be an image/*")
+
     data = await image.read()
     try:
-        result = ocr_from_bytes(data, return_cleaned=bool(return_cleaned))
-        return JSONResponse(result)
+        result = ocr_from_bytes(data, return_cleaned=bool(return_cleaned))  # if this is slow CPU, consider to_thread
+        print("Response from OCR Success")
+        response = await score_receipt(result)   # <-- IMPORTANT: await
+        print("Response from LLM Success")
+        return JSONResponse(content={"items": response})
     except ValueError as e:
         raise HTTPException(status_code=413, detail=str(e))
     except RuntimeError as e:
-        raise HTTPException(status_code=502, detail=f"Vision API: {e}")
+        raise HTTPException(status_code=502, detail=f"Vision/LLM: {e}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"unexpected: {e}")
-
 
 
 # -------- Energy bills (images) --------

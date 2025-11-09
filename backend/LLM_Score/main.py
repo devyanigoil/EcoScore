@@ -1,31 +1,29 @@
 from __future__ import annotations
 
-from fastapi import FastAPI
+import json
+import sys
+from pathlib import Path
 
-# from ScoreCal import create_score_router
-# from .clients import LLMClient, SearchClient
-# from .services import CarbonService
+CURRENT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = CURRENT_DIR.parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
 
-from LLM_Score.ScoreCal import create_score_router
-from LLM_Score.clients.llm_client import LLMClient
-from LLM_Score.clients.search_client import SearchClient
-from LLM_Score.services.carbon_service import CarbonService
-
-def build_app() -> FastAPI:
-    app = FastAPI(
-        title="Carbon Score API",
-        version="0.1.0",
-        description="Lookup service that estimates carbon emissions per product.",
-    )
-
-    llm_client = LLMClient()
-    search_client = SearchClient()
-    carbon_service = CarbonService(llm_client=llm_client, search_client=search_client)
-
-    router = create_score_router(carbon_service)
-    app.include_router(router)
-
-    return app
+from backend.LLM_Score.ScoreCal import score_receipt
 
 
-app = build_app()
+def _load_receipt(path: Path) -> dict:
+    if not path.exists():
+        raise SystemExit(f"Receipt file not found: {path}")
+    return json.loads(path.read_text())
+
+
+def main() -> None:
+    """Tiny helper to run the scorer manually."""
+    receipt = _load_receipt(CURRENT_DIR / "sample_receipt.json")
+    results = score_receipt(receipt)
+    print(json.dumps(results, indent=2))
+
+
+if __name__ == "__main__":
+    main()

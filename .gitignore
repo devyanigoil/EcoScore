@@ -6,9 +6,21 @@
 # Secrets
 keys/
 **/.env
-
-backend/venv
+backend/venv/
 backend/.env
 backend/LLM_Score/keys.env
-backend/__pycache__
-backend/LLM_Score/__pycache__
+
+# Python caches
+backend/__pycache__/
+backend/LLM_Score/__pycache__/
+backend/LLM_Score/clients/__pycache__/
+backend/LLM_Score/services/__pycache__/
+
+# Virtualenvs and generated files
+backend/LLM_Score/venv/
+backend/LLM_Score/__*
+backend/LLM_Score/clients/__*
+backend/LLM_Score/services/*
+
+# Additional local files
+backend/LLM_Score/README.md
