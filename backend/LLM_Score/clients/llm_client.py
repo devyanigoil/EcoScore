@@ -4,9 +4,19 @@ import asyncio
 import json
 import os
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Iterable, List, Optional
 
+from dotenv import load_dotenv
 from openai import OpenAI
+
+# Ensure we load the API key from backend/LLM_Score/keys.env
+CURRENT_DIR = Path(__file__).resolve().parents[1]
+KEYS_ENV = CURRENT_DIR / "keys.env"
+if KEYS_ENV.exists():
+    load_dotenv(KEYS_ENV)
+else:  # pragma: no cover - helpful warning when the file is missing
+    load_dotenv()  # fallback to default lookup
 
 
 @dataclass
