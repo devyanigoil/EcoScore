@@ -329,10 +329,11 @@ async def ocr_energy_upload(
         resp = make_min_response(result)
         resp_json =json.loads(resp.body.decode("utf-8"))
 
-        add_energy(user=userId, bill=resp_json)
-
         carbon = resp_json.get("carbonFootPrint", 0)
         energy_points = 100 - float(carbon)  # 🔸 new energy logic
+        resp_json["points"] = energy_points;
+        add_energy(user=userId, bill=resp_json)
+
         add_points_entry(
             user=userId,
             item="energy",
@@ -364,9 +365,10 @@ async def ocr_energy_pdf(
         resp = make_min_response(result)
         resp_json =json.loads(resp.body.decode("utf-8"))
 
-        add_energy(user=userId, bill=resp_json)
         carbon = resp_json.get("carbonFootPrint", 0)
         energy_points = 100 - float(carbon)  # 🔸 new energy logic
+        resp_json["points"] = energy_points;
+        add_energy(user=userId, bill=resp_json)
         add_points_entry(
             user=userId,
             item="energy",

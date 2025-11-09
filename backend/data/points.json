@@ -118,5 +118,13 @@
     "date": "2025-07-04",
     "carbon_emission": 0.836,
     "points": 9.164
+  },
+  {
+    "user": "Aashnna Soni",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
   }
 ]
