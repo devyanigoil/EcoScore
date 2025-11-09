@@ -10,3 +10,5 @@ keys/
 backend/venv
 backend/.env
 backend.LLM_Score/keys.env
+backend/__pycache__
+backend.LLM_Score/__pycache__
