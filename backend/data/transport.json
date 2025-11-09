@@ -106,5 +106,19 @@
         "points": 9.164
       }
     ]
+  },
+  {
+    "user": "3",
+    "rides": [
+      {
+        "entry_id": "0cee00ca-1ef4-493c-bf03-c30c76d8be46",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      }
+    ]
   }
 ]

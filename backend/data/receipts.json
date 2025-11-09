@@ -167,6 +167,53 @@
             "emissions_kg_co2e": 1.0
           }
         ]
+      },
+      {
+        "entry_id": "90e28cfc-669c-4d3f-a834-cea0608a4754",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854949 GN GOLFSHORT",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "3.001489812 PUMA SOCK",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "AID: A0000000031010",
+            "emissions_kg_co2e": 1.92
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 2.09
+          },
+          {
+            "item_name": "8",
+            "emissions_kg_co2e": 2.72
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 1.01
+          }
+        ],
+        "store": "COSTCO"
       }
     ]
   },
@@ -203,6 +250,53 @@
           }
         ],
         "store": "NEIGHBOR FOOD DAIRY MART"
+      },
+      {
+        "entry_id": "f2414f9f-2861-4d0d-bc77-70ce9d5290d8",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "ORGANIC CHICKEN DRUMSTIC",
+            "emissions_kg_co2e": 6.5
+          },
+          {
+            "item_name": "CHICKEN NAT BREAST BNLS",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "ORG DK CHOC ALMOND BAR",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BREAD FOCACCIA FRENCH ON",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "SOURDOUGH BREAD",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "LOVERS BAR DK CHOC 85%",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "BAREBELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 2.3
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.0
+          }
+        ],
+        "store": "TRADER JOE'S"
       }
     ]
   },

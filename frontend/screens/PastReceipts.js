@@ -83,6 +83,7 @@ export default function History({ userId, type }) {
       <FlatList
         data={entries}
         keyExtractor={(_, idx) => idx.toString()}
+        scrollEnabled={false}
         renderItem={({ item }) => (
           <View style={styles.card}>
             <Text style={styles.icon}>{ICONS[type] || "🧾"}</Text>

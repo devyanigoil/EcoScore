@@ -60,5 +60,19 @@
         "points": 19.78
       }
     ]
+  },
+  {
+    "user": "3",
+    "energy_bills": [
+      {
+        "entry_id": "37f37ed8-8f53-470a-b028-6228b1892182",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
+      }
+    ]
   }
 ]

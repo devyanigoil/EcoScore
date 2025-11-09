@@ -574,5 +574,181 @@
     "date": "2025-11-09",
     "carbon_emission": 1.2,
     "points": 8.8
+  },
+  {
+    "user": "2",
+    "item": "1854625 WRANGLER TEE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "2",
+    "item": "1854625 WRANGLER TEE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "2",
+    "item": "1854949 GN GOLFSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "2",
+    "item": "3.001489812 PUMA SOCK",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "2",
+    "item": "1854910 EB TECHSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "2",
+    "item": "1854910 EB TECHSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "2",
+    "item": "AID: A0000000031010",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.92,
+    "points": 8.08
+  },
+  {
+    "user": "2",
+    "item": "06/22/2025 15:12 302 8 248 76",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.09,
+    "points": 7.91
+  },
+  {
+    "user": "2",
+    "item": "8",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.72,
+    "points": 7.28
+  },
+  {
+    "user": "2",
+    "item": "06/22/2025 15:12 302 8 248 76",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.01,
+    "points": 8.99
+  },
+  {
+    "user": "3",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "3",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
+  },
+  {
+    "user": "3",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "3",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.5,
+    "points": 3.5
+  },
+  {
+    "user": "3",
+    "item": "CHICKEN NAT BREAST BNLS",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "3",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "ORG DK CHOC ALMOND BAR",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "3",
+    "item": "BREAD FOCACCIA FRENCH ON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "3",
+    "item": "SOURDOUGH BREAD",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "3",
+    "item": "LOVERS BAR DK CHOC 85%",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "3",
+    "item": "BAREBELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.3,
+    "points": 7.7
+  },
+  {
+    "user": "3",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
   }
 ]
