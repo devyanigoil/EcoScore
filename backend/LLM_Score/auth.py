@@ -7,9 +7,9 @@ import base64
 import json
 from pathlib import Path
 
-# Load keys.env from project root
-project_root = Path(__file__).parent.parent
-keys_env_path = project_root / "keys.env"
+# Load keys.env from the LLM_Score directory
+project_dir = Path(__file__).resolve().parent
+keys_env_path = project_dir / "keys.env"
 load_dotenv(keys_env_path)
 # Also try loading from current directory as fallback
 load_dotenv()
