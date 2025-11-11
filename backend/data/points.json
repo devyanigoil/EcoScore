@@ -1118,5 +1118,1045 @@
     "date": "2025-09-30",
     "carbon_emission": 80.22,
     "points": 19.78
+  },
+  {
+    "user": "1",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
+  },
+  {
+    "user": "1",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "1",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.5,
+    "points": 3.5
+  },
+  {
+    "user": "1",
+    "item": "CHICKEN NAT BREAST BNLS",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 5.5,
+    "points": 4.5
+  },
+  {
+    "user": "1",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "1",
+    "item": "ORG DK CHOC ALMOND BAR",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "1",
+    "item": "BREAD FOCACCIA FRENCH ON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.8,
+    "points": 8.2
+  },
+  {
+    "user": "1",
+    "item": "SOURDOUGH BREAD",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "1",
+    "item": "LOVERS BAR DK CHOC 85%",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "1",
+    "item": "BAREBELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.3,
+    "points": 7.7
+  },
+  {
+    "user": "1",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "1",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "1",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "1",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
+  },
+  {
+    "user": "4",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "4",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.5,
+    "points": 3.5
+  },
+  {
+    "user": "4",
+    "item": "CHICKEN NAT BREAST BNLS",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 5.5,
+    "points": 4.5
+  },
+  {
+    "user": "4",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "4",
+    "item": "ORG DK CHOC ALMOND BAR",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "4",
+    "item": "BREAD FOCACCIA FRENCH ON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.8,
+    "points": 8.2
+  },
+  {
+    "user": "4",
+    "item": "SOURDOUGH BREAD",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "4",
+    "item": "LOVERS BAR DK CHOC 85%",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "4",
+    "item": "BAREBELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.3,
+    "points": 7.7
+  },
+  {
+    "user": "4",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "4",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "4",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
+  },
+  {
+    "user": "5",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
+  },
+  {
+    "user": "5",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-12-01",
+    "carbon_emission": 0.0,
+    "points": 10.0
+  },
+  {
+    "user": "5",
+    "item": "1854625 WRANGLER TEE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "5",
+    "item": "1854625 WRANGLER TEE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "5",
+    "item": "1854949 GN GOLFSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "5",
+    "item": "3.001489812 PUMA SOCK",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.5,
+    "points": 9.5
+  },
+  {
+    "user": "5",
+    "item": "1854910 EB TECHSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "5",
+    "item": "1854910 EB TECHSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "5",
+    "item": "AID: A0000000031010",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.87,
+    "points": 7.13
+  },
+  {
+    "user": "5",
+    "item": "06/22/2025 15:12 302 8 248 76",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.71,
+    "points": 8.29
+  },
+  {
+    "user": "5",
+    "item": "8",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.77,
+    "points": 7.23
+  },
+  {
+    "user": "5",
+    "item": "06/22/2025 15:12 302 8 248 76",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.85,
+    "points": 8.15
+  },
+  {
+    "user": "6",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.0,
+    "points": 4.0
+  },
+  {
+    "user": "6",
+    "item": "ORGANIC CHICKEN DRUMSTIC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 6.5,
+    "points": 3.5
+  },
+  {
+    "user": "6",
+    "item": "CHICKEN NAT BREAST BNLS",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 5.5,
+    "points": 4.5
+  },
+  {
+    "user": "6",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "6",
+    "item": "ORG DK CHOC ALMOND BAR",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "6",
+    "item": "BREAD FOCACCIA FRENCH ON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.8,
+    "points": 8.2
+  },
+  {
+    "user": "6",
+    "item": "SOURDOUGH BREAD",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "6",
+    "item": "LOVERS BAR DK CHOC 85%",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "6",
+    "item": "BAREBELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.3,
+    "points": 7.7
+  },
+  {
+    "user": "6",
+    "item": "FLATBREAD INDIAN STYLE G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "6",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "6",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
+  },
+  {
+    "user": "6",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-07-04",
+    "carbon_emission": 0.836,
+    "points": 9.164
+  },
+  {
+    "user": "6",
+    "item": "1854625 WRANGLER TEE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "6",
+    "item": "1854625 WRANGLER TEE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "6",
+    "item": "1854949 GN GOLFSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "6",
+    "item": "3.001489812 PUMA SOCK",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "6",
+    "item": "1854910 EB TECHSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "6",
+    "item": "1854910 EB TECHSHORT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "6",
+    "item": "AID: A0000000031010",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.71,
+    "points": 7.29
+  },
+  {
+    "user": "6",
+    "item": "06/22/2025 15:12 302 8 248 76",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.6,
+    "points": 8.4
+  },
+  {
+    "user": "6",
+    "item": "8",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.22,
+    "points": 8.78
+  },
+  {
+    "user": "6",
+    "item": "06/22/2025 15:12 302 8 248 76",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.85,
+    "points": 8.15
+  },
+  {
+    "user": "3",
+    "item": "MILK HALF GALLON LOW FAT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "3",
+    "item": "AVOCADO BAG HASS TEENY T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "AVOCADO BAG HASS TEENY T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "PERI PERI SAUCE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.5,
+    "points": 9.5
+  },
+  {
+    "user": "3",
+    "item": "FUL IL CHOCOLATE SALTED",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "3",
+    "item": "CLIF ZBAR CHOC CHIP",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.6,
+    "points": 9.4
+  },
+  {
+    "user": "3",
+    "item": "THIN THIN BROWNIE CRUNC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.8,
+    "points": 9.2
+  },
+  {
+    "user": "3",
+    "item": "BARFJELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.3,
+    "points": 8.7
+  },
+  {
+    "user": "3",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "3",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "3",
+    "item": "BLUEBERRIES 11OZ",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.4,
+    "points": 9.6
+  },
+  {
+    "user": "3",
+    "item": "R-MUSHROOMS WHITE PUTTON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.3,
+    "points": 9.7
+  },
+  {
+    "user": "3",
+    "item": "A-HERB BASIL 4 OZ",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.2,
+    "points": 9.8
+  },
+  {
+    "user": "3",
+    "item": "R-SALAD SPINACH BABY 12",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.5,
+    "points": 9.5
+  },
+  {
+    "user": "3",
+    "item": "Please retain for your records",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.12,
+    "points": 8.88
+  },
+  {
+    "user": "5",
+    "item": "1 KURKURE MSL MUNCH",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "5",
+    "item": "1 LAY'S MAGIC MASALA",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "5",
+    "item": "1 GG RATLAMI SEV",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.3,
+    "points": 8.7
+  },
+  {
+    "user": "5",
+    "item": "1 VL MALAI PANEER 908G",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "5",
+    "item": "2 UNCOOKED",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "5",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-06-16",
+    "carbon_emission": 1.374,
+    "points": 8.626
+  },
+  {
+    "user": "5",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-06-16",
+    "carbon_emission": 1.374,
+    "points": 8.626
+  },
+  {
+    "user": "5",
+    "item": "MILK HALF GALLON LOW FAT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "5",
+    "item": "AVOCADO BAG HASS TEENY T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "5",
+    "item": "PIRI PERI SAUCE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.5,
+    "points": 9.5
+  },
+  {
+    "user": "5",
+    "item": "CLIP ZBAR CHOC CHIP",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.8,
+    "points": 9.2
+  },
+  {
+    "user": "5",
+    "item": "THIN THIN BROWNIE CRUNC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "5",
+    "item": "BARFJELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.1,
+    "points": 8.9
+  },
+  {
+    "user": "5",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "5",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "5",
+    "item": "BLUEBERRIES 11OZ",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.3,
+    "points": 9.7
+  },
+  {
+    "user": "5",
+    "item": "R-MUSHROOMS WHITE PUTTON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.4,
+    "points": 9.6
+  },
+  {
+    "user": "5",
+    "item": "A-HERB BASIL 4 OZ",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.2,
+    "points": 9.8
+  },
+  {
+    "user": "5",
+    "item": "R-SALAD SPINACH BABY 12",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.3,
+    "points": 9.7
+  },
+  {
+    "user": "5",
+    "item": "****3177",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.22,
+    "points": 7.78
+  },
+  {
+    "user": "5",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-06-16",
+    "carbon_emission": 1.374,
+    "points": 8.626
+  },
+  {
+    "user": "5",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
+  },
+  {
+    "user": "5",
+    "item": "MILK HALF GALLON LOW FAT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "5",
+    "item": "AVOCADO BAG HASS TEENY T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "5",
+    "item": "AVOCADO BAG HASS TEENY T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "5",
+    "item": "PERI PERI SAUCE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.5,
+    "points": 9.5
+  },
+  {
+    "user": "5",
+    "item": "FUL IL CHOCOLATE SALTED",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "5",
+    "item": "CLIP ZBAR CHOC CHIP",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.8,
+    "points": 9.2
+  },
+  {
+    "user": "5",
+    "item": "THIN THIN BROWNIE CRUNC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "5",
+    "item": "BARFJELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.3,
+    "points": 8.7
+  },
+  {
+    "user": "5",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "5",
+    "item": "NATURAL BNLS SKNES CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.5,
+    "points": 7.5
+  },
+  {
+    "user": "5",
+    "item": "BLUEBERRIES 11OZ",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.6,
+    "points": 9.4
+  },
+  {
+    "user": "5",
+    "item": "R-MUSHROOMS WHITE PUTTON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.4,
+    "points": 9.6
+  },
+  {
+    "user": "5",
+    "item": "A-HERB BASIL 4 OZ",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.3,
+    "points": 9.7
+  },
+  {
+    "user": "5",
+    "item": "R-SALAD SPINACH BABY 12",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.5,
+    "points": 9.5
+  },
+  {
+    "user": "5",
+    "item": "****3177",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.62,
+    "points": 7.38
+  },
+  {
+    "user": "5",
+    "item": "ride (gasoline)",
+    "type": "transportation",
+    "date": "2025-06-16",
+    "carbon_emission": 1.374,
+    "points": 8.626
+  },
+  {
+    "user": "5",
+    "item": "energy",
+    "type": "energy",
+    "date": "2025-09-30",
+    "carbon_emission": 80.22,
+    "points": 19.78
+  },
+  {
+    "user": "3",
+    "item": "MILK HALF GALLON LOW FAT",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.2,
+    "points": 8.8
+  },
+  {
+    "user": "3",
+    "item": "AVOCADO BAG HASS TEENY T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "AVOCADO BAG HASS TEENY T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.0,
+    "points": 9.0
+  },
+  {
+    "user": "3",
+    "item": "PERI PERI SAUCE",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.5,
+    "points": 9.5
+  },
+  {
+    "user": "3",
+    "item": "FUL IL CHOCOLATE SALTED",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.5,
+    "points": 8.5
+  },
+  {
+    "user": "3",
+    "item": "CLIF ZBAR CHOC CHIP",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.7,
+    "points": 9.3
+  },
+  {
+    "user": "3",
+    "item": "THIN THIN BROWNIE CRUNC",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.8,
+    "points": 9.2
+  },
+  {
+    "user": "3",
+    "item": "BARFJELLS CHOCOLATE DOUG",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 1.3,
+    "points": 8.7
+  },
+  {
+    "user": "3",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "3",
+    "item": "NATURAL BNLS SKNLS CKN T",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.0,
+    "points": 8.0
+  },
+  {
+    "user": "3",
+    "item": "BLUEBERRIES 11OZ",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.3,
+    "points": 9.7
+  },
+  {
+    "user": "3",
+    "item": "R-MUSHROOMS WHITE PUTTON",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.4,
+    "points": 9.6
+  },
+  {
+    "user": "3",
+    "item": "A-HERB BASIL 4 OZ",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.1,
+    "points": 9.9
+  },
+  {
+    "user": "3",
+    "item": "R-SALAD SPINACH BABY 12",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 0.2,
+    "points": 9.8
+  },
+  {
+    "user": "3",
+    "item": "****3177",
+    "type": "shopping",
+    "date": "2025-11-09",
+    "carbon_emission": 2.25,
+    "points": 7.75
   }
 ]

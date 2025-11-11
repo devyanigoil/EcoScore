@@ -58,6 +58,24 @@
         "consumption_kwh": 191.0,
         "emissions": 80.22,
         "points": 19.78
+      },
+      {
+        "entry_id": "b6fae4ab-5f56-4f3f-a402-9e894aed27b8",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
+      },
+      {
+        "entry_id": "995c8d54-9a15-433e-85dd-6bcd607c6ade",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
       }
     ]
   },
@@ -84,6 +102,66 @@
       },
       {
         "entry_id": "728d9efc-c29f-48a6-8bcf-a9a11063f83d",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
+      }
+    ]
+  },
+  {
+    "user": "4",
+    "energy_bills": [
+      {
+        "entry_id": "b845f475-76b4-47cf-ab18-46ee3e164981",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
+      }
+    ]
+  },
+  {
+    "user": "5",
+    "energy_bills": [
+      {
+        "entry_id": "493a38d0-a9b1-4a58-8f6c-dff017bb3b47",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
+      },
+      {
+        "entry_id": "47e52317-de05-4d1c-bc31-30d48952dec8",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
+      },
+      {
+        "entry_id": "488d80c6-3eeb-4dbb-8179-c5210f63d763",
+        "date": "2025-11-09",
+        "start_date": "2025-09-30",
+        "end_date": "2025-10-29",
+        "consumption_kwh": 191.0,
+        "emissions": 80.22,
+        "points": 19.78
+      }
+    ]
+  },
+  {
+    "user": "6",
+    "energy_bills": [
+      {
+        "entry_id": "8bfe91ce-217b-4c62-882f-384d5855ba52",
         "date": "2025-11-09",
         "start_date": "2025-09-30",
         "end_date": "2025-10-29",

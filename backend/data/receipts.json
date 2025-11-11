@@ -391,6 +391,140 @@
           }
         ],
         "store": "TRADER JOE'S"
+      },
+      {
+        "entry_id": "80040fb3-92a8-4727-8044-3ade71ed4a85",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "MILK HALF GALLON LOW FAT",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "AVOCADO BAG HASS TEENY T",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "AVOCADO BAG HASS TEENY T",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "PERI PERI SAUCE",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "FUL IL CHOCOLATE SALTED",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "CLIF ZBAR CHOC CHIP",
+            "emissions_kg_co2e": 0.6
+          },
+          {
+            "item_name": "THIN THIN BROWNIE CRUNC",
+            "emissions_kg_co2e": 0.8
+          },
+          {
+            "item_name": "BARFJELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 1.3
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "BLUEBERRIES 11OZ",
+            "emissions_kg_co2e": 0.4
+          },
+          {
+            "item_name": "R-MUSHROOMS WHITE PUTTON",
+            "emissions_kg_co2e": 0.3
+          },
+          {
+            "item_name": "A-HERB BASIL 4 OZ",
+            "emissions_kg_co2e": 0.2
+          },
+          {
+            "item_name": "R-SALAD SPINACH BABY 12",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "Please retain for your records",
+            "emissions_kg_co2e": 1.12
+          }
+        ],
+        "store": "TRADER JOE'S"
+      },
+      {
+        "entry_id": "8ec92e65-84ac-403d-98a5-cab9fc5b2a4f",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "MILK HALF GALLON LOW FAT",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "AVOCADO BAG HASS TEENY T",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "AVOCADO BAG HASS TEENY T",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "PERI PERI SAUCE",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "FUL IL CHOCOLATE SALTED",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "CLIF ZBAR CHOC CHIP",
+            "emissions_kg_co2e": 0.7
+          },
+          {
+            "item_name": "THIN THIN BROWNIE CRUNC",
+            "emissions_kg_co2e": 0.8
+          },
+          {
+            "item_name": "BARFJELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 1.3
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "BLUEBERRIES 11OZ",
+            "emissions_kg_co2e": 0.3
+          },
+          {
+            "item_name": "R-MUSHROOMS WHITE PUTTON",
+            "emissions_kg_co2e": 0.4
+          },
+          {
+            "item_name": "A-HERB BASIL 4 OZ",
+            "emissions_kg_co2e": 0.1
+          },
+          {
+            "item_name": "R-SALAD SPINACH BABY 12",
+            "emissions_kg_co2e": 0.2
+          },
+          {
+            "item_name": "****3177",
+            "emissions_kg_co2e": 2.25
+          }
+        ],
+        "store": "TRADER JOE'S"
       }
     ]
   },
@@ -492,53 +626,6 @@
         "store": "TRADER JOE'S"
       },
       {
-        "entry_id": "cfa14995-413c-4e7e-ac40-59e1e2c7c7c6",
-        "date": "2025-11-09",
-        "items": [
-          {
-            "item_name": "1854625 WRANGLER TEE",
-            "emissions_kg_co2e": 1.5
-          },
-          {
-            "item_name": "1854625 WRANGLER TEE",
-            "emissions_kg_co2e": 1.5
-          },
-          {
-            "item_name": "1854949 GN GOLFSHORT",
-            "emissions_kg_co2e": 1.2
-          },
-          {
-            "item_name": "3.001489812 PUMA SOCK",
-            "emissions_kg_co2e": 0.3
-          },
-          {
-            "item_name": "1854910 EB TECHSHORT",
-            "emissions_kg_co2e": 1.2
-          },
-          {
-            "item_name": "1854910 EB TECHSHORT",
-            "emissions_kg_co2e": 1.2
-          },
-          {
-            "item_name": "AID: A0000000031010",
-            "emissions_kg_co2e": null
-          },
-          {
-            "item_name": "06/22/2025 15:12 302 8 248 76",
-            "emissions_kg_co2e": null
-          },
-          {
-            "item_name": "8",
-            "emissions_kg_co2e": null
-          },
-          {
-            "item_name": "06/22/2025 15:12 302 8 248 76",
-            "emissions_kg_co2e": null
-          }
-        ],
-        "store": "COSTCO"
-      },
-      {
         "entry_id": "f58eb0fd-e02e-486d-b366-a14dc95e401c",
         "date": "2025-11-09",
         "items": [
@@ -581,6 +668,409 @@
           {
             "item_name": "06/22/2025 15:12 302 8 248 76",
             "emissions_kg_co2e": 1.5
+          }
+        ],
+        "store": "COSTCO"
+      },
+      {
+        "entry_id": "1e66380e-dcfc-444e-bf76-956337287deb",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "ORGANIC CHICKEN DRUMSTIC",
+            "emissions_kg_co2e": 6.5
+          },
+          {
+            "item_name": "CHICKEN NAT BREAST BNLS",
+            "emissions_kg_co2e": 5.5
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "ORG DK CHOC ALMOND BAR",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BREAD FOCACCIA FRENCH ON",
+            "emissions_kg_co2e": 1.8
+          },
+          {
+            "item_name": "SOURDOUGH BREAD",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "LOVERS BAR DK CHOC 85%",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "BAREBELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 2.3
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.2
+          }
+        ],
+        "store": "TRADER JOE'S"
+      }
+    ]
+  },
+  {
+    "user": "4",
+    "receipts": [
+      {
+        "entry_id": "22b30760-2b74-4448-ae18-978359917992",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "ORGANIC CHICKEN DRUMSTIC",
+            "emissions_kg_co2e": 6.5
+          },
+          {
+            "item_name": "CHICKEN NAT BREAST BNLS",
+            "emissions_kg_co2e": 5.5
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "ORG DK CHOC ALMOND BAR",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BREAD FOCACCIA FRENCH ON",
+            "emissions_kg_co2e": 1.8
+          },
+          {
+            "item_name": "SOURDOUGH BREAD",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "LOVERS BAR DK CHOC 85%",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "BAREBELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 2.3
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.2
+          }
+        ],
+        "store": "TRADER JOE'S"
+      }
+    ]
+  },
+  {
+    "user": "5",
+    "receipts": [
+      {
+        "entry_id": "f0e32aae-7dac-4c76-89d5-469a7adf255c",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854949 GN GOLFSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "3.001489812 PUMA SOCK",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "AID: A0000000031010",
+            "emissions_kg_co2e": 2.87
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 1.71
+          },
+          {
+            "item_name": "8",
+            "emissions_kg_co2e": 2.77
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 1.85
+          }
+        ],
+        "store": "COSTCO"
+      },
+      {
+        "entry_id": "81c89392-43af-45d1-a5fd-954c1544a405",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1 KURKURE MSL MUNCH",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "1 LAY'S MAGIC MASALA",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "1 GG RATLAMI SEV",
+            "emissions_kg_co2e": 1.3
+          },
+          {
+            "item_name": "1 VL MALAI PANEER 908G",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "2 UNCOOKED",
+            "emissions_kg_co2e": 2.0
+          }
+        ],
+        "store": "NEIGHBOR FOOD DAIRY MART"
+      },
+      {
+        "entry_id": "e2575135-5133-49a7-9528-47a06ac083ea",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "MILK HALF GALLON LOW FAT",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "AVOCADO BAG HASS TEENY T",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "PIRI PERI SAUCE",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "CLIP ZBAR CHOC CHIP",
+            "emissions_kg_co2e": 0.8
+          },
+          {
+            "item_name": "THIN THIN BROWNIE CRUNC",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "BARFJELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 1.1
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BLUEBERRIES 11OZ",
+            "emissions_kg_co2e": 0.3
+          },
+          {
+            "item_name": "R-MUSHROOMS WHITE PUTTON",
+            "emissions_kg_co2e": 0.4
+          },
+          {
+            "item_name": "A-HERB BASIL 4 OZ",
+            "emissions_kg_co2e": 0.2
+          },
+          {
+            "item_name": "R-SALAD SPINACH BABY 12",
+            "emissions_kg_co2e": 0.3
+          },
+          {
+            "item_name": "****3177",
+            "emissions_kg_co2e": 2.22
+          }
+        ],
+        "store": "TRADER JOE'S"
+      },
+      {
+        "entry_id": "40f0601d-bf92-4540-8fef-585ae3313659",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "MILK HALF GALLON LOW FAT",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "AVOCADO BAG HASS TEENY T",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "AVOCADO BAG HASS TEENY T",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "PERI PERI SAUCE",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "FUL IL CHOCOLATE SALTED",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "CLIP ZBAR CHOC CHIP",
+            "emissions_kg_co2e": 0.8
+          },
+          {
+            "item_name": "THIN THIN BROWNIE CRUNC",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "BARFJELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 1.3
+          },
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "NATURAL BNLS SKNES CKN T",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BLUEBERRIES 11OZ",
+            "emissions_kg_co2e": 0.6
+          },
+          {
+            "item_name": "R-MUSHROOMS WHITE PUTTON",
+            "emissions_kg_co2e": 0.4
+          },
+          {
+            "item_name": "A-HERB BASIL 4 OZ",
+            "emissions_kg_co2e": 0.3
+          },
+          {
+            "item_name": "R-SALAD SPINACH BABY 12",
+            "emissions_kg_co2e": 0.5
+          },
+          {
+            "item_name": "****3177",
+            "emissions_kg_co2e": 2.62
+          }
+        ],
+        "store": "TRADER JOE'S"
+      }
+    ]
+  },
+  {
+    "user": "6",
+    "receipts": [
+      {
+        "entry_id": "34d7c415-61f4-495e-bdd1-b3679fd78380",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "NATURAL BNLS SKNLS CKN T",
+            "emissions_kg_co2e": 6.0
+          },
+          {
+            "item_name": "ORGANIC CHICKEN DRUMSTIC",
+            "emissions_kg_co2e": 6.5
+          },
+          {
+            "item_name": "CHICKEN NAT BREAST BNLS",
+            "emissions_kg_co2e": 5.5
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.2
+          },
+          {
+            "item_name": "ORG DK CHOC ALMOND BAR",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "BREAD FOCACCIA FRENCH ON",
+            "emissions_kg_co2e": 1.8
+          },
+          {
+            "item_name": "SOURDOUGH BREAD",
+            "emissions_kg_co2e": 1.5
+          },
+          {
+            "item_name": "LOVERS BAR DK CHOC 85%",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "BAREBELLS CHOCOLATE DOUG",
+            "emissions_kg_co2e": 2.3
+          },
+          {
+            "item_name": "FLATBREAD INDIAN STYLE G",
+            "emissions_kg_co2e": 1.2
+          }
+        ],
+        "store": "TRADER JOE'S"
+      },
+      {
+        "entry_id": "33f94a9b-ecc3-4ffe-ad7a-512accc90eaa",
+        "date": "2025-11-09",
+        "items": [
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854625 WRANGLER TEE",
+            "emissions_kg_co2e": 2.0
+          },
+          {
+            "item_name": "1854949 GN GOLFSHORT",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "3.001489812 PUMA SOCK",
+            "emissions_kg_co2e": 1.0
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "1854910 EB TECHSHORT",
+            "emissions_kg_co2e": 2.5
+          },
+          {
+            "item_name": "AID: A0000000031010",
+            "emissions_kg_co2e": 2.71
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 1.6
+          },
+          {
+            "item_name": "8",
+            "emissions_kg_co2e": 1.22
+          },
+          {
+            "item_name": "06/22/2025 15:12 302 8 248 76",
+            "emissions_kg_co2e": 1.85
           }
         ],
         "store": "COSTCO"

@@ -50,9 +50,9 @@ export default function HomeScreen() {
           icon: "🚶",
           delta: pointsData.by_type.transportation,
         },
-        { key: "Energy", icon: "💡", delta: pointsData.by_type.energy },
+        { key: "Utilities", icon: "💡", delta: pointsData.by_type.energy },
         // Add Food if you have it in your API, otherwise remove or set to 0
-        { key: "Food", icon: "🥗", delta: 0 },
+        // { key: "Food", icon: "🥗", delta: 0 },
       ]
     : [];
 

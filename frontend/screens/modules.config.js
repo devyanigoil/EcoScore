@@ -15,5 +15,5 @@ export const MODULES = [
     enabled: true,
   },
   { key: "energy", icon: "💡", title: "Energy", subtitle: "", enabled: true },
-  { key: "food", icon: "🥗", title: "Food", subtitle: "", enabled: false },
+  // { key: "food", icon: "🥗", title: "Food", subtitle: "", enabled: false },
 ];

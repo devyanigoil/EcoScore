@@ -72,6 +72,24 @@
         "vehicle_type": "gasoline",
         "emissions": 0.836,
         "points": 9.164
+      },
+      {
+        "entry_id": "1ac70e87-414a-4860-935b-bd64ebb701df",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      },
+      {
+        "entry_id": "7a515479-89f6-47e4-8a2c-0312fceacce6",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
       }
     ]
   },
@@ -135,6 +153,93 @@
     "rides": [
       {
         "entry_id": "efe95532-0d39-4184-8a32-9facb3f64afe",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      }
+    ]
+  },
+  {
+    "user": "4",
+    "rides": [
+      {
+        "entry_id": "556abae5-587d-410e-965f-f3343deec35d",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      }
+    ]
+  },
+  {
+    "user": "5",
+    "rides": [
+      {
+        "entry_id": "a2bb6433-0b52-4bac-9fe5-a9a25111ad1f",
+        "date": "2025-11-09",
+        "ride_date": "2025-12-01",
+        "distance_miles": null,
+        "vehicle_type": "gasoline",
+        "emissions": 0.0,
+        "points": 10.0
+      },
+      {
+        "entry_id": "9a221067-5ad5-4e70-afff-61dcc7156e41",
+        "date": "2025-11-09",
+        "ride_date": "2025-06-16",
+        "distance_miles": 3.4,
+        "vehicle_type": "gasoline",
+        "emissions": 1.374,
+        "points": 8.626
+      },
+      {
+        "entry_id": "4769fc8d-b8e2-4057-96e9-359401c510a3",
+        "date": "2025-11-09",
+        "ride_date": "2025-06-16",
+        "distance_miles": 3.4,
+        "vehicle_type": "gasoline",
+        "emissions": 1.374,
+        "points": 8.626
+      },
+      {
+        "entry_id": "19d1c044-3eee-4a58-8cc8-48836fbc56b0",
+        "date": "2025-11-09",
+        "ride_date": "2025-06-16",
+        "distance_miles": 3.4,
+        "vehicle_type": "gasoline",
+        "emissions": 1.374,
+        "points": 8.626
+      },
+      {
+        "entry_id": "55981edc-3c87-4b63-bbfd-f0c8a35eec08",
+        "date": "2025-11-09",
+        "ride_date": "2025-06-16",
+        "distance_miles": 3.4,
+        "vehicle_type": "gasoline",
+        "emissions": 1.374,
+        "points": 8.626
+      }
+    ]
+  },
+  {
+    "user": "6",
+    "rides": [
+      {
+        "entry_id": "ea92302f-c644-42c4-9556-5038143b3658",
+        "date": "2025-11-09",
+        "ride_date": "2025-07-04",
+        "distance_miles": 2.07,
+        "vehicle_type": "gasoline",
+        "emissions": 0.836,
+        "points": 9.164
+      },
+      {
+        "entry_id": "429e4419-4343-4388-a3ea-b019fcfc4ff8",
         "date": "2025-11-09",
         "ride_date": "2025-07-04",
         "distance_miles": 2.07,

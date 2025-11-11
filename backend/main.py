@@ -657,7 +657,7 @@ def get_today_percentile(user_id: str):
     total_users = len(values)
 
     # 3) Percentile: proportion of users with <= this user's points
-    count_le = sum(1 for v in values if v <= user_today_points)
+    count_le = sum(1 for v in values if v < user_today_points)
     percentile = (count_le / total_users) * 100 if total_users > 0 else 0.0
 
     return {
